@@ -1,0 +1,10 @@
+services:
+  my-next-app:
+    image: my-next-app:prod
+    build:
+      target: production
+      context: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
