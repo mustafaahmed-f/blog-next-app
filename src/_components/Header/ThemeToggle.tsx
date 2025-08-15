@@ -1,4 +1,6 @@
+"use client";
 import { ThemeContext } from "@/_context/ThemeContext";
+import { Moon, Sun } from "lucide-react";
 import Image from "next/image";
 import { useContext } from "react";
 
@@ -11,7 +13,7 @@ function ThemeToggle({}: ThemeToggleProps) {
       onClick={toggle}
       className="
       w-[40px] h-[20px] rounded-[50px] cursor-pointer 
-      flex items-center justify-between relative
+      flex items-center justify-between relative px-1 border
     "
       style={
         theme === "dark"
@@ -19,7 +21,7 @@ function ThemeToggle({}: ThemeToggleProps) {
           : { backgroundColor: "#0f172a" }
       }
     >
-      <Image src="/moon.png" alt="" width={14} height={14} />
+      <Moon size={14} color="#FFF" />
       <div
         className="w-[15px] h-[15px] rounded-full absolute"
         style={
@@ -28,7 +30,7 @@ function ThemeToggle({}: ThemeToggleProps) {
             : { right: 1, background: "white" }
         }
       ></div>
-      <Image src="/sun.png" alt="" width={14} height={14} />
+      <Sun size={14} />
     </div>
   );
 }

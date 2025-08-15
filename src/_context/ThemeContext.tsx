@@ -31,6 +31,7 @@ export const ThemeContextProvider = ({
   });
 
   const toggle = () => {
+    console.log("toggle");
     setTheme(theme === "light" ? "dark" : "light");
   };
 

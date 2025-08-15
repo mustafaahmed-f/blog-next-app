@@ -1,67 +1,46 @@
 import Image from "next/image";
 import Link from "next/link";
+import { FaFacebook, FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa";
+import styles from "./Footer.module.css";
 
-interface FooterProps {}
-
-function Footer({}: FooterProps) {
+function Footer() {
   return (
-    <div
-      className="
-        mt-[50px] py-5 flex items-center justify-between 
-        text-[var(--softTextColor)]
-        md:flex-col md:gap-[50px]
-      "
-    >
-      {/* Info Section */}
-      <div className="flex-1 flex flex-col gap-[14px]">
-        <div className="flex items-center gap-[10px]">
+    <div className={styles.container}>
+      <div className={styles.info}>
+        <div className={styles.logo}>
           <Image src="/logo.png" alt="lama blog" width={50} height={50} />
-          <h1 className="text-2xl">Lamablog</h1>
+          <h1 className={styles.logoText}>Lamablog</h1>
         </div>
-        <p className="font-light">
+        <p className={styles.desc}>
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Enim
           necessitatibus similique aspernatur obcaecati veritatis. Aperiam cum
           porro sequi, totam minima consequuntur, aspernatur deleniti vero
           repellendus dorales.
         </p>
-        <div className="mt-[10px] flex gap-[10px]">
-          <Image src="/facebook.png" alt="" width={18} height={18} />
-          <Image src="/instagram.png" alt="" width={18} height={18} />
-          <Image src="/tiktok.png" alt="" width={18} height={18} />
-          <Image src="/youtube.png" alt="" width={18} height={18} />
+        <div className={styles.icons}>
+          <FaFacebook size={20} />
+          <FaInstagram size={20} />
+          <FaTiktok size={20} />
+          <FaYoutube size={20} />
         </div>
       </div>
-
-      {/* Links Section */}
-      <div
-        className="
-          flex-1 flex justify-end gap-[100px] 
-          lg:gap-[50px] 
-          md:w-full md:justify-between 
-          sm:text-sm
-        "
-      >
-        {/* Links List */}
-        <div className="flex flex-col gap-[10px] font-light">
-          <span className="font-bold">Links</span>
+      <div className={styles.links}>
+        <div className={styles.list}>
+          <span className={styles.listTitle}>Links</span>
           <Link href="/">Homepage</Link>
           <Link href="/">Blog</Link>
           <Link href="/">About</Link>
           <Link href="/">Contact</Link>
         </div>
-
-        {/* Tags List */}
-        <div className="flex flex-col gap-[10px] font-light">
-          <span className="font-bold">Tags</span>
+        <div className={styles.list}>
+          <span className={styles.listTitle}>Tags</span>
           <Link href="/">Style</Link>
           <Link href="/">Fashion</Link>
           <Link href="/">Coding</Link>
           <Link href="/">Travel</Link>
         </div>
-
-        {/* Social List */}
-        <div className="flex flex-col gap-[10px] font-light">
-          <span className="font-bold">Social</span>
+        <div className={styles.list}>
+          <span className={styles.listTitle}>Social</span>
           <Link href="/">Facebook</Link>
           <Link href="/">Instagram</Link>
           <Link href="/">Tiktok</Link>
