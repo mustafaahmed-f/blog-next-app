@@ -8,8 +8,14 @@ import Providers from "@/_providers/Providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Lama Dev Blog App",
+  title: {
+    template: "%s - Lama Dev Blog App",
+    default: "Welcome to Lama Dev Blog App",
+  },
   description: "The best blog app!",
+  icons: {
+    icon: "/icons8-blog-logo-32.png",
+  },
 };
 
 export default function RootLayout({
