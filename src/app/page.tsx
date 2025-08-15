@@ -1,9 +1,20 @@
-import Image from "next/image";
-
-export default function Home() {
+import CategoryList from "@/_components/HomePage/CategoryList";
+import styles from "./homepage.module.css";
+import Featured from "@/_components/HomePage/Featured";
+import CardList from "@/_components/HomePage/CardList";
+import Menu from "@/_components/HomePage/Menu";
+export default async function Home({ searchParams }: { searchParams: any }) {
+  const params = await searchParams;
+  const page = parseInt(params.page) || 1;
   return (
-    <div className="font-sans grid bg-yellow-600 grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      welcome to our template
+    <div className={styles.container}>
+      <Featured />
+      <CategoryList />
+      <div className={styles.content}>
+        {/* //todo : see how to get category */}
+        <CardList page={page} cat="" />
+        <Menu />
+      </div>
     </div>
   );
 }

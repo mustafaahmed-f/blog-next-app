@@ -1,8 +1,8 @@
 "use client";
 import { ThemeContext } from "@/_context/ThemeContext";
 import { Moon, Sun } from "lucide-react";
-import Image from "next/image";
 import { useContext } from "react";
+import styles from "./themeToggle.module.css";
 
 interface ThemeToggleProps {}
 
@@ -10,20 +10,17 @@ function ThemeToggle({}: ThemeToggleProps) {
   const { toggle, theme } = useContext(ThemeContext);
   return (
     <div
+      className={styles.container}
       onClick={toggle}
-      className="
-      w-[40px] h-[20px] rounded-[50px] cursor-pointer 
-      flex items-center justify-between relative px-1 border
-    "
       style={
         theme === "dark"
           ? { backgroundColor: "white" }
           : { backgroundColor: "#0f172a" }
       }
     >
-      <Moon size={14} color="#FFF" />
+      <Moon size={14} color="yellow" />
       <div
-        className="w-[15px] h-[15px] rounded-full absolute"
+        className={styles.ball}
         style={
           theme === "dark"
             ? { left: 1, background: "#0f172a" }

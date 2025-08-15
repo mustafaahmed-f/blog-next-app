@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import styles from "./authLinks.module.css";
 
 interface AuthLinksProps {}
 
@@ -10,42 +11,26 @@ function AuthLinks({}: AuthLinksProps) {
   return (
     <>
       {status === "unauthenticated" ? (
-        <Link href="/login" className="cursor-pointer sm:hidden">
+        <Link href="/login" className={styles.link}>
           Login
         </Link>
       ) : (
         <>
-          <Link href="/write" className="cursor-pointer sm:hidden">
+          <Link href="/write" className={styles.link}>
             Write
           </Link>
-          <span className="cursor-pointer sm:hidden" onClick={() => {}}>
+          <span className={styles.link} onClick={() => {}}>
             Logout
           </span>
         </>
       )}
-
-      {/* Burger menu */}
-      <div
-        className="
-        w-[20px] h-[16px] flex-col justify-between cursor-pointer hidden
-        sm:flex
-      "
-        onClick={() => setOpen(!open)}
-      >
-        <div className="w-full h-[2px] bg-[var(--textColor)]"></div>
-        <div className="w-full h-[2px] bg-[var(--textColor)]"></div>
-        <div className="w-full h-[2px] bg-[var(--textColor)]"></div>
+      <div className={styles.burger} onClick={() => setOpen(!open)}>
+        <div className={styles.line}></div>
+        <div className={styles.line}></div>
+        <div className={styles.line}></div>
       </div>
-
-      {/* Responsive menu */}
       {open && (
-        <div
-          className="
-          absolute top-[100px] left-0 bg-[var(--bg)]
-          h-[calc(100vh-100px)] w-full flex flex-col items-center justify-center
-          gap-[50px] text-[36px] z-[999]
-        "
-        >
+        <div className={styles.responsiveMenu}>
           <Link href="/">Homepage</Link>
           <Link href="/">About</Link>
           <Link href="/">Contact</Link>
@@ -54,7 +39,7 @@ function AuthLinks({}: AuthLinksProps) {
           ) : (
             <>
               <Link href="/write">Write</Link>
-              <span className="cursor-pointer">Logout</span>
+              <span className={styles.link}>Logout</span>
             </>
           )}
         </div>
