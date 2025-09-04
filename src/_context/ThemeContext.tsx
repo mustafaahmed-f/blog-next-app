@@ -29,6 +29,7 @@ export const ThemeContextProvider = ({
   const [theme, setTheme] = useState(() => {
     return getFromLocalStorage() || "light";
   });
+  const [mounted, setMounted] = useState(false);
 
   const toggle = () => {
     console.log("toggle");
@@ -39,9 +40,15 @@ export const ThemeContextProvider = ({
     localStorage.setItem("theme", theme!);
   }, [theme]);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <ThemeContext.Provider value={{ theme, toggle }}>
-      {children}
+      <div className={theme}>{children}</div>;
     </ThemeContext.Provider>
   );
 };

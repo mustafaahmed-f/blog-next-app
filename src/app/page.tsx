@@ -1,8 +1,9 @@
-import CategoryList from "@/_components/HomePage/CategoryList";
+import CardList from "@/_components/CardList/CardList";
+import CategoryList from "@/_components/CategoryList/CategoryList";
+import Featured from "@/_components/Featured/Featured";
+import Menu from "@/_components/Menu/Menu";
 import styles from "./homepage.module.css";
-import Featured from "@/_components/HomePage/Featured";
-import CardList from "@/_components/HomePage/CardList";
-import Menu from "@/_components/HomePage/Menu";
+
 export default async function Home({ searchParams }: { searchParams: any }) {
   const params = await searchParams;
   const page = parseInt(params.page) || 1;

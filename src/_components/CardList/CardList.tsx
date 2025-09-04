@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "./cardList.module.css";
 import Image from "next/image";
-import Card from "./Card";
-import Pagination from "./Pagination";
+import Card from "../Card/Card";
+import Pagination from "../Pagination/Pagination";
 
 //todo : re-configure the get data method
 const getData = async (page: number, cat: string) => {

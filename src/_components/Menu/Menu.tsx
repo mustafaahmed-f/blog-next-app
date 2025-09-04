@@ -1,6 +1,6 @@
+import MenuPosts from "../MenuPosts/MenuPosts";
+import MenuCategories from "../MenyCategories/MenuCategories";
 import styles from "./menu.module.css";
-import MenuCategories from "./MenuCategories";
-import MenuPosts from "./MenuPosts";
 
 const Menu = () => {
   return (
