@@ -1,16 +1,16 @@
 services:
   my-next-app:
-    image: my-next-app:dev
+    image: blog-app-next-app:dev
     build:
       target: development
       context: .
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       - NODE_ENV=development
-      - WATCHPACK_POLLING_INTERVAL=1000
-      - WATCHPACK_POLLING=true
-      - CHOKIDAR_USEPOLLING=true
+      # - WATCHPACK_POLLING_INTERVAL=1000
+      # - WATCHPACK_POLLING=true
+      # - CHOKIDAR_USEPOLLING=true
     volumes:
       - .:/app
       # - ./src:/app/src

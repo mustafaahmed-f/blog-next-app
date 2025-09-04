@@ -1,6 +1,6 @@
 services:
   my-next-app:
-    image: my-next-app:prod
+    image: blog-app-next-app:prod
     build:
       target: production
       context: .
