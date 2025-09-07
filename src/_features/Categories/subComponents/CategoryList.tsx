@@ -28,9 +28,7 @@ const CategoryList = async () => {
     console.log("error", error);
     catchedError = error?.message;
   }
-  console.log("data", data);
-  console.log("catchedError", catchedError);
-  // const data = (await getData())
+
   return (
     <>
       {catchedError && <ErrorToast error={catchedError} />}
@@ -41,7 +39,7 @@ const CategoryList = async () => {
             <Link
               href="/blog?cat=style"
               className={`${styles.category} ${styles[item.slug]}`}
-              key={item._id}
+              key={item.id}
             >
               {item.img && (
                 <Image
