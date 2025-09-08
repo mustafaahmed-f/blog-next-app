@@ -1,4 +1,4 @@
-import MenuPosts from "../MenuPosts/MenuPosts";
+import MenuPosts from "../../_features/Posts/subComponents/MenuPosts/MenuPosts";
 import MenuCategories from "../MenyCategories/MenuCategories";
 import styles from "./menu.module.css";
 
