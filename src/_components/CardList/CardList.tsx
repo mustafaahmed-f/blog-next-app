@@ -20,8 +20,13 @@ const getData = async (page: number, cat: string) => {
   return res.json();
 };
 
-const CardList = async ({ page, cat }: { page: number; cat: string }) => {
-  // const { posts, count } = await getData(page, cat);
+const CardList = async ({
+  page,
+  cat,
+}: {
+  page: number;
+  cat: string | null;
+}) => {
   const { posts, count } = { posts: [], count: 1 };
 
   const POST_PER_PAGE = 2;
@@ -29,7 +34,7 @@ const CardList = async ({ page, cat }: { page: number; cat: string }) => {
   const hasPrev = POST_PER_PAGE * (page - 1) > 0;
   const hasNext = POST_PER_PAGE * (page - 1) + POST_PER_PAGE < count;
 
-  return (
+  return cat ? (
     <div className={styles.container}>
       <h1 className={styles.title}>Recent Posts</h1>
       <div className={styles.posts}>
@@ -38,6 +43,12 @@ const CardList = async ({ page, cat }: { page: number; cat: string }) => {
         ))}
       </div>
       <Pagination page={page} hasPrev={hasPrev} hasNext={hasNext} />
+    </div>
+  ) : (
+    <div className={styles.container}>
+      <p style={{ textAlign: "center", margin: "50px 0px", color: "red" }}>
+        Unable to fetch posts
+      </p>
     </div>
   );
 };

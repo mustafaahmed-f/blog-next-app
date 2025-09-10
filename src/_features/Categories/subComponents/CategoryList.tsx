@@ -1,43 +1,16 @@
-import React from "react";
-import styles from "./categoryList.module.css";
-import Link from "next/link";
 import Image from "next/image";
-import { getCategories } from "../services/getCategories";
-import { showErrorToast } from "@/_utils/helperMethods/showToasts";
-import ErrorToast from "@/_components/Toasts/ErrorToast";
+import Link from "next/link";
+import styles from "./categoryList.module.css";
 
-const getData = async () => {
-  const res = await fetch("http://localhost:3000/api/categories", {
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    throw new Error("Failed");
-  }
-
-  return res.json();
-};
-
-const CategoryList = async () => {
-  let data: any = null;
-  let catchedError: string | null | undefined = null;
-  try {
-    const response: any = await getCategories();
-    data = await response?.data;
-  } catch (error: any) {
-    console.log("error", error);
-    catchedError = error?.message;
-  }
-
+const CategoryList = async ({ categories }: { categories: any }) => {
   return (
     <>
-      {catchedError && <ErrorToast error={catchedError} />}
       <div className={styles.container}>
         <h1 className={styles.title}>Popular Categories</h1>
         <div className={styles.categories}>
-          {data?.map((item: any) => (
+          {categories?.map((item: any) => (
             <Link
-              href="/blog?cat=style"
+              href={`/blog?cat=${item.id}`}
               className={`${styles.category} ${styles[item.slug]}`}
               key={item.id}
             >
