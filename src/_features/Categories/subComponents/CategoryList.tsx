@@ -11,7 +11,7 @@ const CategoryList = async ({ categories }: { categories: any }) => {
           {categories?.map((item: any) => (
             <Link
               href={`/blog?cat=${item.id}`}
-              className={`${styles.category} ${styles[item.slug]}`}
+              className={`${styles.category} ${styles[item.title]}`}
               key={item.id}
             >
               {item.img && (

@@ -11,7 +11,7 @@ export async function getSingleRecord({
   enableCache: boolean;
 }) {
   const res = await fetch(
-    `${process.env.MAIN_BACKEND_URL}/${_APIEndpointName}/${recordIdentified}`,
+    `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}/${recordIdentified}`,
     {
       credentials: "include",
       //// Cache for three hours
@@ -49,7 +49,7 @@ export async function _getEveryRecord(
 ) {
   //// This method is used to get all records from table and apply api feature on the client side
   const res = await fetch(
-    `${process.env.MAIN_BACKEND_URL}/${_APIEndpointName}`,
+    `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}`,
     {
       credentials: "include",
       //// Cache for three hours
@@ -97,7 +97,7 @@ export async function _getAllRecords({
   enableCache?: boolean;
 }) {
   const res = await fetch(
-    `${process.env.MAIN_BACKEND_URL}/${_APIEndpointName}?page=${page}&pageSize=${pageSize}&searchTerm=${searchTerm}&sort=${sort}`,
+    `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}page=${page}&pageSize=${pageSize}&searchTerm=${searchTerm}&sort=${sort}`,
     {
       credentials: "include",
       //// Cache for three hours
@@ -137,7 +137,7 @@ export async function _deleteSingleRecord({
   recordIdentified: string;
 }) {
   const res = await fetch(
-    `${process.env.MAIN_BACKEND_URL}/${_APIEndpointName}/${recordIdentified}`,
+    `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}/${recordIdentified}`,
     {
       credentials: "include",
       method: "DELETE",
@@ -175,7 +175,7 @@ export async function _updateSingleRecord({
   data: any;
 }) {
   const res = await fetch(
-    `${process.env.MAIN_BACKEND_URL}/${_APIEndpointName}/${recordIdentified}`,
+    `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}/${recordIdentified}`,
     {
       credentials: "include",
       method: "PUT",
@@ -212,7 +212,7 @@ export async function _createSingleRecord({
   data: any;
 }) {
   const res = await fetch(
-    `${process.env.MAIN_BACKEND_URL}/${_APIEndpointName}`,
+    `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}`,
     {
       credentials: "include",
       method: "POST",

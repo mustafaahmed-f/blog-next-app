@@ -27,7 +27,7 @@ function ThemeToggle({}: ThemeToggleProps) {
             : { right: 1, background: "white" }
         }
       ></div>
-      <Sun size={14} />
+      <Sun size={14} className="font-bold text-amber-700" />
     </div>
   );
 }

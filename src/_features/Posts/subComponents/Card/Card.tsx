@@ -12,9 +12,7 @@ const Card = ({ key, item }: { key: number; item: any }) => {
       )}
       <div className={styles.textContainer}>
         <div className={styles.detail}>
-          <span className={styles.date}>
-            {item.createdAt.substring(0, 10)} -{" "}
-          </span>
+          <span className={styles.date}>{item.createdAt.substring(0, 10)}</span>
           <span className={styles.category}>{item.catSlug}</span>
         </div>
         <Link href={`/posts/${item.slug}`}>

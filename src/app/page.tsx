@@ -1,4 +1,4 @@
-import CardList from "@/_components/CardList/CardList";
+import CardList from "@/_features/Posts/subComponents/CardList/CardList";
 import CategoryList from "@/_features/Categories/subComponents/CategoryList";
 import Featured from "@/_features/Posts/subComponents/Featured/Featured";
 import Menu from "@/_components/Menu/Menu";
@@ -34,7 +34,7 @@ export default async function Home({ searchParams }: { searchParams: any }) {
         <CategoryList categories={data} />
         <div className={styles.content}>
           {/* //todo : see how to get category */}
-          <CardList page={page} cat={targetCategoy} />
+          <CardList page={page} cat={targetCategoy.id} />
           <Menu />
         </div>
       </div>

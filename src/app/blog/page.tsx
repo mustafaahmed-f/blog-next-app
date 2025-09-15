@@ -1,4 +1,4 @@
-import CardList from "@/_components/CardList/CardList";
+import CardList from "@/_features/Posts/subComponents/CardList/CardList";
 import Menu from "@/_components/Menu/Menu";
 import styles from "./blogPage.module.css";
 

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styles from "./postPage.module.css";
-import Comments from "@/_components/Comments/Comments";
+import Comments from "@/_features/Comments/subComponents/Comments/Comments";
 import Menu from "@/_components/Menu/Menu";
 interface PageProps {
   params: {
