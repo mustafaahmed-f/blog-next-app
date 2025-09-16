@@ -1,41 +1,61 @@
-import CardList from "@/_features/Posts/subComponents/CardList/CardList";
-import CategoryList from "@/_features/Categories/subComponents/CategoryList";
-import Featured from "@/_features/Posts/subComponents/Featured/Featured";
 import Menu from "@/_components/Menu/Menu";
-import styles from "./homepage.module.css";
-import { Suspense } from "react";
 import LoadingSection from "@/_components/Spinner/LoadingSection";
-import { getCategories } from "@/_features/Categories/services/getCategories";
 import ErrorToast from "@/_components/Toasts/ErrorToast";
-import { getRandomInt } from "@/_utils/helperMethods/getRandomNumber";
+import { getCategories } from "@/_features/Categories/services/getCategories";
+import CategoryList from "@/_features/Categories/subComponents/CategoryList";
+import { getFeaturedPosts } from "@/_features/Posts/services/getFeaturedPosts";
+import CardList from "@/_features/Posts/subComponents/CardList/CardList";
+import Featured from "@/_features/Posts/subComponents/Featured/Featured";
+import { Suspense } from "react";
+import styles from "./homepage.module.css";
 
 export default async function Home({ searchParams }: { searchParams: any }) {
-  let data: any = null;
-  let catchedError: string | null | undefined = null;
+  let fetchedCategories: any = null;
+  let featuredPosts: any = null;
+  let catchedError: { catgoriesError: string; postsError: string } = {
+    catgoriesError: "",
+    postsError: "",
+  };
   try {
-    const response: any = await getCategories();
-    data = await response?.data;
-  } catch (error: any) {
-    console.log("error", error);
-    catchedError = error?.message;
-  }
+    const [featuredPostsResponse, categoriesResponse] = await Promise.all([
+      getFeaturedPosts().catch((err: any) => {
+        catchedError!.postsError = err?.message;
+        console.log("Posts error : ", err);
+      }),
+      getCategories().catch((err: any) => {
+        catchedError!.catgoriesError = err?.message;
+        console.log("Categories error : ", err);
+      }),
+    ]);
 
-  let targetCategoy = data ? data[getRandomInt(0, data.length - 1)] : null;
+    fetchedCategories = categoriesResponse?.data;
+    featuredPosts = featuredPostsResponse?.data;
+  } catch (error: any) {
+    console.log("Unexpected error : ", error);
+  }
 
   const params = await searchParams;
   const page = parseInt(params.page) || 1;
   return (
     <>
-      {catchedError && <ErrorToast error={catchedError} />}
+      {catchedError.postsError && (
+        <ErrorToast error={catchedError.postsError} />
+      )}
+      {catchedError.catgoriesError && (
+        <ErrorToast error={catchedError.catgoriesError} />
+      )}
       <div className={styles.container}>
         <Suspense fallback={<LoadingSection />}>
-          <Featured />
+          <Featured
+            featuredPosts={featuredPosts}
+            catchedError={catchedError.postsError}
+          />
         </Suspense>
-        <CategoryList categories={data} />
+        <CategoryList categories={fetchedCategories} />
         <div className={styles.content}>
           {/* //todo : see how to get category */}
-          <CardList page={page} cat={targetCategoy.id} />
-          <Menu />
+          <CardList page={page} />
+          <Menu featuredPosts={featuredPosts} />
         </div>
       </div>
     </>

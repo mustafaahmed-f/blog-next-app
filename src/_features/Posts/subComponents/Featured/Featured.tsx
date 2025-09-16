@@ -1,25 +1,15 @@
-import ErrorToast from "@/_components/Toasts/ErrorToast";
 import Image from "next/image";
-import { getFeaturedPosts } from "../../services/getFeaturedPosts";
 import styles from "./featured.module.css";
 
-const Featured = async () => {
-  //todo: use get featured posts and use the first post
-  let featuredPosts: any = null;
-  let catchedError: string | null | undefined = null;
-
-  try {
-    const response: any = await getFeaturedPosts();
-    featuredPosts = await response?.data;
-  } catch (error: any) {
-    console.log("error", error);
-    catchedError = error?.message;
-  }
-
+const Featured = async ({
+  featuredPosts,
+  catchedError,
+}: {
+  featuredPosts: any;
+  catchedError: any;
+}) => {
   return (
     <>
-      {catchedError && <ErrorToast error={catchedError} />}
-
       <div className={styles.container}>
         <h1 className={styles.title}>
           <b>Hey, lama dev here!</b> Discover my stories and creative ideas.

@@ -84,20 +84,20 @@ export async function _getEveryRecord(
 export async function _getAllRecords({
   _APIEndpointName,
   page = 1,
-  pageSize = 10,
+  size = 10,
   sort = "",
   searchTerm = "",
   enableCache = true,
 }: {
   _APIEndpointName: string;
   page?: number;
-  pageSize?: number;
+  size?: number;
   sort?: string;
   searchTerm?: string;
   enableCache?: boolean;
 }) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}page=${page}&pageSize=${pageSize}&searchTerm=${searchTerm}&sort=${sort}`,
+    `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}page=${page}&size=${size}&searchTerm=${searchTerm}&sort=${sort}`,
     {
       credentials: "include",
       //// Cache for three hours
