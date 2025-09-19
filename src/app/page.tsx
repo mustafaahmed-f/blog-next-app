@@ -1,55 +1,25 @@
 import Menu from "@/_components/Menu/Menu";
 import ErrorToast from "@/_components/Toasts/ErrorToast";
 import { getCategories } from "@/_features/Categories/services/getCategories";
-import CategoryList from "@/_features/Categories/subComponents/CategoryList";
+import CategoryList from "@/_features/Categories/subComponents/CategoryList/CategoryList";
 import { getFeaturedPosts } from "@/_features/Posts/services/getFeaturedPosts";
 import CardList from "@/_features/Posts/subComponents/CardList/CardList";
 import Featured from "@/_features/Posts/subComponents/Featured/Featured";
 import styles from "./homepage.module.css";
 
 export default async function Home({ searchParams }: { searchParams: any }) {
-  let fetchedCategories: any = null;
-  let featuredPosts: any = null;
-  let catchedError: { catgoriesError: string; postsError: string } = {
-    catgoriesError: "",
-    postsError: "",
-  };
-  try {
-    const [featuredPostsResponse, categoriesResponse] = await Promise.all([
-      getFeaturedPosts().catch((err: any) => {
-        catchedError!.postsError = err?.message;
-        console.log("Posts error : ", err);
-      }),
-      getCategories().catch((err: any) => {
-        catchedError!.catgoriesError = err?.message;
-        console.log("Categories error : ", err);
-      }),
-    ]);
-
-    fetchedCategories = categoriesResponse?.data;
-    featuredPosts = featuredPostsResponse?.data;
-  } catch (error: any) {
-    console.log("Unexpected error : ", error);
-  }
-
   const params = await searchParams;
   const page = parseInt(params.page) || 1;
   return (
     <>
       <div className={styles.container}>
-        <Featured
-          featuredPosts={featuredPosts}
-          catchedError={catchedError.postsError}
-        />
+        <Featured />
 
-        <CategoryList
-          categories={fetchedCategories}
-          catchedError={catchedError.catgoriesError}
-        />
+        <CategoryList />
         <div className={styles.content}>
           {/* //todo : see how to get category */}
           <CardList page={page} />
-          <Menu featuredPosts={featuredPosts} />
+          <Menu />
         </div>
       </div>
     </>

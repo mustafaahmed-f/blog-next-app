@@ -1,8 +1,12 @@
-import MenuPosts from "../../_features/Posts/subComponents/MenuPosts/MenuPosts";
-import MenuCategories from "../MenyCategories/MenuCategories";
-import styles from "./menu.module.css";
+"use client";
 
-const Menu = ({ featuredPosts }: { featuredPosts: any }) => {
+import MenuPosts from "../../_features/Posts/subComponents/MenuPosts/MenuPosts";
+import MenuCategories from "../../_features/Categories/subComponents/MenyCategories/MenuCategories";
+import styles from "./menu.module.css";
+import { useFeaturedPosts } from "@/_context/FeaturedPostsContext";
+
+const Menu = () => {
+  const { featuredPosts } = useFeaturedPosts();
   return (
     <div className={styles.container}>
       <h2 className={styles.subtitle}>{"What's hot"}</h2>

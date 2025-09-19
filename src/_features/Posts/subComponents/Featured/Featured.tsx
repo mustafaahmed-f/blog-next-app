@@ -1,14 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import styles from "./featured.module.css";
 import ErrorToast from "@/_components/Toasts/ErrorToast";
+import { useFeaturedPosts } from "@/_context/FeaturedPostsContext";
 
-const Featured = async ({
-  featuredPosts,
-  catchedError,
-}: {
-  featuredPosts: any;
-  catchedError: any;
-}) => {
+const Featured = () => {
+  const { featuredPosts, catchedError } = useFeaturedPosts();
   return (
     <>
       {catchedError && <ErrorToast error={catchedError} />}

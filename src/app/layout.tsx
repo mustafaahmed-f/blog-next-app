@@ -5,6 +5,8 @@ import Footer from "@/_components/Footer/Footer";
 import Header from "@/_components/Header/Header";
 import Providers from "@/_providers/Providers";
 import { Toaster } from "sonner";
+import { getFeaturedPosts } from "@/_features/Posts/services/getFeaturedPosts";
+import { getCategories } from "@/_features/Categories/services/getCategories";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,16 +21,48 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let fetchedCategories: any = null;
+  let featuredPosts: any = null;
+  let catchedError: { catgoriesError: string; postsError: string } = {
+    catgoriesError: "",
+    postsError: "",
+  };
+  try {
+    const [featuredPostsResponse, categoriesResponse] = await Promise.all([
+      getFeaturedPosts().catch((err: any) => {
+        catchedError!.postsError = err?.message;
+        console.log("Posts error : ", err);
+      }),
+      getCategories().catch((err: any) => {
+        catchedError!.catgoriesError = err?.message;
+        console.log("Categories error : ", err);
+      }),
+    ]);
+
+    fetchedCategories = categoriesResponse?.data;
+    featuredPosts = featuredPostsResponse?.data;
+  } catch (error: any) {
+    console.log("Unexpected error : ", error);
+    catchedError = {
+      catgoriesError: error?.message,
+      postsError: error?.message,
+    };
+  }
+
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
         {" "}
-        <Providers>
+        <Providers
+          featuredPosts={featuredPosts}
+          catchedError={catchedError}
+          fetchedCategories={fetchedCategories}
+        >
           <div className="container">
             <div className="wrapper">
               <Toaster richColors position="bottom-right" expand={true} />

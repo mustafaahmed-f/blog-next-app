@@ -1,22 +1,20 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./categoryList.module.css";
 import ErrorToast from "@/_components/Toasts/ErrorToast";
+import { useCategoires } from "@/_context/CategoriesContext";
 
-const CategoryList = async ({
-  categories,
-  catchedError,
-}: {
-  categories: any;
-  catchedError: any;
-}) => {
+const CategoryList = () => {
+  const { catchedError, fetchedCategories } = useCategoires();
   return (
     <>
       {catchedError && <ErrorToast error={catchedError} />}
       <div className={styles.container}>
         <h1 className={styles.title}>Popular Categories</h1>
         <div className={styles.categories}>
-          {categories?.map((item: any) => (
+          {fetchedCategories?.map((item: any) => (
             <Link
               href={`/blog?cat=${item.id}`}
               className={`${styles.category} ${styles[item.title]}`}
