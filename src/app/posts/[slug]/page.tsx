@@ -2,27 +2,32 @@ import Image from "next/image";
 import styles from "./postPage.module.css";
 import Comments from "@/_features/Comments/subComponents/Comments/Comments";
 import Menu from "@/_components/Menu/Menu";
+import { getSinglePost } from "@/_features/Posts/services/getSinglePost";
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 async function Page({ params }: PageProps) {
-  const { slug } = params;
+  const { slug } = await params;
 
-  const data: any = [];
+  const response = await getSinglePost(slug);
+
+  const post: any = response.data;
+
+  // return <div>Single post</div>;
 
   return (
     <div className={styles.container}>
       <div className={styles.infoContainer}>
         <div className={styles.textContainer}>
-          <h1 className={styles.title}>{data?.title}</h1>
+          <h1 className={styles.title}>{post?.title}</h1>
           <div className={styles.user}>
-            {data?.user?.image && (
+            {post?.user?.image && (
               <div className={styles.userImageContainer}>
                 <Image
-                  src={data.user.image}
+                  src={post.user.image}
                   alt=""
                   fill
                   className={styles.avatar}
@@ -30,14 +35,19 @@ async function Page({ params }: PageProps) {
               </div>
             )}
             <div className={styles.userTextContainer}>
-              <span className={styles.username}>{data?.user.name}</span>
-              <span className={styles.date}>01.01.2024</span>
+              <span className={styles.username}>{post?.user.userName}</span>
+              <span className={styles.date}>{post?.createdAt}</span>
             </div>
           </div>
         </div>
-        {data?.img && (
+        {post?.img && (
           <div className={styles.imageContainer}>
-            <Image src={data.img} alt="" fill className={styles.image} />
+            <Image
+              src={post.img}
+              alt={post.title}
+              fill
+              className={styles.image}
+            />
           </div>
         )}
       </div>
@@ -45,9 +55,11 @@ async function Page({ params }: PageProps) {
         <div className={styles.post}>
           <div
             className={styles.description}
-            dangerouslySetInnerHTML={{ __html: data?.desc }}
+            dangerouslySetInnerHTML={{ __html: post?.desc }}
           />
+          <hr style={{ marginTop: "3rem" }} />
           <div className={styles.comment}>
+            {/* //todo : get comments on client side */}
             <Comments postSlug={slug} />
           </div>
         </div>

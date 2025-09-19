@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import styles from "./comments.module.css";
 import Link from "next/link";
@@ -9,7 +10,7 @@ interface CommentsProps {
 
 function Comments({ postSlug }: CommentsProps) {
   //todo : get status from clerk
-  const status = "authenticated";
+  const status: string = "unauthenticated";
   const [desc, setDesc] = useState("");
   const { 0: isLoading, 1: setIsLoading } = useState(false);
   const handleSubmit = async () => {};
