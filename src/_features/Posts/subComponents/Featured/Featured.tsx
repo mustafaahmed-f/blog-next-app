@@ -1,5 +1,6 @@
 import Image from "next/image";
 import styles from "./featured.module.css";
+import ErrorToast from "@/_components/Toasts/ErrorToast";
 
 const Featured = async ({
   featuredPosts,
@@ -10,6 +11,7 @@ const Featured = async ({
 }) => {
   return (
     <>
+      {catchedError && <ErrorToast error={catchedError} />}
       <div className={styles.container}>
         <h1 className={styles.title}>
           <b>Hey, lama dev here!</b> Discover my stories and creative ideas.

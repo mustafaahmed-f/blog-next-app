@@ -36,19 +36,16 @@ export default async function Home({ searchParams }: { searchParams: any }) {
   const page = parseInt(params.page) || 1;
   return (
     <>
-      {catchedError.postsError && (
-        <ErrorToast error={catchedError.postsError} />
-      )}
-      {catchedError.catgoriesError && (
-        <ErrorToast error={catchedError.catgoriesError} />
-      )}
       <div className={styles.container}>
         <Featured
           featuredPosts={featuredPosts}
           catchedError={catchedError.postsError}
         />
 
-        <CategoryList categories={fetchedCategories} />
+        <CategoryList
+          categories={fetchedCategories}
+          catchedError={catchedError.catgoriesError}
+        />
         <div className={styles.content}>
           {/* //todo : see how to get category */}
           <CardList page={page} />

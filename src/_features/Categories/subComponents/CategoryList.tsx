@@ -1,10 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./categoryList.module.css";
+import ErrorToast from "@/_components/Toasts/ErrorToast";
 
-const CategoryList = async ({ categories }: { categories: any }) => {
+const CategoryList = async ({
+  categories,
+  catchedError,
+}: {
+  categories: any;
+  catchedError: any;
+}) => {
   return (
     <>
+      {catchedError && <ErrorToast error={catchedError} />}
       <div className={styles.container}>
         <h1 className={styles.title}>Popular Categories</h1>
         <div className={styles.categories}>
