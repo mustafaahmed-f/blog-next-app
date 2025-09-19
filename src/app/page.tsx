@@ -1,12 +1,10 @@
 import Menu from "@/_components/Menu/Menu";
-import LoadingSection from "@/_components/Spinner/LoadingSection";
 import ErrorToast from "@/_components/Toasts/ErrorToast";
 import { getCategories } from "@/_features/Categories/services/getCategories";
 import CategoryList from "@/_features/Categories/subComponents/CategoryList";
 import { getFeaturedPosts } from "@/_features/Posts/services/getFeaturedPosts";
 import CardList from "@/_features/Posts/subComponents/CardList/CardList";
 import Featured from "@/_features/Posts/subComponents/Featured/Featured";
-import { Suspense } from "react";
 import styles from "./homepage.module.css";
 
 export default async function Home({ searchParams }: { searchParams: any }) {
@@ -45,12 +43,11 @@ export default async function Home({ searchParams }: { searchParams: any }) {
         <ErrorToast error={catchedError.catgoriesError} />
       )}
       <div className={styles.container}>
-        <Suspense fallback={<LoadingSection />}>
-          <Featured
-            featuredPosts={featuredPosts}
-            catchedError={catchedError.postsError}
-          />
-        </Suspense>
+        <Featured
+          featuredPosts={featuredPosts}
+          catchedError={catchedError.postsError}
+        />
+
         <CategoryList categories={fetchedCategories} />
         <div className={styles.content}>
           {/* //todo : see how to get category */}

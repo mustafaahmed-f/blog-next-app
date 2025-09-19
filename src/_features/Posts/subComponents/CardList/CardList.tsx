@@ -20,41 +20,48 @@ const CardList = ({ page }: { page: number }) => {
 
   const posts = !isFetching && data ? data.data : null;
 
+  console.log("Additional data : ", data?.additionalInfo);
+
   const hasPrev = page - 1 > 0;
   const hasNext = data?.additionalInfo.hasNext;
-
-  if (isError) {
-    return (
-      <div className={styles.container}>
-        <p style={{ textAlign: "center", margin: "50px 0px", color: "red" }}>
-          Unable to fetch posts or category undefined
-        </p>
-        <p style={{ textAlign: "center", margin: "50px 0px", color: "red" }}>
-          {error?.message}
-        </p>
-      </div>
-    );
-  }
-
-  if (isFetching) {
-    return (
-      <div className={styles.container}>
-        <Spinner />
-      </div>
-    );
-  }
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Recent Posts</h1>
-      <div className={styles.posts}>
-        {posts?.map((item: any) => (
-          <div key={item.id}>
-            <Card item={item} />
+      {isFetching ? (
+        <div className={styles.container}>
+          <div
+            style={{
+              textAlign: "center",
+              margin: "50px 0px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Spinner />
           </div>
-        ))}
-      </div>
-      <Pagination page={page} hasPrev={hasPrev} hasNext={hasNext} />
+        </div>
+      ) : isError ? (
+        <div className={styles.container}>
+          <p style={{ textAlign: "center", margin: "50px 0px", color: "red" }}>
+            Unable to fetch posts
+          </p>
+          <p style={{ textAlign: "center", margin: "50px 0px", color: "red" }}>
+            {error?.message}
+          </p>
+        </div>
+      ) : (
+        <>
+          <div className={styles.posts}>
+            {posts?.map((item: any) => (
+              <div key={item.id}>
+                <Card item={item} />
+              </div>
+            ))}
+          </div>
+          <Pagination page={page} hasPrev={hasPrev} hasNext={hasNext} />
+        </>
+      )}
     </div>
   );
 };
