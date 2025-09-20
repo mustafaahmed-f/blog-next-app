@@ -36,7 +36,9 @@ async function Page({ params }: PageProps) {
             )}
             <div className={styles.userTextContainer}>
               <span className={styles.username}>{post?.user.userName}</span>
-              <span className={styles.date}>{post?.createdAt}</span>
+              <span className={styles.date}>
+                {post?.createdAt.slice(0, 10)}
+              </span>
             </div>
           </div>
         </div>
@@ -59,7 +61,6 @@ async function Page({ params }: PageProps) {
           />
           <hr style={{ marginTop: "3rem" }} />
           <div className={styles.comment}>
-            {/* //todo : get comments on client side */}
             <Comments postSlug={slug} />
           </div>
         </div>

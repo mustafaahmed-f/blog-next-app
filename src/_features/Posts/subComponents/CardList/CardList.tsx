@@ -10,7 +10,7 @@ import styles from "./cardList.module.css";
 const CardList = ({ page }: { page: number }) => {
   const POST_PER_PAGE = 3;
 
-  const { data, isPending, isFetching, isError, error, isSuccess } = useQuery({
+  const { data, isFetching, isError, error } = useQuery({
     queryKey: [page, "main_page_recent_posts"],
     queryFn: () => {
       return getPosts(page, POST_PER_PAGE);

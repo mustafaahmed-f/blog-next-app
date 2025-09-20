@@ -11,6 +11,7 @@
 .title {
   font-size: 64px;
   margin-bottom: 50px;
+  font-weight: 600;
 }
 
 .user {
@@ -40,6 +41,7 @@
 .username {
   font-size: 20px;
   font-weight: 500;
+  color: #0777df;
 }
 
 .imageContainer {

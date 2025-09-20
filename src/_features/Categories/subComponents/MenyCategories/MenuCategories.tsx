@@ -3,32 +3,26 @@
 import Link from "next/link";
 import React from "react";
 import styles from "./menuCategories.module.css";
+import { useCategoires } from "@/_context/CategoriesContext";
+import ErrorToast from "@/_components/Toasts/ErrorToast";
 
 const MenuCategories = () => {
+  const { fetchedCategories, catchedError } = useCategoires();
   return (
-    <div className={styles.categoryList}>
-      <Link
-        href="/blog?cat=style"
-        className={`${styles.categoryItem} ${styles.style}`}
-      >
-        Style
-      </Link>
-      <Link href="/blog" className={`${styles.categoryItem} ${styles.fashion}`}>
-        Fashion
-      </Link>
-      <Link href="/blog" className={`${styles.categoryItem} ${styles.food}`}>
-        Food
-      </Link>
-      <Link href="/blog" className={`${styles.categoryItem} ${styles.travel}`}>
-        Travel
-      </Link>
-      <Link href="/blog" className={`${styles.categoryItem} ${styles.culture}`}>
-        Culture
-      </Link>
-      <Link href="/blog" className={`${styles.categoryItem} ${styles.coding}`}>
-        Coding
-      </Link>
-    </div>
+    <>
+      {catchedError && <ErrorToast error={catchedError} />}
+      <div className={styles.categoryList}>
+        {fetchedCategories?.map((item: any) => (
+          <Link
+            href={`/blog?cat=${item.id}`}
+            className={`${styles.categoryItem} ${styles[item.slug]}`}
+            key={item.id}
+          >
+            {item.title}
+          </Link>
+        ))}
+      </div>
+    </>
   );
 };
 
