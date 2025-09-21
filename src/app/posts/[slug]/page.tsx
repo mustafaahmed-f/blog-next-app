@@ -61,7 +61,7 @@ async function Page({ params }: PageProps) {
           />
           <hr style={{ marginTop: "3rem" }} />
           <div className={styles.comment}>
-            <Comments postSlug={slug} />
+            <Comments postSlug={slug} sizeOfComments={10} />
           </div>
         </div>
         <Menu />

@@ -19,7 +19,13 @@ function Providers({
   catchedError,
   fetchedCategories,
 }: ProvidersProps) {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 1000 * 60 * 5,
+      },
+    },
+  });
   return (
     <ThemeContextProvider>
       <QueryClientProvider client={queryClient}>

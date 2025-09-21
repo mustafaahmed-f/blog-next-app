@@ -2,7 +2,6 @@ import Link from "next/link";
 import styles from "./menuPosts.module.css";
 
 const MenuPosts = ({ featuredPosts }: { featuredPosts: any }) => {
-  console.log("Featured posts : ", featuredPosts);
   return (
     <div className={styles.items}>
       {featuredPosts &&

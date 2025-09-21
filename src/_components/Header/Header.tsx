@@ -13,7 +13,9 @@ function Header() {
         <FaTiktok size={20} />
         <FaYoutube size={20} />
       </div>
-      <div className={styles.logo}>lamablog</div>
+      <Link href="/" className={styles.logo}>
+        lamablog
+      </Link>
       <div className={styles.links}>
         <ThemeToggle />
         <Link href="/" className={styles.link}>
