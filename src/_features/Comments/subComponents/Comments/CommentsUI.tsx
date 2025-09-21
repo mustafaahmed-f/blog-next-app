@@ -4,6 +4,7 @@ import Link from "next/link";
 import styles from "./comments.module.css";
 import { forwardRef } from "react";
 import Spinner from "@/_components/Spinner/Spinner";
+import SingleComment from "./SingleComment";
 
 interface CommentsUIProps {
   data:
@@ -89,36 +90,7 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
             </div>
           ) : (
             uniqueComments?.map((item: any) => (
-              <div className={styles.comment} key={item.id}>
-                <div className={styles.user}>
-                  {item?.user?.img ? (
-                    <Image
-                      src={item.user.img}
-                      alt=""
-                      width={50}
-                      height={50}
-                      className={styles.image}
-                    />
-                  ) : (
-                    <Image
-                      src={"/icons8-avatar-50.png"}
-                      alt="User avatar"
-                      width={50}
-                      height={50}
-                      className={styles.image}
-                    />
-                  )}
-                  <div className={styles.userInfo}>
-                    <span className={styles.username}>
-                      {item.user.userName}
-                    </span>
-                    <span className={styles.date}>
-                      {item.createdAt.slice(0, 10)}
-                    </span>
-                  </div>
-                </div>
-                <p className={styles.desc}>{item.desc}</p>
-              </div>
+              <SingleComment key={item.id} item={item} />
             ))
           )}
         </div>
