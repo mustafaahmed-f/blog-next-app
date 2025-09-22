@@ -37,3 +37,49 @@ function SingleComment({ item }: SingleCommentProps) {
 }
 
 export default SingleComment;
+
+/*
+const deleteCommentMutation = useMutation({
+  mutationFn: (id: string) => deleteCommentApi(id), // your API call
+  onSuccess: (deletedId) => {
+    queryClient.setQueryData(["comments"], (oldData: any) => {
+      if (!oldData) return oldData;
+
+      return {
+        ...oldData,
+        pages: oldData.pages.map((page: any) => ({
+          ...page,
+          data: page.data.filter((comment: any) => comment.id !== deletedId),
+        })),
+      };
+    });
+  },
+});
+
+
+const queryClient = useQueryClient();
+
+const editCommentMutation = useMutation({
+  mutationFn: ({ id, desc }: { id: string; desc: string }) =>
+    editCommentApi(id, desc), // your API call
+  onSuccess: (updatedComment) => {
+    queryClient.setQueryData(["comments"], (oldData: any) => {
+      if (!oldData) return oldData;
+
+      return {
+        ...oldData,
+        pages: oldData.pages.map((page: any) => ({
+          ...page,
+          data: page.data.map((comment: any) =>
+            comment.id === updatedComment.id
+              ? { ...comment, ...updatedComment } // update the one comment
+              : comment
+          ),
+        })),
+      };
+    });
+  },
+});
+
+
+*/

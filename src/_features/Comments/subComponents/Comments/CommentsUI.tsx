@@ -5,6 +5,8 @@ import styles from "./comments.module.css";
 import { forwardRef } from "react";
 import Spinner from "@/_components/Spinner/Spinner";
 import SingleComment from "./SingleComment";
+import { Button } from "@/_components/ui/button";
+import { useParams, useRouter } from "next/navigation";
 
 interface CommentsUIProps {
   data:
@@ -18,6 +20,7 @@ interface CommentsUIProps {
         unknown
       >
     | undefined;
+  allComments: any;
   isError: boolean;
   error: any;
   desc: string;
@@ -30,6 +33,7 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
   (
     {
       data,
+      allComments,
       isError,
       error,
       desc,
@@ -39,10 +43,14 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
     },
     ref,
   ) => {
+    const { slug } = useParams();
+    const router = useRouter();
+
     const status: string = "unauthenticated";
-    const allComments = data?.pages.flatMap((page) => page.data) ?? [];
     const uniqueComments = Array.from(
-      new Map(allComments?.map((comment) => [comment.id, comment])).values(),
+      new Map(
+        allComments?.map((comment: any) => [comment.id, comment]),
+      ).values(),
     );
     return (
       <div className={styles.container} ref={ref}>
@@ -119,6 +127,30 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
             </p>
           </div>
         )}
+        {allComments.length >= 40 ? (
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              margin: "50px 0px",
+            }}
+          >
+            <Button
+              style={{
+                padding: "12px 18px",
+                backgroundColor: "yellowgreen",
+                cursor: "pointer",
+              }}
+              variant={"default"}
+              onClick={() => {
+                router.push(`/posts/${slug}/comments`);
+              }}
+            >
+              See Full Comments
+            </Button>
+          </div>
+        ) : null}
       </div>
     );
   },

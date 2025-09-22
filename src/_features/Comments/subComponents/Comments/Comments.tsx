@@ -1,7 +1,7 @@
 "use client";
 import Spinner from "@/_components/Spinner/Spinner";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import useComments from "../../hooks/useComments";
 import { getComments } from "../../services/getComments";
 import styles from "./comments.module.css";
@@ -17,7 +17,7 @@ function Comments({ postSlug, sizeOfComments = 10 }: CommentsProps) {
 
   const commentsSection = useRef<HTMLDivElement | null>(null);
   const loadMoreSection = useRef<HTMLDivElement | null>(null);
-  const { toggleHasMore, desc, setDesc } = useComments();
+  const { desc, setDesc } = useComments();
 
   const {
     data,
@@ -40,15 +40,9 @@ function Comments({ postSlug, sizeOfComments = 10 }: CommentsProps) {
     refetchOnWindowFocus: false,
   });
 
-  useEffect(() => {
-    if (!isFetching && data) {
-      if (data?.pages[data.pages.length - 1]?.additionalInfo.hasMore) {
-        toggleHasMore(true);
-      } else if (!data?.pages[data.pages.length - 1]?.additionalInfo.hasMore) {
-        toggleHasMore(false);
-      }
-    }
-  }, [data, isFetching]);
+  const allComments = data?.pages.flatMap((page) => page.data) ?? [];
+
+  const canFetchMore = allComments.length < 40;
 
   useEffect(() => {
     const intersectionObserver = new IntersectionObserver((entries) => {
@@ -57,7 +51,8 @@ function Comments({ postSlug, sizeOfComments = 10 }: CommentsProps) {
         hasNextPage &&
         !isFetching &&
         !isFetchingNextPage &&
-        !isFetchNextPageError
+        !isFetchNextPageError &&
+        canFetchMore
       ) {
         fetchNextPage();
       }
@@ -87,6 +82,7 @@ function Comments({ postSlug, sizeOfComments = 10 }: CommentsProps) {
     <>
       <CommentsUI
         data={data}
+        allComments={allComments}
         isError={isError}
         error={error}
         desc={desc}
