@@ -10,9 +10,14 @@ import CommentsUI from "./CommentsUI";
 interface CommentsProps {
   postSlug: string;
   sizeOfComments: number;
+  fullComments?: boolean;
 }
 
-function Comments({ postSlug, sizeOfComments = 10 }: CommentsProps) {
+function Comments({
+  postSlug,
+  sizeOfComments = 10,
+  fullComments,
+}: CommentsProps) {
   //todo : get status from clerk
 
   const commentsSection = useRef<HTMLDivElement | null>(null);
@@ -42,7 +47,7 @@ function Comments({ postSlug, sizeOfComments = 10 }: CommentsProps) {
 
   const allComments = data?.pages.flatMap((page) => page.data) ?? [];
 
-  const canFetchMore = allComments.length < 40;
+  const canFetchMore = fullComments ? true : allComments.length < 40;
 
   useEffect(() => {
     const intersectionObserver = new IntersectionObserver((entries) => {
@@ -89,6 +94,7 @@ function Comments({ postSlug, sizeOfComments = 10 }: CommentsProps) {
         setDesc={setDesc}
         isFetchingNextPage={isFetchingNextPage}
         isFetchNextPageError={isFetchNextPageError}
+        canFetchMore={canFetchMore}
         ref={commentsSection}
       />
       <div ref={loadMoreSection}></div>

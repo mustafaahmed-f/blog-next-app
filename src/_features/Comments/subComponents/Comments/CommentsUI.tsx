@@ -6,7 +6,7 @@ import { forwardRef } from "react";
 import Spinner from "@/_components/Spinner/Spinner";
 import SingleComment from "./SingleComment";
 import { Button } from "@/_components/ui/button";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 interface CommentsUIProps {
   data:
@@ -27,6 +27,7 @@ interface CommentsUIProps {
   setDesc: (desc: string) => void;
   isFetchingNextPage: boolean;
   isFetchNextPageError: boolean;
+  canFetchMore: boolean;
 }
 
 const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
@@ -40,13 +41,16 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
       setDesc,
       isFetchNextPageError,
       isFetchingNextPage,
+      canFetchMore,
     },
     ref,
   ) => {
     const { slug } = useParams();
     const router = useRouter();
+    const pathName = usePathname();
+    const isCommentsPage = pathName.includes("comments");
 
-    const status: string = "unauthenticated";
+    const status: string = "authenticated";
     const uniqueComments = Array.from(
       new Map(
         allComments?.map((comment: any) => [comment.id, comment]),
@@ -57,7 +61,7 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
         <h1 className={styles.title}>
           Comments <span>({data?.pages[0]?.additionalInfo.commentsCount})</span>
         </h1>
-        {status === "authenticated" ? (
+        {isCommentsPage ? null : status === "authenticated" ? (
           <div className={styles.write}>
             <textarea
               placeholder="write a comment..."
@@ -127,7 +131,7 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
             </p>
           </div>
         )}
-        {allComments.length >= 40 ? (
+        {allComments.length >= 40 && !canFetchMore ? (
           <div
             style={{
               width: "100%",

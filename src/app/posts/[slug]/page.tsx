@@ -23,8 +23,6 @@ async function Page({ params }: PageProps) {
 
   const post: any = response ? response.data : null;
 
-  // return <div>Single post</div>;
-
   return (
     <>
       {catchedError && <ErrorToast error={catchedError} />}
@@ -47,7 +45,7 @@ async function Page({ params }: PageProps) {
                   <div className={styles.userImageContainer}>
                     <Image
                       src={post.user.image}
-                      alt={post.title}
+                      alt={post.user.userName}
                       fill
                       className={styles.avatar}
                     />
