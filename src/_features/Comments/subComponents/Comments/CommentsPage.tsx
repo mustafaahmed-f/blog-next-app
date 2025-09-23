@@ -5,6 +5,7 @@ import Comments from "./Comments";
 import { useRouter } from "next/navigation";
 import styles from "@/app/posts/[slug]/postPage.module.css";
 import { Button } from "@/_components/ui/button";
+import { getImgSrc } from "@/_utils/helperMethods/getImgSrc";
 
 interface CommentsPageProps {
   postSlug: string;
@@ -34,16 +35,16 @@ function CommentsPage({ postSlug, post }: CommentsPageProps) {
         <div className={styles.textContainer}>
           <Button
             onClick={() => router.push(`/posts/${postSlug}`)}
-            // className="mb-4 rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
             variant={"link"}
+            style={{ cursor: "pointer" }}
           >
-            ← Back to Post
+            <span style={{ marginRight: "2px" }}>←</span> Back to Post
           </Button>
           <h1 className={styles.title}>{post?.title}</h1>
           <div className={styles.user}>
             <div className={styles.userImageContainer}>
               <img
-                src={post?.user?.img || "/default-avatar.png"}
+                src={getImgSrc(post?.user?.img)}
                 alt={post?.user?.userName}
                 className={styles.avatar}
               />
