@@ -92,6 +92,7 @@ function Comments({
         error={error}
         desc={desc}
         setDesc={setDesc}
+        hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
         isFetchNextPageError={isFetchNextPageError}
         canFetchMore={canFetchMore}

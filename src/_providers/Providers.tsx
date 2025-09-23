@@ -5,6 +5,8 @@ import { FeaturedPostsProvider } from "@/_context/FeaturedPostsContext";
 import { ThemeContextProvider } from "@/_context/ThemeContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -19,6 +21,12 @@ function Providers({
   catchedError,
   fetchedCategories,
 }: ProvidersProps) {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {

@@ -1,12 +1,12 @@
-import { InfiniteData } from "@tanstack/react-query";
-import Image from "next/image";
-import Link from "next/link";
-import styles from "./comments.module.css";
-import { forwardRef } from "react";
 import Spinner from "@/_components/Spinner/Spinner";
-import SingleComment from "./SingleComment";
 import { Button } from "@/_components/ui/button";
+import { InfiniteData } from "@tanstack/react-query";
+import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
+import { forwardRef, useRef } from "react";
+import styles from "./comments.module.css";
+import SingleComment from "./SingleComment";
+import { useWindowVirtualizer } from "@tanstack/react-virtual";
 
 interface CommentsUIProps {
   data:
@@ -25,6 +25,7 @@ interface CommentsUIProps {
   error: any;
   desc: string;
   setDesc: (desc: string) => void;
+  hasNextPage: boolean;
   isFetchingNextPage: boolean;
   isFetchNextPageError: boolean;
   canFetchMore: boolean;
@@ -42,6 +43,7 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
       isFetchNextPageError,
       isFetchingNextPage,
       canFetchMore,
+      hasNextPage,
     },
     ref,
   ) => {
@@ -49,6 +51,15 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
     const router = useRouter();
     const pathName = usePathname();
     const isCommentsPage = pathName.includes("comments");
+    const listElement = useRef<HTMLDivElement | null>(null);
+
+    const rowVirtualizer = useWindowVirtualizer({
+      count: hasNextPage ? allComments.length + 1 : allComments.length,
+      scrollMargin: listElement.current?.offsetTop ?? 0,
+      estimateSize: () => 130,
+      measureElement: (el) => el.getBoundingClientRect().height,
+      overscan: 4,
+    });
 
     const status: string = "authenticated";
     const uniqueComments = Array.from(
@@ -61,6 +72,11 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
         <h1 className={styles.title}>
           Comments <span>({data?.pages[0]?.additionalInfo.commentsCount})</span>
         </h1>
+
+        {/* //========================================================================= */}
+        {/* //// Add comment section */}
+        {/* //========================================================================= */}
+
         {isCommentsPage ? null : status === "authenticated" ? (
           <div className={styles.write}>
             <textarea
@@ -100,12 +116,54 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
                 {error?.message}
               </p>
             </div>
+          ) : isCommentsPage ? (
+            <div
+              ref={listElement}
+              style={{
+                height: `${rowVirtualizer.getTotalSize()}px`,
+                width: "100%",
+                position: "relative",
+              }}
+            >
+              {rowVirtualizer.getVirtualItems().map((virtualItem) => {
+                const isLoadingElement =
+                  hasNextPage && virtualItem.index > allComments.length - 1;
+                const Comment = allComments[virtualItem.index];
+
+                return (
+                  <div
+                    key={virtualItem.index}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: `${virtualItem.size}px`,
+                      transform: `translateY(${
+                        virtualItem.start - rowVirtualizer.options.scrollMargin
+                      }px)`,
+                    }}
+                  >
+                    {isLoadingElement ? (
+                      <div></div>
+                    ) : (
+                      <SingleComment key={Comment.id} item={Comment} />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           ) : (
             uniqueComments?.map((item: any) => (
               <SingleComment key={item.id} item={item} />
             ))
           )}
         </div>
+
+        {/* //========================================================================= */}
+        {/* //// Loading spinner */}
+        {/* //========================================================================= */}
+
         {isFetchingNextPage && (
           <div
             style={{
@@ -118,6 +176,11 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
             <Spinner />
           </div>
         )}
+
+        {/* //========================================================================= */}
+        {/* //// Fetch more error indicator */}
+        {/* //========================================================================= */}
+
         {isFetchNextPageError && (
           <div style={{ width: "100%", textAlign: "center" }}>
             <p
@@ -131,6 +194,11 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
             </p>
           </div>
         )}
+
+        {/* //========================================================================= */}
+        {/* //// Fetch more btn */}
+        {/* //========================================================================= */}
+
         {allComments.length >= 40 && !canFetchMore ? (
           <div
             style={{

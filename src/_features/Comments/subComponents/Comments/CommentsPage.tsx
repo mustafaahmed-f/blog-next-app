@@ -67,7 +67,11 @@ function CommentsPage({ postSlug, post }: CommentsPageProps) {
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed right-6 bottom-6 rounded-full bg-gray-800 px-4 py-2 text-white shadow-lg transition hover:bg-gray-700"
+          style={{
+            padding: "5px",
+            cursor: "pointer",
+          }}
+          className="fixed right-4 bottom-16 rounded-full bg-gray-800 p-10 text-white shadow-lg transition hover:bg-gray-700"
         >
           ↑ Top
         </button>
