@@ -1,11 +1,11 @@
 "use client";
 
+import { Button } from "@/_components/ui/button";
+import { getProfileImg } from "@/_utils/helperMethods/getProfileImg";
+import styles from "@/app/posts/[slug]/postPage.module.css";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Comments from "./Comments";
-import { useRouter } from "next/navigation";
-import styles from "@/app/posts/[slug]/postPage.module.css";
-import { Button } from "@/_components/ui/button";
-import { getImgSrc } from "@/_utils/helperMethods/getImgSrc";
 
 interface CommentsPageProps {
   postSlug: string;
@@ -44,7 +44,7 @@ function CommentsPage({ postSlug, post }: CommentsPageProps) {
           <div className={styles.user}>
             <div className={styles.userImageContainer}>
               <img
-                src={getImgSrc(post?.user?.img)}
+                src={getProfileImg(post?.user?.img)}
                 alt={post?.user?.userName}
                 className={styles.avatar}
               />
