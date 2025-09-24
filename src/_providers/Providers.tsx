@@ -3,6 +3,7 @@
 import { CategoriesProvider } from "@/_context/CategoriesContext";
 import { FeaturedPostsProvider } from "@/_context/FeaturedPostsContext";
 import { ThemeContextProvider } from "@/_context/ThemeContext";
+import { queryClient } from "@/_services/TanstackQuery_Client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { usePathname } from "next/navigation";
@@ -27,13 +28,6 @@ function Providers({
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 1000 * 60 * 5,
-      },
-    },
-  });
   return (
     <ThemeContextProvider>
       <QueryClientProvider client={queryClient}>

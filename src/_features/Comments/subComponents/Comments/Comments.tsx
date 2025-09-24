@@ -1,11 +1,17 @@
 "use client";
 import Spinner from "@/_components/Spinner/Spinner";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import {
+  InfiniteData,
+  QueryClient,
+  useInfiniteQuery,
+} from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 import useComments from "../../hooks/useComments";
 import { getComments } from "../../services/getComments";
 import styles from "./comments.module.css";
 import CommentsUI from "./CommentsUI";
+import { queryClient } from "@/_services/TanstackQuery_Client";
+import { jsonResponseType } from "@/_types/JsonResponse.type";
 
 interface CommentsProps {
   postSlug: string;
@@ -37,12 +43,43 @@ function Comments({
   } = useInfiniteQuery({
     queryKey: [postSlug, "Comments"],
     queryFn: ({ pageParam }) => {
-      return getComments(postSlug, pageParam, sizeOfComments);
+      return getComments(postSlug, pageParam as string, sizeOfComments);
     },
     initialPageParam: "",
     getNextPageParam: (lastPage) =>
       lastPage.additionalInfo.nextCursor ?? undefined,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    staleTime: 1000 * 60 * 3,
+    gcTime: 1000 * 60 * 3,
+    initialData: () => {
+      const cached = queryClient.getQueryData<InfiniteData<any>>([
+        postSlug,
+        "Comments",
+      ]);
+
+      if (!cached) return undefined; // 👉 if no cache, let React Query fetch normally
+
+      if (fullComments) {
+        return cached; // 👉 use all cached data (All Comments Page)
+      }
+
+      // 👉 otherwise, only first 2 pages (Single Post Page)
+      return {
+        pageParams: cached.pageParams.slice(0, 2),
+        pages: cached.pages.slice(0, 2),
+      } as InfiniteData<any>;
+    },
+
+    select: (data) => {
+      if (fullComments) return data; // all pages
+
+      // 👉 only first 2 pages
+      return {
+        pageParams: data.pageParams.slice(0, 2),
+        pages: data.pages.slice(0, 2),
+      };
+    },
   });
 
   const allComments = data?.pages.flatMap((page) => page.data) ?? [];

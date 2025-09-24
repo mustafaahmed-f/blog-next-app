@@ -216,7 +216,7 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
               }}
               variant={"default"}
               onClick={() => {
-                router.push(`/posts/${slug}/comments`);
+                (router.push(`/posts/${slug}/comments`), {});
               }}
             >
               See Full Comments
