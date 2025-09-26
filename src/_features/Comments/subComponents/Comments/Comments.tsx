@@ -1,17 +1,12 @@
 "use client";
 import Spinner from "@/_components/Spinner/Spinner";
-import {
-  InfiniteData,
-  QueryClient,
-  useInfiniteQuery,
-} from "@tanstack/react-query";
+import { queryClient } from "@/_services/TanstackQuery_Client";
+import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import useComments from "../../hooks/useComments";
 import { getComments } from "../../services/getComments";
 import styles from "./comments.module.css";
 import CommentsUI from "./CommentsUI";
-import { queryClient } from "@/_services/TanstackQuery_Client";
-import { jsonResponseType } from "@/_types/JsonResponse.type";
 
 interface CommentsProps {
   postSlug: string;

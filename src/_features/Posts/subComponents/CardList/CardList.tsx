@@ -6,14 +6,21 @@ import { getPosts } from "../../services/getPosts";
 import Card from "../Card/Card";
 import Pagination from "../Pagination/Pagination";
 import styles from "./cardList.module.css";
+import { getPostsWithCategory } from "../../services/getPostsWithCategory";
+import { useTransition } from "react";
 
-const CardList = ({ page }: { page: number }) => {
+const CardList = ({ page, category }: { page: number; category?: string }) => {
+  const { 0: isPending, 1: startTransition } = useTransition();
   const POST_PER_PAGE = 3;
 
   const { data, isFetching, isError, error } = useQuery({
-    queryKey: [page, "main_page_recent_posts"],
+    queryKey: category
+      ? [page, category, `main_page_recent_posts_of_${category}`]
+      : [page, "main_page_recent_posts"],
     queryFn: () => {
-      return getPosts(page, POST_PER_PAGE);
+      return category
+        ? getPostsWithCategory(category, page, POST_PER_PAGE)
+        : getPosts(page, POST_PER_PAGE);
     },
     placeholderData: keepPreviousData,
   });
@@ -27,7 +34,9 @@ const CardList = ({ page }: { page: number }) => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Recent Posts</h1>
+      <h1 className={styles.title}>
+        Recent Posts ({data?.additionalInfo.postsCount ?? 0})
+      </h1>
       {isFetching ? (
         <div className={styles.container}>
           <div
@@ -52,14 +61,22 @@ const CardList = ({ page }: { page: number }) => {
         </div>
       ) : (
         <>
-          <div className={styles.posts}>
+          <div
+            className={styles.posts}
+            style={isPending ? { opacity: 0.5, pointerEvents: "none" } : {}}
+          >
             {posts?.map((item: any) => (
               <div key={item.id}>
                 <Card item={item} />
               </div>
             ))}
           </div>
-          <Pagination page={page} hasPrev={hasPrev} hasNext={hasNext} />
+          <Pagination
+            page={page}
+            hasPrev={hasPrev}
+            hasNext={hasNext}
+            startTransition={startTransition}
+          />
         </>
       )}
     </div>

@@ -1,8 +1,5 @@
 import Menu from "@/_components/Menu/Menu";
-import ErrorToast from "@/_components/Toasts/ErrorToast";
-import { getCategories } from "@/_features/Categories/services/getCategories";
 import CategoryList from "@/_features/Categories/subComponents/CategoryList/CategoryList";
-import { getFeaturedPosts } from "@/_features/Posts/services/getFeaturedPosts";
 import CardList from "@/_features/Posts/subComponents/CardList/CardList";
 import Featured from "@/_features/Posts/subComponents/Featured/Featured";
 import styles from "./homepage.module.css";

@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "./featured.module.css";
 import ErrorToast from "@/_components/Toasts/ErrorToast";
 import { useFeaturedPosts } from "@/_context/FeaturedPostsContext";
+import Link from "next/link";
 
 const Featured = () => {
   const { featuredPosts, catchedError } = useFeaturedPosts();
@@ -27,7 +28,12 @@ const Featured = () => {
             <div className={styles.textContainer}>
               <h1 className={styles.postTitle}>{featuredPosts[0]?.title}</h1>
               <p className={styles.postDesc}>{featuredPosts[0]?.desc}</p>
-              <button className={styles.button}>Read More</button>
+              <Link
+                href={`/posts/${featuredPosts[0]?.slug}`}
+                className={styles.buttons}
+              >
+                Read More
+              </Link>
             </div>
           </div>
         ) : (

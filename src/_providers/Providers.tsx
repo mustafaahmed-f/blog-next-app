@@ -4,7 +4,7 @@ import { CategoriesProvider } from "@/_context/CategoriesContext";
 import { FeaturedPostsProvider } from "@/_context/FeaturedPostsContext";
 import { ThemeContextProvider } from "@/_context/ThemeContext";
 import { queryClient } from "@/_services/TanstackQuery_Client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";

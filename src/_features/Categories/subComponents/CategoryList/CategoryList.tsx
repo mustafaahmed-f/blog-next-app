@@ -16,7 +16,7 @@ const CategoryList = () => {
         <div className={styles.categories}>
           {fetchedCategories?.map((item: any) => (
             <Link
-              href={`/blog?cat=${item.id}`}
+              href={`/blog?cat=${item.id}&name=${item.title}`}
               className={`${styles.category} ${styles[item.title]}`}
               key={item.id}
             >

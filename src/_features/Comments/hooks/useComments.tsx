@@ -1,7 +1,5 @@
 import { useReducer } from "react";
 
-interface useCommentsProps {}
-
 type initialStateType = {
   desc: string;
   cursor: string;

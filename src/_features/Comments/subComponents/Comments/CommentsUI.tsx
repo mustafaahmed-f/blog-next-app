@@ -70,7 +70,11 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
     return (
       <div className={styles.container} ref={ref}>
         <h1 className={styles.title}>
-          Comments <span>({data?.pages[0]?.additionalInfo.commentsCount})</span>
+          Comments{" "}
+          <span>
+            ({allComments.length ?? 0} of{" "}
+            {data?.pages[0]?.additionalInfo.commentsCount})
+          </span>
         </h1>
 
         {/* //========================================================================= */}
@@ -216,7 +220,12 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
               }}
               variant={"default"}
               onClick={() => {
-                (router.push(`/posts/${slug}/comments`), {});
+                (router.push(`/posts/${slug}/comments`),
+                  {
+                    scroll: "smooth",
+                    hash: "#top",
+                    
+                  });
               }}
             >
               See Full Comments
