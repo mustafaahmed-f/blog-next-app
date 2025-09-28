@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.input {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+/* Make toolbar sticky */
+.ql-toolbar {
+  position: sticky;
+  top: 0;
+  background: white; /* prevent text from showing through */
+  z-index: 10; /* stay above editor content */
+  border-bottom: 1px solid #ddd; /* optional, keeps it visually separate */
+}
