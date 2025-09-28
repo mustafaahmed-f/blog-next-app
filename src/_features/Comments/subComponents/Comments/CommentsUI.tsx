@@ -220,12 +220,7 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
               }}
               variant={"default"}
               onClick={() => {
-                (router.push(`/posts/${slug}/comments`),
-                  {
-                    scroll: "smooth",
-                    hash: "#top",
-                    
-                  });
+                router.push(`/posts/${slug}/comments`);
               }}
             >
               See Full Comments
