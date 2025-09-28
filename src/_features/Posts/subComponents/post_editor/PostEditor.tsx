@@ -16,8 +16,6 @@ function PostEditor({}: PostEditorProps) {
   const [title, setTitle] = useState<string>("");
   const [catSlug, setCatSlug] = useState<string>("");
   const { fetchedCategories, catchedError } = useCategoires();
-
-  // const editorRef = useRef<HTMLDivElement>(null);
   const quillRef = useRef<any>(null);
 
   return (

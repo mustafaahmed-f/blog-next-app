@@ -23,11 +23,21 @@
   font-size: 1rem;
 }
 
-/* Make toolbar sticky */
-.ql-toolbar {
+:global(.ql-toolbar) {
   position: sticky;
-  top: 0;
-  background: white; /* prevent text from showing through */
-  z-index: 10; /* stay above editor content */
-  border-bottom: 1px solid #ddd; /* optional, keeps it visually separate */
+  top: 0; /* adjust if you have a fixed header (e.g. top: 64px) */
+  z-index: 50;
+  background: #fff; /* avoid transparent overlap */
+  border-bottom: 1px solid #e6e6e6;
+}
+
+/* editor area */
+:global(.ql-container) {
+  border-top: none; /* avoid double border with toolbar */
+}
+
+:global(.ql-editor) {
+  min-height: 300px; /* ensure big typing area */
+  padding: 1rem;
+  line-height: 1.6;
 }
