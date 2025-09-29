@@ -4,7 +4,7 @@ import ErrorToast from "@/_components/Toasts/ErrorToast";
 import { useCategoires } from "@/_context/CategoriesContext";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./PostEditor.module.css";
 import QuillEditor from "./QuillEditor";
 
@@ -15,8 +15,32 @@ interface PostEditorProps {}
 function PostEditor({}: PostEditorProps) {
   const [title, setTitle] = useState<string>("");
   const [catSlug, setCatSlug] = useState<string>("");
+  const [quillInstance, setQuillInstance] = useState<Quill | null>(null);
   const { fetchedCategories, catchedError } = useCategoires();
-  const quillRef = useRef<any>(null);
+
+  function onReady(q: Quill) {
+    setQuillInstance(q);
+  }
+
+  console.log("quillInstance", quillInstance);
+
+  useEffect(() => {
+    function handler() {
+      if (quillInstance) {
+        console.log("Get contents : ", quillInstance?.getContents());
+      }
+    }
+
+    if (quillInstance) {
+      quillInstance.on(Quill.events.TEXT_CHANGE, handler);
+    }
+
+    return () => {
+      if (quillInstance) {
+        quillInstance.off(Quill.events.TEXT_CHANGE, handler);
+      }
+    };
+  }, [quillInstance]);
 
   return (
     <>
@@ -54,7 +78,6 @@ function PostEditor({}: PostEditorProps) {
         </div>
 
         <QuillEditor
-          ref={quillRef}
           defaultValue={new Delta()
             .insert("Hello")
             .insert("\n", { header: 1 })
@@ -63,6 +86,7 @@ function PostEditor({}: PostEditorProps) {
             .insert(" ")
             .insert("content", { underline: true })
             .insert("\n")}
+          onReady={onReady}
         />
       </div>
     </>
