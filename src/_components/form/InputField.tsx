@@ -7,6 +7,7 @@ import {
   UseFormWatch,
 } from "react-hook-form";
 import { Input } from "../ui/input";
+import { getErrObject } from "@/_utils/helperMethods/getErrObject";
 
 interface InputFieldProps<T extends FieldValues> {
   name: Path<T>;
@@ -31,6 +32,7 @@ function InputField<T extends FieldValues>({
   trigger,
   register,
 }: InputFieldProps<T>) {
+  const errorObj = getErrObject<T>(errors, name);
   return (
     <div
       style={{
@@ -51,6 +53,9 @@ function InputField<T extends FieldValues>({
         {...register(name)}
         style={{ padding: "10px" }}
       />
+      {errorObj && (
+        <p className="mt-1 text-xs text-red-600">{errorObj.message}</p>
+      )}
     </div>
   );
 }

@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import styles from "./DropList.module.css";
+import { getErrObject } from "@/_utils/helperMethods/getErrObject";
 
 interface DropListProps<T extends FieldValues> {
   options: any[];
@@ -36,6 +37,7 @@ function DropList<T extends FieldValues>({
   trigger,
   errors,
 }: DropListProps<T>) {
+  const errorObj = getErrObject<T>(errors, name);
   function onSelectChange(value: string) {
     setValue(name, value as PathValue<T, Path<T>>, { shouldValidate: true });
     trigger(name);
@@ -73,6 +75,9 @@ function DropList<T extends FieldValues>({
           ))}
         </SelectContent>
       </Select>
+      {errorObj && (
+        <p className="mt-1 text-xs text-red-600">{errorObj.message}</p>
+      )}
     </div>
   );
 }

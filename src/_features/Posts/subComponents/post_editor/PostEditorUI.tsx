@@ -73,7 +73,7 @@ function PostEditorUI({
       <ImageUploader<InferFormValues<typeof addPostYupValidation>>
         name="img"
         required
-        label="Image"
+        label="Main Image"
         errors={methods.formState.errors}
         setValue={methods.setValue}
         trigger={methods.trigger}

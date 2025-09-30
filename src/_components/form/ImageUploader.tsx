@@ -8,6 +8,7 @@ import {
   UseFormWatch,
 } from "react-hook-form";
 import styles from "./ImageUploader.module.css";
+import { getErrObject } from "@/_utils/helperMethods/getErrObject";
 
 interface ImageUploaderProps<T extends FieldValues> {
   name: Path<T>;
@@ -30,6 +31,7 @@ function ImageUploader<T extends FieldValues>({
 }: ImageUploaderProps<T>) {
   const [image, setImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const errorObj = getErrObject<T>(errors, name);
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -43,7 +45,11 @@ function ImageUploader<T extends FieldValues>({
 
   return (
     <div className={styles.imageUpload}>
-      <label>Main Image : </label>
+      <label style={{ wordBreak: "keep-all", whiteSpace: "nowrap" }}>
+        {label}
+        {required && <span className="ms-1 text-red-500">*</span>}
+        {" : "}
+      </label>
       <label htmlFor="postImage" className={styles.uploadBtn}>
         {image ? "Change Image" : "Choose Image"}
       </label>
@@ -59,6 +65,10 @@ function ImageUploader<T extends FieldValues>({
         <div className={styles.imagePreview}>
           <img src={previewUrl} alt="Preview" />
         </div>
+      )}
+
+      {errorObj && (
+        <p className="mt-1 text-xs text-red-600">{errorObj.message}</p>
       )}
     </div>
   );

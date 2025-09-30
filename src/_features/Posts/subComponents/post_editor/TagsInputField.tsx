@@ -8,6 +8,7 @@ import {
   UseFormTrigger,
   UseFormWatch,
 } from "react-hook-form";
+import { getErrObject } from "@/_utils/helperMethods/getErrObject";
 
 interface TagsInputFieldProps<T extends FieldValues> {
   name: Path<T>;
@@ -28,6 +29,7 @@ function TagsInputField<T extends FieldValues>({
   setValue,
   trigger,
 }: TagsInputFieldProps<T>) {
+  const errorObj = getErrObject<T>(errors, name);
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState<string>("");
 
@@ -93,6 +95,9 @@ function TagsInputField<T extends FieldValues>({
       <span style={{ fontSize: "12px", color: "gray" }}>
         Press enter to add tags
       </span>
+      {errorObj && (
+        <p className="mt-1 text-xs text-red-600">{errorObj.message}</p>
+      )}
     </div>
   );
 }
