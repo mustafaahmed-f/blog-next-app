@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./PostEditor.module.css";
 import {
   FieldValues,
   Path,
+  PathValue,
   UseFormSetValue,
   UseFormTrigger,
   UseFormWatch,
@@ -30,6 +31,12 @@ function TagsInputField<T extends FieldValues>({
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState<string>("");
 
+  function updateFromValue() {
+    setValue(name, tags.join(",") as PathValue<T, Path<T>>, {
+      shouldValidate: true,
+    });
+  }
+
   function addTag(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -44,6 +51,8 @@ function TagsInputField<T extends FieldValues>({
   function removeTag(tag: string) {
     setTags(tags.filter((t) => t !== tag));
   }
+
+  useEffect(() => updateFromValue(), [tags]);
 
   return (
     <div

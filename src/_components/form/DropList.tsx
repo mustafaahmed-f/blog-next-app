@@ -1,6 +1,7 @@
 import {
   FieldValues,
   Path,
+  PathValue,
   UseFormSetValue,
   UseFormTrigger,
   UseFormWatch,
@@ -35,6 +36,11 @@ function DropList<T extends FieldValues>({
   trigger,
   errors,
 }: DropListProps<T>) {
+  function onSelectChange(value: string) {
+    setValue(name, value as PathValue<T, Path<T>>, { shouldValidate: true });
+    trigger(name);
+  }
+
   return (
     <div
       style={{
@@ -49,7 +55,7 @@ function DropList<T extends FieldValues>({
         {required && <span className="ms-1 text-red-500">*</span>}
         {" : "}
       </label>
-      <Select>
+      <Select onValueChange={onSelectChange}>
         <SelectTrigger
           style={{ width: "100%", paddingInline: "10px", cursor: "pointer" }}
         >

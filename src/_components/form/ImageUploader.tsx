@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   FieldValues,
   Path,
+  PathValue,
   UseFormSetValue,
   UseFormTrigger,
   UseFormWatch,
@@ -35,6 +36,8 @@ function ImageUploader<T extends FieldValues>({
     if (file) {
       setImage(file);
       setPreviewUrl(URL.createObjectURL(file));
+      setValue(name, file as PathValue<T, Path<T>>, { shouldValidate: true });
+      trigger(name);
     }
   }
 

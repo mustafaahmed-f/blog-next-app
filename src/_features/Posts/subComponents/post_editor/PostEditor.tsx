@@ -51,6 +51,9 @@ function PostEditor({}: PostEditorProps) {
           "blog_app_post_content",
           JSON.stringify(quillInstance.getContents()),
         );
+        methods.setValue("desc", quillInstance.getText());
+        methods.setValue("html", quillInstance.getSemanticHTML());
+        methods.setValue("delta", JSON.stringify(quillInstance.getContents()));
       }
     }
 
