@@ -1,6 +1,7 @@
 import Quill from "quill";
 import React, { forwardRef, useEffect, useLayoutEffect, useRef } from "react";
 import { quillOptions } from "../../utils/quillOptions";
+import { QuillImageHandler } from "../../utils/QuillImageHandler";
 
 interface QuillEditorProps {
   defaultValue?: any;
@@ -17,6 +18,8 @@ function QuillEditor({ defaultValue, onReady }: QuillEditorProps) {
       container!.ownerDocument.createElement("div"),
     );
     const quill = new Quill(editorContainer, quillOptions);
+    const toolbar: any = quill.getModule("toolbar");
+    toolbar.addHandler("image", () => QuillImageHandler(quill));
 
     if (typeof onReady === "function") {
       onReady(quill);
