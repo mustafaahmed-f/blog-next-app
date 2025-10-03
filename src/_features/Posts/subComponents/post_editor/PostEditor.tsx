@@ -2,25 +2,26 @@
 
 import ErrorToast from "@/_components/Toasts/ErrorToast";
 import { useCategoires } from "@/_context/CategoriesContext";
+import { InferFormValues } from "@/_utils/helperMethods/InferFormValues";
+import {
+  showErrorToast,
+  showSuccessToast,
+} from "@/_utils/helperMethods/showToasts";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from "next/navigation";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
-import { useEffect, useRef, useState } from "react";
-import styles from "./PostEditor.module.css";
-import QuillEditor from "./QuillEditor";
-import { Button } from "@/_components/ui/button";
-import DropList from "@/_components/form/DropList";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { InferFormValues } from "@/_utils/helperMethods/InferFormValues";
-import { addPostYupValidation } from "../../utils/addPostYupValidation";
+import { sendPost } from "../../services/sendPost";
 import { addPostDefaultValues } from "../../utils/addPostDefaultValues";
-import { yupResolver } from "@hookform/resolvers/yup";
-import TagsInputField from "./TagsInputField";
-import ImageUploader from "@/_components/form/ImageUploader";
+import { addPostYupValidation } from "../../utils/addPostYupValidation";
 import PostEditorUI from "./PostEditorUI";
 
 interface PostEditorProps {}
 
 function PostEditor({}: PostEditorProps) {
+  const router = useRouter();
   const { fetchedCategories, catchedError } = useCategoires();
 
   const [title, setTitle] = useState<string>("");
@@ -29,12 +30,6 @@ function PostEditor({}: PostEditorProps) {
   );
 
   const [quillInstance, setQuillInstance] = useState<Quill | null>(null);
-
-  const canSend: boolean =
-    title !== "" &&
-    selectedCat !== "" &&
-    quillInstance !== null &&
-    quillInstance.getLength() > 10;
 
   const methods = useForm<InferFormValues<typeof addPostYupValidation>>({
     defaultValues: addPostDefaultValues,
@@ -68,20 +63,34 @@ function PostEditor({}: PostEditorProps) {
     };
   }, [quillInstance]);
 
-  function publishPost() {
-    // if (!canSend) return;
-    //todo : after submiting the post, clear the localstorage
-    //todo : the final post will be form data as we will send the img file
+  async function publishPost(
+    data: InferFormValues<typeof addPostYupValidation>,
+  ) {
+    const formData = new FormData();
+    formData.set("title", data.title);
+    formData.set("categoryId", data.categoryId);
+    formData.set("desc", data.desc);
+    formData.set("html", data.html);
+    formData.set("delta", data.delta);
+    formData.set("img", data.img);
+    formData.set("tags", data.tags);
 
-    const newPost = {
-      title,
-      desc: quillInstance?.getText(),
-      // tags: tags.join(","),
-      html: quillInstance?.getSemanticHTML(),
-      delta: JSON.stringify(quillInstance?.getContents()),
-    };
-
-    console.log("Values : ", methods.getValues());
+    try {
+      const response = await sendPost(formData);
+      if (response.data) {
+        showSuccessToast("Post published successfully");
+        router.push(`/posts/${response.data.slug}`);
+      }
+    } catch (error: any) {
+      console.log("Error : ", error);
+      if (error.properties) {
+        for (const property in error.properties) {
+          showErrorToast((property as any).errors[0]);
+        }
+        return;
+      }
+      showErrorToast(error.message);
+    }
   }
 
   function onReady(q: Quill) {
@@ -91,12 +100,14 @@ function PostEditor({}: PostEditorProps) {
   return (
     <>
       {catchedError && <ErrorToast error={catchedError} />}
-      <PostEditorUI
-        methods={methods}
-        categories={fetchedCategories}
-        onReady={onReady}
-        publishPost={publishPost}
-      />
+      <form onSubmit={methods.handleSubmit(publishPost)}>
+        <PostEditorUI
+          methods={methods}
+          categories={fetchedCategories}
+          onReady={onReady}
+          disabled={!methods.formState.isValid}
+        />
+      </form>
     </>
   );
 }

@@ -4,6 +4,7 @@ export const addPostYupValidation = yup.object().shape({
   title: yup
     .string()
     .required("Title is required")
+    .min(5, "Title must be at least 5 characters")
     .max(100, "Title must be at most 100 characters"),
 
   desc: yup

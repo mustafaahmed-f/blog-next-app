@@ -1,3 +1,4 @@
+import { showErrorToast } from "@/_utils/helperMethods/showToasts";
 import Quill from "quill";
 import { sendPostImg } from "../services/sendPostImg";
 
@@ -15,15 +16,21 @@ export function QuillImageHandler(quill: Quill) {
     const formData: FormData = new FormData();
     formData.set("image", image);
 
-    const response = await sendPostImg(formData);
-    if (response.error) {
-      console.log("Error : ", response.error);
-      return;
+    try {
+      const response = await sendPostImg(formData);
+      if (response.error) {
+        showErrorToast(response.error);
+        console.log("Error : ", response.error);
+        return;
+      }
+
+      const imageURL = response.data;
+
+      const range = quill.getSelection();
+      quill.insertEmbed(range?.index ?? 1, "image", imageURL);
+    } catch (error: any) {
+      showErrorToast(error.message);
+      console.log(error);
     }
-
-    const imageURL = response.data;
-
-    const range = quill.getSelection();
-    quill.insertEmbed(range?.index ?? 1, "image", imageURL);
   };
 }

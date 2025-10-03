@@ -1,0 +1,9 @@
+import { _createSingleRecord } from "@/_services/CRUD_operations";
+import { mainURLs } from "@/_utils/constants/mainURLs";
+
+export async function sendPost(data: FormData) {
+  return _createSingleRecord({
+    _APIEndpointName: `${mainURLs.Posts}/addPost`,
+    data,
+  });
+}

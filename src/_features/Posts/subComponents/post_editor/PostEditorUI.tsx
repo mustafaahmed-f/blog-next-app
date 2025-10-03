@@ -16,14 +16,14 @@ interface PostEditorUIProps {
   methods: UseFormReturn<PostFormValues>;
   categories: any[];
   onReady: (q: Quill) => void;
-  publishPost: () => void;
+  disabled?: boolean;
 }
 
 function PostEditorUI({
   methods,
   categories,
   onReady,
-  publishPost,
+  disabled,
 }: PostEditorUIProps) {
   return (
     <div className={styles.container}>
@@ -91,7 +91,7 @@ function PostEditorUI({
           alignItems: "center",
         }}
       >
-        <Button onClick={publishPost} className={styles.publishBtn}>
+        <Button className={styles.publishBtn} disabled={disabled}>
           Publish
         </Button>
       </div>
