@@ -83,7 +83,7 @@ async function Page({ params }: PageProps) {
             <div className={styles.post}>
               <div
                 className={styles.description}
-                dangerouslySetInnerHTML={{ __html: post?.desc }}
+                dangerouslySetInnerHTML={{ __html: post?.html }}
               />
               <hr style={{ marginTop: "3rem" }} />
               <div className={styles.comment}>

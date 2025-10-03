@@ -7,7 +7,7 @@ interface AuthLinksProps {}
 
 function AuthLinks({}: AuthLinksProps) {
   const [open, setOpen] = useState(false);
-  let status = "unauthenticated";
+  let status = "authenticated";
   return (
     <>
       {status === "unauthenticated" ? (
@@ -16,7 +16,7 @@ function AuthLinks({}: AuthLinksProps) {
         </Link>
       ) : (
         <>
-          <Link href="/write" className={styles.link}>
+          <Link href="/newpost" className={styles.link}>
             Write
           </Link>
           <span className={styles.link} onClick={() => {}}>
@@ -31,8 +31,7 @@ function AuthLinks({}: AuthLinksProps) {
       </div>
       {open && (
         <div className={styles.responsiveMenu}>
-          <Link href="/">Homepage</Link>
-          <Link href="/">About</Link>
+          <Link href="/">HomePage</Link>
           <Link href="/">Contact</Link>
           {status === "notauthenticated" ? (
             <Link href="/login">Login</Link>

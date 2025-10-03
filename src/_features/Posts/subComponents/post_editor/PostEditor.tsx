@@ -66,6 +66,7 @@ function PostEditor({}: PostEditorProps) {
   async function publishPost(
     data: InferFormValues<typeof addPostYupValidation>,
   ) {
+    console.log(data);
     const formData = new FormData();
     formData.set("title", data.title);
     formData.set("categoryId", data.categoryId);
@@ -96,6 +97,9 @@ function PostEditor({}: PostEditorProps) {
   function onReady(q: Quill) {
     setQuillInstance(q);
   }
+
+  console.log("Errors : ", methods.formState.errors);
+  console.log("Isvalid : ", methods.formState.isValid);
 
   return (
     <>
