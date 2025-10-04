@@ -1,0 +1,20 @@
+.likeSection {
+  margin-block: 30px;
+}
+
+.likeIcon {
+  transition: color 0.2s;
+  cursor: pointer;
+  color: white;
+}
+
+.likeIcon:hover {
+  color: #9eccf7;
+}
+
+.likeIcon.active {
+  color: #0d87f9;
+}
+.likeIcon.active:hover {
+  color: #0d87f9;
+}

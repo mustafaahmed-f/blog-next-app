@@ -1,10 +1,12 @@
-import Image from "next/image";
-import styles from "./postPage.module.css";
-import Comments from "@/_features/Comments/subComponents/Comments/Comments";
 import Menu from "@/_components/Menu/Menu";
-import { getSinglePost } from "@/_features/Posts/services/getSinglePost";
 import ErrorToast from "@/_components/Toasts/ErrorToast";
+import Comments from "@/_features/Comments/subComponents/Comments/Comments";
+import { getSinglePost } from "@/_features/Posts/services/getSinglePost";
+import { HeartIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import styles from "./postPage.module.css";
+import LikeBtn from "@/_features/Posts/subComponents/LikeBtn/LikeBtn";
 interface PageProps {
   params: Promise<{
     slug: string;
@@ -94,6 +96,7 @@ async function Page({ params }: PageProps) {
                 className={styles.description}
                 dangerouslySetInnerHTML={{ __html: post?.html }}
               />
+              <LikeBtn />
               <hr style={{ marginTop: "3rem" }} />
               <div className={styles.comment}>
                 <Comments postSlug={slug} sizeOfComments={20} />
