@@ -17,6 +17,7 @@ interface PostEditorUIProps {
   categories: any[];
   onReady: (q: Quill) => void;
   disabled?: boolean;
+  editMode?: boolean;
 }
 
 function PostEditorUI({
@@ -24,6 +25,7 @@ function PostEditorUI({
   categories,
   onReady,
   disabled,
+  editMode,
 }: PostEditorUIProps) {
   return (
     <div className={styles.container}>
@@ -66,21 +68,28 @@ function PostEditorUI({
         errors={methods.formState.errors}
         setValue={methods.setValue}
         trigger={methods.trigger}
+        editMode={editMode}
       />
 
       {/* //// Add image section */}
 
       <ImageUploader<InferFormValues<typeof addPostYupValidation>>
         name="img"
-        required
         label="Main Image"
+        required
         errors={methods.formState.errors}
         setValue={methods.setValue}
         trigger={methods.trigger}
         watch={methods.watch}
+        editMode={editMode}
       />
 
-      <QuillEditor defaultValue={""} onReady={onReady} />
+      <QuillEditor<InferFormValues<typeof addPostYupValidation>>
+        defaultValue={""}
+        onReady={onReady}
+        watch={methods.watch}
+        editMode={editMode}
+      />
 
       <div
         style={{
@@ -92,7 +101,7 @@ function PostEditorUI({
         }}
       >
         <Button className={styles.publishBtn} disabled={disabled}>
-          Publish
+          {editMode ? "Update" : "Publish"}
         </Button>
       </div>
     </div>

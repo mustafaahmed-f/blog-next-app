@@ -8,7 +8,7 @@ import {
   showSuccessToast,
 } from "@/_utils/helperMethods/showToasts";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import { useEffect, useState } from "react";
@@ -17,27 +17,36 @@ import { sendPost } from "../../services/sendPost";
 import { addPostDefaultValues } from "../../utils/addPostDefaultValues";
 import { addPostYupValidation } from "../../utils/addPostYupValidation";
 import PostEditorUI from "./PostEditorUI";
+import { editPost } from "../../services/editPost";
 
-interface PostEditorProps {}
+interface PostEditorProps {
+  editMode?: boolean;
+  editModeDefaultValues?: InferFormValues<typeof addPostYupValidation>;
+}
 
-function PostEditor({}: PostEditorProps) {
+function PostEditor({
+  editMode = false,
+  editModeDefaultValues,
+}: PostEditorProps) {
   const router = useRouter();
+  const { slug } = useParams();
   const { fetchedCategories, catchedError } = useCategoires();
-
-  const [title, setTitle] = useState<string>("");
-  const [selectedCat, setSelectedCat] = useState<string>(
-    fetchedCategories[0]?.id ?? "",
-  );
 
   const [quillInstance, setQuillInstance] = useState<Quill | null>(null);
 
   const methods = useForm<InferFormValues<typeof addPostYupValidation>>({
-    defaultValues: addPostDefaultValues,
+    defaultValues: editMode ? editModeDefaultValues : addPostDefaultValues,
     resolver: yupResolver(addPostYupValidation),
     mode: "onChange",
     reValidateMode: "onChange",
     criteriaMode: "firstError",
   });
+
+  useEffect(() => {
+    if (editMode && editModeDefaultValues) {
+      methods.reset(editModeDefaultValues);
+    }
+  }, [editMode, editModeDefaultValues, methods]);
 
   useEffect(() => {
     function handler() {
@@ -46,9 +55,16 @@ function PostEditor({}: PostEditorProps) {
           "blog_app_post_content",
           JSON.stringify(quillInstance.getContents()),
         );
-        methods.setValue("desc", quillInstance.getText());
-        methods.setValue("html", quillInstance.getSemanticHTML());
-        methods.setValue("delta", JSON.stringify(quillInstance.getContents()));
+        methods.setValue("desc", quillInstance.getText(), {
+          shouldDirty: true,
+        });
+        methods.setValue("html", quillInstance.getSemanticHTML(), {
+          shouldDirty: true,
+        });
+        methods.setValue("delta", JSON.stringify(quillInstance.getContents()), {
+          shouldDirty: true,
+        });
+        methods.trigger();
       }
     }
 
@@ -73,13 +89,19 @@ function PostEditor({}: PostEditorProps) {
     formData.set("desc", data.desc);
     formData.set("html", data.html);
     formData.set("delta", data.delta);
-    formData.set("img", data.img);
+    if (data.img instanceof File) formData.set("img", data.img);
     formData.set("tags", data.tags);
 
     try {
-      const response = await sendPost(formData);
+      const response = editMode
+        ? await editPost(formData, slug as string)
+        : await sendPost(formData);
       if (response.data) {
-        showSuccessToast("Post published successfully");
+        showSuccessToast(
+          editMode
+            ? "Post updated successfully"
+            : "Post published successfully",
+        );
         router.push(`/posts/${response.data.slug}`);
       }
     } catch (error: any) {
@@ -98,9 +120,6 @@ function PostEditor({}: PostEditorProps) {
     setQuillInstance(q);
   }
 
-  console.log("Errors : ", methods.formState.errors);
-  console.log("Isvalid : ", methods.formState.isValid);
-
   return (
     <>
       {catchedError && <ErrorToast error={catchedError} />}
@@ -109,7 +128,12 @@ function PostEditor({}: PostEditorProps) {
           methods={methods}
           categories={fetchedCategories}
           onReady={onReady}
-          disabled={!methods.formState.isValid}
+          disabled={
+            editMode && !methods.formState.isDirty
+              ? true
+              : !methods.formState.isValid
+          }
+          editMode={editMode}
         />
       </form>
     </>

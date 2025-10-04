@@ -16,9 +16,8 @@ export const addPostYupValidation = yup.object().shape({
     .mixed<File | string>()
     .required("Image is required")
     .test("fileOrUrl", "Invalid image", (value) => {
-      if (!value) return false;
+      if (!value) return true; // ✅ allow missing value
 
-      // If it's a string → validate URL
       if (typeof value === "string") {
         try {
           new URL(value);
@@ -28,10 +27,9 @@ export const addPostYupValidation = yup.object().shape({
         }
       }
 
-      // If it's a File → validate image type & size
       if (value instanceof File) {
         const isImage = value.type.startsWith("image/");
-        const isValidSize = value.size <= 1024 * 1024; // 1MB
+        const isValidSize = value.size <= 1024 * 1024;
         return isImage && isValidSize;
       }
 

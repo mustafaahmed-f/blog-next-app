@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FieldValues,
   Path,
@@ -18,6 +18,7 @@ interface ImageUploaderProps<T extends FieldValues> {
   watch: UseFormWatch<T>;
   setValue: UseFormSetValue<T>;
   trigger: UseFormTrigger<T>;
+  editMode?: boolean;
 }
 
 function ImageUploader<T extends FieldValues>({
@@ -28,6 +29,7 @@ function ImageUploader<T extends FieldValues>({
   watch,
   setValue,
   trigger,
+  editMode,
 }: ImageUploaderProps<T>) {
   const [image, setImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -38,10 +40,19 @@ function ImageUploader<T extends FieldValues>({
     if (file) {
       setImage(file);
       setPreviewUrl(URL.createObjectURL(file));
-      setValue(name, file as PathValue<T, Path<T>>, { shouldValidate: true });
+      setValue(name, file as PathValue<T, Path<T>>, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
       trigger(name);
     }
   }
+
+  useEffect(() => {
+    if (editMode) {
+      setPreviewUrl(watch("img" as Path<T>));
+    }
+  }, []);
 
   return (
     <div className={styles.imageUpload}>
@@ -51,7 +62,7 @@ function ImageUploader<T extends FieldValues>({
         {" : "}
       </label>
       <label htmlFor="postImage" className={styles.uploadBtn}>
-        {image ? "Change Image" : "Choose Image"}
+        {image || editMode ? "Change Image" : "Choose Image"}
       </label>
       <input
         id="postImage"

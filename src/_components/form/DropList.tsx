@@ -15,6 +15,7 @@ import {
 } from "../ui/select";
 import styles from "./DropList.module.css";
 import { getErrObject } from "@/_utils/helperMethods/getErrObject";
+import { useEffect } from "react";
 
 interface DropListProps<T extends FieldValues> {
   options: any[];
@@ -39,7 +40,10 @@ function DropList<T extends FieldValues>({
 }: DropListProps<T>) {
   const errorObj = getErrObject<T>(errors, name);
   function onSelectChange(value: string) {
-    setValue(name, value as PathValue<T, Path<T>>, { shouldValidate: true });
+    setValue(name, value as PathValue<T, Path<T>>, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
     trigger(name);
   }
 
@@ -57,7 +61,7 @@ function DropList<T extends FieldValues>({
         {required && <span className="ms-1 text-red-500">*</span>}
         {" : "}
       </label>
-      <Select onValueChange={onSelectChange}>
+      <Select onValueChange={onSelectChange} value={watch(name)}>
         <SelectTrigger
           style={{ width: "100%", paddingInline: "10px", cursor: "pointer" }}
         >

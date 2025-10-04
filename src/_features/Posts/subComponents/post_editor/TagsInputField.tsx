@@ -1,5 +1,5 @@
+import { getErrObject } from "@/_utils/helperMethods/getErrObject";
 import { useEffect, useState } from "react";
-import styles from "./PostEditor.module.css";
 import {
   FieldValues,
   Path,
@@ -8,7 +8,7 @@ import {
   UseFormTrigger,
   UseFormWatch,
 } from "react-hook-form";
-import { getErrObject } from "@/_utils/helperMethods/getErrObject";
+import styles from "./PostEditor.module.css";
 
 interface TagsInputFieldProps<T extends FieldValues> {
   name: Path<T>;
@@ -18,6 +18,7 @@ interface TagsInputFieldProps<T extends FieldValues> {
   watch: UseFormWatch<T>;
   setValue: UseFormSetValue<T>;
   trigger: UseFormTrigger<T>;
+  editMode?: boolean;
 }
 
 function TagsInputField<T extends FieldValues>({
@@ -28,6 +29,7 @@ function TagsInputField<T extends FieldValues>({
   watch,
   setValue,
   trigger,
+  editMode,
 }: TagsInputFieldProps<T>) {
   const errorObj = getErrObject<T>(errors, name);
   const [tags, setTags] = useState<string[]>([]);
@@ -36,6 +38,7 @@ function TagsInputField<T extends FieldValues>({
   function updateFromValue() {
     setValue(name, tags.join(",") as PathValue<T, Path<T>>, {
       shouldValidate: true,
+      shouldDirty: true,
     });
   }
 
@@ -54,7 +57,15 @@ function TagsInputField<T extends FieldValues>({
     setTags(tags.filter((t) => t !== tag));
   }
 
-  useEffect(() => updateFromValue(), [tags]);
+  useEffect(() => {
+    if (editMode) {
+      setTags(watch(name).split(","));
+    }
+  }, []);
+
+  useEffect(() => {
+    updateFromValue();
+  }, [tags]);
 
   return (
     <div

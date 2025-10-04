@@ -4,6 +4,7 @@ import Comments from "@/_features/Comments/subComponents/Comments/Comments";
 import Menu from "@/_components/Menu/Menu";
 import { getSinglePost } from "@/_features/Posts/services/getSinglePost";
 import ErrorToast from "@/_components/Toasts/ErrorToast";
+import Link from "next/link";
 interface PageProps {
   params: Promise<{
     slug: string;
@@ -39,7 +40,15 @@ async function Page({ params }: PageProps) {
         <div className={styles.container}>
           <div className={styles.infoContainer}>
             <div className={styles.textContainer}>
-              <h1 className={styles.title}>{post?.title}</h1>
+              <div className={styles.titleContainer}>
+                <h1 className={styles.title}>{post?.title}</h1>
+                <Link
+                  href={`/posts/${post?.slug}/edit`}
+                  className={styles.edit}
+                >
+                  Edit
+                </Link>
+              </div>
               <div className={styles.user}>
                 {post?.user?.image ? (
                   <div className={styles.userImageContainer}>

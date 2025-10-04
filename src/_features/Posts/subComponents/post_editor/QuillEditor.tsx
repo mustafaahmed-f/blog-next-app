@@ -2,13 +2,21 @@ import Quill from "quill";
 import React, { forwardRef, useEffect, useLayoutEffect, useRef } from "react";
 import { quillOptions } from "../../utils/quillOptions";
 import { QuillImageHandler } from "../../utils/QuillImageHandler";
+import { FieldValues, Path, UseFormWatch } from "react-hook-form";
 
-interface QuillEditorProps {
+interface QuillEditorProps<T extends FieldValues> {
   defaultValue?: any;
   onReady: (q: Quill) => void;
+  watch: UseFormWatch<T>;
+  editMode?: boolean;
 }
 
-function QuillEditor({ defaultValue, onReady }: QuillEditorProps) {
+function QuillEditor<T extends FieldValues>({
+  defaultValue,
+  onReady,
+  watch,
+  editMode,
+}: QuillEditorProps<T>) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const defaultValueRef = useRef<any>(defaultValue);
 
@@ -20,6 +28,17 @@ function QuillEditor({ defaultValue, onReady }: QuillEditorProps) {
     const quill = new Quill(editorContainer, quillOptions);
     const toolbar: any = quill.getModule("toolbar");
     toolbar.addHandler("image", () => QuillImageHandler(quill));
+
+    if (editMode) {
+      const deltaValue = watch("delta" as Path<T>);
+      try {
+        const parsedDelta =
+          typeof deltaValue === "string" ? JSON.parse(deltaValue) : deltaValue;
+        quill.setContents(parsedDelta);
+      } catch (e) {
+        console.error("Invalid delta:", deltaValue, e);
+      }
+    }
 
     if (typeof onReady === "function") {
       onReady(quill);
