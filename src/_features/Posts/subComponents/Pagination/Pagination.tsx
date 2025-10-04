@@ -23,7 +23,7 @@ const Pagination = ({
     const params = new URLSearchParams(searchParams);
     params.set("page", page.toString());
     startTransition(() => {
-      router.replace(`${pathName}?${params.toString()}`);
+      router.replace(`${pathName}?${params.toString()}`, { scroll: false });
     });
   };
 

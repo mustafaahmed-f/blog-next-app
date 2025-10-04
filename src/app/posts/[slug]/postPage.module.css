@@ -91,6 +91,12 @@
   margin-bottom: 20px;
 }
 
+.crudSection {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 @media screen and (max-width: 1536px) {
   .title {
     font-size: 54px;

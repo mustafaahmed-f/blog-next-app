@@ -82,7 +82,6 @@ function PostEditor({
   async function publishPost(
     data: InferFormValues<typeof addPostYupValidation>,
   ) {
-    console.log(data);
     const formData = new FormData();
     formData.set("title", data.title);
     formData.set("categoryId", data.categoryId);

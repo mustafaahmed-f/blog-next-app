@@ -72,7 +72,7 @@ const CardList = ({ page, category }: { page: number; category?: string }) => {
             style={isPending ? { opacity: 0.5, pointerEvents: "none" } : {}}
           >
             {posts?.map((item: any) => (
-              <div key={item.id}>
+              <div key={item.slug}>
                 <Card item={item} />
               </div>
             ))}
