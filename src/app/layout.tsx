@@ -7,6 +7,8 @@ import Providers from "@/_providers/Providers";
 import { Toaster } from "sonner";
 import { getFeaturedPosts } from "@/_features/Posts/services/getFeaturedPosts";
 import { getCategories } from "@/_features/Categories/services/getCategories";
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -55,24 +57,26 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en">
-      <body className={`${inter.className} antialiased`}>
-        {" "}
-        <Providers
-          featuredPosts={featuredPosts}
-          catchedError={catchedError}
-          fetchedCategories={fetchedCategories}
-        >
-          <div className="container">
-            <div className="wrapper">
-              <Toaster richColors position="bottom-right" expand={true} />
-              <Header />
-              {children}
-              <Footer />
+    <ClerkProvider appearance={{ baseTheme: dark }}>
+      <html lang="en">
+        <body className={`${inter.className} antialiased`}>
+          {" "}
+          <Providers
+            featuredPosts={featuredPosts}
+            catchedError={catchedError}
+            fetchedCategories={fetchedCategories}
+          >
+            <div className="container">
+              <div className="wrapper">
+                <Toaster richColors position="bottom-right" expand={true} />
+                <Header />
+                {children}
+                <Footer />
+              </div>
             </div>
-          </div>
-        </Providers>
-      </body>
-    </html>
+          </Providers>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
