@@ -18,6 +18,7 @@ import { addPostDefaultValues } from "../../utils/addPostDefaultValues";
 import { addPostYupValidation } from "../../utils/addPostYupValidation";
 import PostEditorUI from "./PostEditorUI";
 import { editPost } from "../../services/editPost";
+import { useAuth } from "@clerk/nextjs";
 
 interface PostEditorProps {
   editMode?: boolean;
@@ -30,6 +31,7 @@ function PostEditor({
 }: PostEditorProps) {
   const router = useRouter();
   const { slug } = useParams();
+  const { getToken } = useAuth();
   const { fetchedCategories, catchedError } = useCategoires();
 
   const [quillInstance, setQuillInstance] = useState<Quill | null>(null);
@@ -92,9 +94,11 @@ function PostEditor({
     formData.set("tags", data.tags);
 
     try {
+      const token = await getToken();
+
       const response = editMode
-        ? await editPost(formData, slug as string)
-        : await sendPost(formData);
+        ? await editPost(formData, slug as string, token)
+        : await sendPost(formData, token);
       if (response.data) {
         showSuccessToast(
           editMode

@@ -13,7 +13,7 @@ const Featured = () => {
       {catchedError && <ErrorToast error={catchedError} />}
       <div className={styles.container}>
         <h1 className={styles.title}>
-          <b>Hey, lama dev here!</b> Discover my stories and creative ideas.
+          <b>Hey, lama dev here!</b> Discover stories and creative ideas.
         </h1>
         {featuredPosts && featuredPosts.length ? (
           <div className={styles.post}>

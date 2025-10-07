@@ -6,7 +6,6 @@ const isProtectedRoute = createRouteMatcher(["/newpost", "/posts/[slug]/edit"]);
 const isNonAuthRoute = createRouteMatcher(["/sign-in(.*)", "/sign-up(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
-  console.log("🔹 Middleware hit:", req.nextUrl.pathname);
   if (isProtectedRoute(req)) {
     await auth.protect();
   }

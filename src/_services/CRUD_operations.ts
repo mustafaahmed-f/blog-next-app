@@ -132,15 +132,23 @@ export async function _getAllRecords({
 export async function _deleteSingleRecord({
   _APIEndpointName,
   recordIdentified,
+  token,
 }: {
   _APIEndpointName: string;
   recordIdentified: string;
+  token: string | null;
 }) {
+  let headers: any = {};
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}/${recordIdentified}`,
     {
       credentials: "include",
       method: "DELETE",
+      headers,
     },
   );
 
@@ -169,17 +177,25 @@ export async function _updateSingleRecord({
   _APIEndpointName,
   recordIdentified,
   data,
+  token,
 }: {
   _APIEndpointName: string;
   recordIdentified: string;
   data: any;
+  token: string | null;
 }) {
+  let headers: any = {};
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}/${recordIdentified}`,
     {
       credentials: "include",
       method: "PUT",
       body: data instanceof FormData ? data : JSON.stringify(data),
+      headers,
     },
   );
 
@@ -207,16 +223,23 @@ export async function _updateSingleRecord({
 export async function _createSingleRecord({
   _APIEndpointName,
   data,
+  token,
 }: {
   _APIEndpointName: string;
   data: any;
+  token: string | null;
 }) {
+  let headers: any = {};
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}`,
     {
       credentials: "include",
       method: "POST",
       body: data instanceof FormData ? data : JSON.stringify(data),
+      headers,
     },
   );
 
