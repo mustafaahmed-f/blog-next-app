@@ -8,6 +8,7 @@ import Link from "next/link";
 import styles from "./postPage.module.css";
 import LikeBtn from "@/_features/Posts/subComponents/LikeBtn/LikeBtn";
 import DeletePostBtn from "@/_features/Posts/subComponents/DeletePostBtn/DeletePostBtn";
+import { SignedIn } from "@clerk/nextjs";
 interface PageProps {
   params: Promise<{
     slug: string;
@@ -45,15 +46,17 @@ async function Page({ params }: PageProps) {
             <div className={styles.textContainer}>
               <div className={styles.titleContainer}>
                 <h1 className={styles.title}>{post?.title}</h1>
-                <div className={styles.crudSection}>
-                  <Link
-                    href={`/posts/${post?.slug}/edit`}
-                    className={styles.edit}
-                  >
-                    Edit
-                  </Link>
-                  <DeletePostBtn postSlug={post?.slug} />
-                </div>
+                <SignedIn>
+                  <div className={styles.crudSection}>
+                    <Link
+                      href={`/posts/${post?.slug}/edit`}
+                      className={styles.edit}
+                    >
+                      Edit
+                    </Link>
+                    <DeletePostBtn postSlug={post?.slug} />
+                  </div>
+                </SignedIn>
               </div>
               <div className={styles.user}>
                 {post?.user?.image ? (

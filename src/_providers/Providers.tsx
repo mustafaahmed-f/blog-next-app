@@ -22,6 +22,8 @@ function Providers({
   catchedError,
   fetchedCategories,
 }: ProvidersProps) {
+  console.log("Categories : ", fetchedCategories);
+  console.log("Posts : ", featuredPosts);
   const pathname = usePathname();
 
   useEffect(() => {

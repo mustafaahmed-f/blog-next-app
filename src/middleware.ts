@@ -17,5 +17,5 @@ export default clerkMiddleware(async (auth, req) => {
 });
 
 export const config = {
-  matcher: ["/newpost", "/posts/[slug]/edit", "/sign-in(.*)", "/sign-up(.*)"],
+  matcher: ["/((?!_next|.*\\..*).*)"],
 };
