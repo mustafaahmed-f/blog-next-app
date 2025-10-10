@@ -59,10 +59,10 @@ async function Page({ params }: PageProps) {
                 </SignedIn>
               </div>
               <div className={styles.user}>
-                {post?.user?.image ? (
+                {post?.user?.img ? (
                   <div className={styles.userImageContainer}>
                     <Image
-                      src={post.user.image}
+                      src={post.user.img}
                       alt={post.user.userName}
                       fill
                       className={styles.avatar}
