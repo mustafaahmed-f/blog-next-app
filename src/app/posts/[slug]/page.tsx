@@ -2,13 +2,14 @@ import Menu from "@/_components/Menu/Menu";
 import ErrorToast from "@/_components/Toasts/ErrorToast";
 import Comments from "@/_features/Comments/subComponents/Comments/Comments";
 import { getSinglePost } from "@/_features/Posts/services/getSinglePost";
-import { HeartIcon } from "lucide-react";
+import { EyeIcon, HeartIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./postPage.module.css";
 import LikeBtn from "@/_features/Posts/subComponents/LikeBtn/LikeBtn";
 import DeletePostBtn from "@/_features/Posts/subComponents/DeletePostBtn/DeletePostBtn";
 import { SignedIn } from "@clerk/nextjs";
+import { incViews } from "@/_features/Posts/services/incViews";
 interface PageProps {
   params: Promise<{
     slug: string;
@@ -18,15 +19,36 @@ interface PageProps {
 async function Page({ params }: PageProps) {
   const { slug } = await params;
   let catchedError: any = null;
-  let response: any = null;
+  let getSinglePostResponse: any = null;
+  let incViewResponse: any = null;
 
   try {
-    response = await getSinglePost(slug);
+    const [incView, singlePost] = await Promise.all([
+      incViews(slug).catch((error: any) => {
+        catchedError =
+          error.message !== "You already viewed this post"
+            ? `Inc View Error : ${error.message}`
+            : null;
+      }),
+      getSinglePost(slug).catch((error: any) => {
+        catchedError = `Single Post Error : ${error.message}`;
+      }),
+    ]);
+    getSinglePostResponse = singlePost;
+    incViewResponse = incView;
   } catch (error: any) {
     catchedError = error.message;
   }
 
-  const post: any = response ? response.data : null;
+  const post: any = getSinglePostResponse ? getSinglePostResponse.data : null;
+  const postViews = post ? post.views : 0;
+  const instantIncOfViews =
+    incViewResponse &&
+    incViewResponse.message === "Post has been updated successfully !!"
+      ? true
+      : false;
+
+  console.log("Instant inc of views : ", instantIncOfViews);
 
   return (
     <>
@@ -46,6 +68,19 @@ async function Page({ params }: PageProps) {
             <div className={styles.textContainer}>
               <div className={styles.titleContainer}>
                 <h1 className={styles.title}>{post?.title}</h1>
+
+                {/* Likes + Views section */}
+                <div className={styles.stats}>
+                  <div className={styles.statItem}>
+                    <HeartIcon className={styles.statIcon} />
+                    <span>{post?._count.likes ?? 0}</span>
+                  </div>
+                  <div className={styles.statItem}>
+                    <EyeIcon className={styles.statIcon} />
+                    <span>{instantIncOfViews ? postViews + 1 : postViews}</span>
+                  </div>
+                </div>
+
                 <SignedIn>
                   <div className={styles.crudSection}>
                     <Link
@@ -58,6 +93,7 @@ async function Page({ params }: PageProps) {
                   </div>
                 </SignedIn>
               </div>
+
               <div className={styles.user}>
                 {post?.user?.img ? (
                   <div className={styles.userImageContainer}>

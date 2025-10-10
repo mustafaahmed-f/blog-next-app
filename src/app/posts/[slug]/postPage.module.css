@@ -97,6 +97,27 @@
   gap: 20px;
 }
 
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  color: black;
+  font-size: 0.95rem;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.statIcon {
+  width: 18px;
+  height: 18px;
+  color: black;
+}
+
 @media screen and (max-width: 1536px) {
   .title {
     font-size: 54px;
