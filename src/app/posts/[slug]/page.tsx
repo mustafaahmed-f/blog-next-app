@@ -12,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./postPage.module.css";
 import TagSection from "@/_features/Posts/subComponents/tagsSection/TagSection";
+import PostCategory from "@/_features/Posts/subComponents/Post Category/PostCategory";
 
 interface PageProps {
   params: Promise<{
@@ -64,6 +65,7 @@ async function Page({ params }: PageProps) {
         <div className={styles.container}>
           <div className={styles.infoContainer}>
             <div className={styles.textContainer}>
+              <PostCategory categoryId={post.categoryId} />
               <div className={styles.titleContainer}>
                 <h1 className={styles.title}>{post?.title}</h1>
                 <TagSection tags={post?.tags} />

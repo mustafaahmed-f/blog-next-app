@@ -1,0 +1,35 @@
+.category {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-transform: capitalize;
+  /* width: 15%; */
+  /* height: 80px; */
+  padding: 5px 10px;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.category.Style {
+  background-color: #57c4ff31;
+}
+
+.category.Fashion {
+  background-color: #da85c731;
+}
+
+.category.Food {
+  background-color: #7fb88133;
+}
+
+.category.Travel {
+  background-color: #ff795736;
+}
+
+.category.Culture {
+  background-color: #ffb04f45;
+}
+
+.category.Coding {
+  background-color: #5e4fff31;
+}
