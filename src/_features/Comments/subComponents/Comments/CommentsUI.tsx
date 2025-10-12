@@ -7,6 +7,7 @@ import { forwardRef, useRef } from "react";
 import styles from "./comments.module.css";
 import SingleComment from "./SingleComment";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
+import { SignedIn } from "@clerk/nextjs";
 
 interface CommentsUIProps {
   data:
@@ -81,22 +82,20 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
         {/* //// Add comment section */}
         {/* //========================================================================= */}
 
-        {isCommentsPage ? null : status === "authenticated" ? (
-          <div className={styles.write}>
-            <textarea
-              placeholder="write a comment..."
-              className={styles.input}
-              value={desc}
-              onChange={(e) => setDesc(e.target.value)}
-            />
-            <button className={styles.button} onClick={() => {}}>
-              Send
-            </button>
-          </div>
-        ) : (
-          <Link href="/login" style={{ color: "yellowgreen" }}>
-            Login to write a comment
-          </Link>
+        {isCommentsPage ? null : (
+          <SignedIn>
+            <div className={styles.write}>
+              <textarea
+                placeholder="write a comment..."
+                className={styles.input}
+                value={desc}
+                onChange={(e) => setDesc(e.target.value)}
+              />
+              <button className={styles.button} onClick={() => {}}>
+                Send
+              </button>
+            </div>
+          </SignedIn>
         )}
         <div className={styles.comments}>
           {isError ? (
