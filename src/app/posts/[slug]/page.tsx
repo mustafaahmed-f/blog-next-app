@@ -11,6 +11,8 @@ import { EyeIcon, HeartIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./postPage.module.css";
+import TagSection from "@/_features/Posts/subComponents/tagsSection/TagSection";
+
 interface PageProps {
   params: Promise<{
     slug: string;
@@ -45,11 +47,6 @@ async function Page({ params }: PageProps) {
 
   const post: any = getSinglePostResponse ? getSinglePostResponse.data : null;
   const postViews = post ? post.views : 0;
-  const instantIncOfViews =
-    incViewResponse &&
-    incViewResponse.message === "Post has been updated successfully !!"
-      ? true
-      : false;
 
   return (
     <>
@@ -69,6 +66,7 @@ async function Page({ params }: PageProps) {
             <div className={styles.textContainer}>
               <div className={styles.titleContainer}>
                 <h1 className={styles.title}>{post?.title}</h1>
+                <TagSection tags={post?.tags} />
 
                 {/* Likes + Views section */}
                 <div className={styles.stats}>
@@ -78,7 +76,7 @@ async function Page({ params }: PageProps) {
                   </div>
                   <div className={styles.statItem}>
                     <EyeIcon className={styles.statIcon} />
-                    <span>{instantIncOfViews ? postViews + 1 : postViews}</span>
+                    <span>{postViews}</span>
                   </div>
                 </div>
 
