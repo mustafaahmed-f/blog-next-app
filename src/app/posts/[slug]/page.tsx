@@ -2,14 +2,15 @@ import Menu from "@/_components/Menu/Menu";
 import ErrorToast from "@/_components/Toasts/ErrorToast";
 import Comments from "@/_features/Comments/subComponents/Comments/Comments";
 import { getSinglePost } from "@/_features/Posts/services/getSinglePost";
+import { incViews } from "@/_features/Posts/services/incViews";
+import DeletePostBtn from "@/_features/Posts/subComponents/DeletePostBtn/DeletePostBtn";
+import LikeBtn from "@/_features/Posts/subComponents/LikeBtn/LikeBtn";
+import { SignedIn } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { EyeIcon, HeartIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./postPage.module.css";
-import LikeBtn from "@/_features/Posts/subComponents/LikeBtn/LikeBtn";
-import DeletePostBtn from "@/_features/Posts/subComponents/DeletePostBtn/DeletePostBtn";
-import { SignedIn } from "@clerk/nextjs";
-import { incViews } from "@/_features/Posts/services/incViews";
 interface PageProps {
   params: Promise<{
     slug: string;
@@ -17,6 +18,8 @@ interface PageProps {
 }
 
 async function Page({ params }: PageProps) {
+  const { userId, getToken } = await auth();
+  const token = await getToken();
   const { slug } = await params;
   let catchedError: any = null;
   let getSinglePostResponse: any = null;
@@ -30,7 +33,7 @@ async function Page({ params }: PageProps) {
             ? `Inc View Error : ${error.message}`
             : null;
       }),
-      getSinglePost(slug).catch((error: any) => {
+      getSinglePost(slug, token ?? "").catch((error: any) => {
         catchedError = `Single Post Error : ${error.message}`;
       }),
     ]);
@@ -47,8 +50,6 @@ async function Page({ params }: PageProps) {
     incViewResponse.message === "Post has been updated successfully !!"
       ? true
       : false;
-
-  console.log("Instant inc of views : ", instantIncOfViews);
 
   return (
     <>
@@ -73,7 +74,7 @@ async function Page({ params }: PageProps) {
                 <div className={styles.stats}>
                   <div className={styles.statItem}>
                     <HeartIcon className={styles.statIcon} />
-                    <span>{post?._count.likes ?? 0}</span>
+                    <span>{post?._count.Likes ?? 0}</span>
                   </div>
                   <div className={styles.statItem}>
                     <EyeIcon className={styles.statIcon} />
@@ -82,15 +83,17 @@ async function Page({ params }: PageProps) {
                 </div>
 
                 <SignedIn>
-                  <div className={styles.crudSection}>
-                    <Link
-                      href={`/posts/${post?.slug}/edit`}
-                      className={styles.edit}
-                    >
-                      Edit
-                    </Link>
-                    <DeletePostBtn postSlug={post?.slug} />
-                  </div>
+                  {post.user.clerkId === userId && (
+                    <div className={styles.crudSection}>
+                      <Link
+                        href={`/posts/${post?.slug}/edit`}
+                        className={styles.edit}
+                      >
+                        Edit
+                      </Link>
+                      <DeletePostBtn postSlug={post?.slug} />
+                    </div>
+                  )}
                 </SignedIn>
               </div>
 
@@ -139,7 +142,12 @@ async function Page({ params }: PageProps) {
                 className={styles.description}
                 dangerouslySetInnerHTML={{ __html: post?.html }}
               />
-              <LikeBtn />
+              <LikeBtn
+                slug={post?.slug}
+                isLiked={
+                  getSinglePostResponse?.additionalInfo?.userLikedPost ?? false
+                }
+              />
               <hr style={{ marginTop: "3rem" }} />
               <div className={styles.comment}>
                 <Comments postSlug={slug} sizeOfComments={20} />

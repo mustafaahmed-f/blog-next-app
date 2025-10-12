@@ -5,11 +5,18 @@ export async function getSingleRecord({
   recordIdentified = "",
   _APIEndpointName = "",
   enableCache = true,
+  token,
 }: {
   recordIdentified: string;
   _APIEndpointName: string;
   enableCache: boolean;
+  token: string | null;
 }) {
+  let headers: any = {};
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}/${recordIdentified}`,
     {
@@ -19,6 +26,7 @@ export async function getSingleRecord({
         revalidate: enableCache ? 60 * 60 * 3 : 0,
         tags: generateTags(_APIEndpointName, "singleRecord", recordIdentified),
       },
+      headers,
     },
   );
 
