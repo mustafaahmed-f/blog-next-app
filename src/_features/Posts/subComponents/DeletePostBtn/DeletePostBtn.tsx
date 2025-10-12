@@ -18,17 +18,20 @@ import {
 } from "@/_utils/helperMethods/showToasts";
 import { deletePost } from "../../services/deletePost";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 
 interface DeletePostBtnProps {
   postSlug: string;
 }
 
 function DeletePostBtn({ postSlug }: DeletePostBtnProps) {
+  const { getToken } = useAuth();
   const [open, setOpen] = useState(false);
   const router = useRouter();
   async function handleDelete() {
     try {
-      const response = await deletePost(postSlug);
+      const token = await getToken();
+      const response = await deletePost(postSlug, token ?? "");
       if (response.data) {
         showSuccessToast("Post has been deleted successfully");
         setOpen(false);
@@ -36,6 +39,7 @@ function DeletePostBtn({ postSlug }: DeletePostBtnProps) {
       }
     } catch (error: any) {
       console.log(error);
+      setOpen(false);
       showErrorToast(error.message);
     }
   }
