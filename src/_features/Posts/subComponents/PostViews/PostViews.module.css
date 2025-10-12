@@ -1,0 +1,11 @@
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.statIcon {
+  width: 18px;
+  height: 18px;
+  color: black;
+}

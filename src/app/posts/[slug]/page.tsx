@@ -13,6 +13,7 @@ import Link from "next/link";
 import styles from "./postPage.module.css";
 import TagSection from "@/_features/Posts/subComponents/tagsSection/TagSection";
 import PostCategory from "@/_features/Posts/subComponents/Post Category/PostCategory";
+import PostViews from "@/_features/Posts/subComponents/PostViews/PostViews";
 
 interface PageProps {
   params: Promise<{
@@ -26,24 +27,13 @@ async function Page({ params }: PageProps) {
   const { slug } = await params;
   let catchedError: any = null;
   let getSinglePostResponse: any = null;
-  let incViewResponse: any = null;
 
   try {
-    const [incView, singlePost] = await Promise.all([
-      incViews(slug).catch((error: any) => {
-        catchedError =
-          error.message !== "You already viewed this post"
-            ? `Inc View Error : ${error.message}`
-            : null;
-      }),
-      getSinglePost(slug, token ?? "").catch((error: any) => {
-        catchedError = `Single Post Error : ${error.message}`;
-      }),
-    ]);
+    const singlePost = await getSinglePost(slug, token ?? "");
+
     getSinglePostResponse = singlePost;
-    incViewResponse = incView;
   } catch (error: any) {
-    catchedError = error.message;
+    catchedError = `Single Post Error : ${error.message}`;
   }
 
   const post: any = getSinglePostResponse ? getSinglePostResponse.data : null;
@@ -76,10 +66,11 @@ async function Page({ params }: PageProps) {
                     <HeartIcon className={styles.statIcon} />
                     <span>{post?._count.Likes ?? 0}</span>
                   </div>
-                  <div className={styles.statItem}>
-                    <EyeIcon className={styles.statIcon} />
-                    <span>{postViews}</span>
-                  </div>
+                  <PostViews
+                    postViews={postViews}
+                    postId={post?.id}
+                    postSlug={post?.slug}
+                  />
                 </div>
 
                 <SignedIn>

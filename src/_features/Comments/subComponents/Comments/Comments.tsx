@@ -3,7 +3,6 @@ import Spinner from "@/_components/Spinner/Spinner";
 import { queryClient } from "@/_services/TanstackQuery_Client";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
-import useComments from "../../hooks/useComments";
 import { getComments } from "../../services/getComments";
 import styles from "./comments.module.css";
 import CommentsUI from "./CommentsUI";
@@ -23,7 +22,6 @@ function Comments({
 
   const commentsSection = useRef<HTMLDivElement | null>(null);
   const loadMoreSection = useRef<HTMLDivElement | null>(null);
-  const { desc, setDesc } = useComments();
 
   const {
     data,
@@ -122,8 +120,6 @@ function Comments({
         allComments={allComments}
         isError={isError}
         error={error}
-        desc={desc}
-        setDesc={setDesc}
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
         isFetchNextPageError={isFetchNextPageError}

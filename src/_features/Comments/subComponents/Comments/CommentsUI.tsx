@@ -1,13 +1,12 @@
 import Spinner from "@/_components/Spinner/Spinner";
 import { Button } from "@/_components/ui/button";
+import { SignedIn } from "@clerk/nextjs";
 import { InfiniteData } from "@tanstack/react-query";
-import Link from "next/link";
+import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { forwardRef, useRef } from "react";
+import { forwardRef, useRef, useState } from "react";
 import styles from "./comments.module.css";
 import SingleComment from "./SingleComment";
-import { useWindowVirtualizer } from "@tanstack/react-virtual";
-import { SignedIn } from "@clerk/nextjs";
 
 interface CommentsUIProps {
   data:
@@ -24,8 +23,6 @@ interface CommentsUIProps {
   allComments: any;
   isError: boolean;
   error: any;
-  desc: string;
-  setDesc: (desc: string) => void;
   hasNextPage: boolean;
   isFetchingNextPage: boolean;
   isFetchNextPageError: boolean;
@@ -39,8 +36,7 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
       allComments,
       isError,
       error,
-      desc,
-      setDesc,
+
       isFetchNextPageError,
       isFetchingNextPage,
       canFetchMore,
@@ -48,6 +44,7 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
     },
     ref,
   ) => {
+    const { 0: commentContent, 1: setCommentContent } = useState<string>("");
     const { slug } = useParams();
     const router = useRouter();
     const pathName = usePathname();
@@ -62,12 +59,14 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
       overscan: 4,
     });
 
-    const status: string = "authenticated";
     const uniqueComments = Array.from(
       new Map(
         allComments?.map((comment: any) => [comment.id, comment]),
       ).values(),
     );
+
+    function handleAddComment() {}
+
     return (
       <div className={styles.container} ref={ref}>
         <h1 className={styles.title}>
@@ -88,8 +87,8 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
               <textarea
                 placeholder="write a comment..."
                 className={styles.input}
-                value={desc}
-                onChange={(e) => setDesc(e.target.value)}
+                value={commentContent}
+                onChange={(e) => setCommentContent(e.target.value)}
               />
               <button className={styles.button} onClick={() => {}}>
                 Send
@@ -97,6 +96,11 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
             </div>
           </SignedIn>
         )}
+
+        {/* //========================================================================= */}
+        {/* //// Comments section */}
+        {/* //========================================================================= */}
+
         <div className={styles.comments}>
           {isError ? (
             <div className={styles.container}>

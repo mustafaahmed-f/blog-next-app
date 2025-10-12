@@ -1,9 +1,9 @@
 import { jsonResponseType } from "@/_types/JsonResponse.type";
 import { mainURLs } from "@/_utils/constants/mainURLs";
 
-export async function incViews(slug: string) {
+export async function incViews(postId: string, slug: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${mainURLs.Posts}/incViews/${slug}`,
+    `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${mainURLs.Posts}/incViews/${slug}?postId=${postId}`,
     {
       credentials: "include",
       method: "PUT",
