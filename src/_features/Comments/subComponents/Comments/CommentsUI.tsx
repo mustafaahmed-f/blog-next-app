@@ -1,12 +1,18 @@
 import Spinner from "@/_components/Spinner/Spinner";
 import { Button } from "@/_components/ui/button";
-import { SignedIn } from "@clerk/nextjs";
+import { SignedIn, useAuth } from "@clerk/nextjs";
 import { InfiniteData } from "@tanstack/react-query";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { forwardRef, useRef, useState } from "react";
+import { forwardRef, useRef, useState, useTransition } from "react";
 import styles from "./comments.module.css";
 import SingleComment from "./SingleComment";
+import {
+  showErrorToast,
+  showSuccessToast,
+} from "@/_utils/helperMethods/showToasts";
+import { addComment } from "../../services/addComment";
+import { queryClient } from "@/_services/TanstackQuery_Client";
 
 interface CommentsUIProps {
   data:
@@ -44,10 +50,12 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
     },
     ref,
   ) => {
+    const { getToken } = useAuth();
     const { 0: commentContent, 1: setCommentContent } = useState<string>("");
     const { slug } = useParams();
     const router = useRouter();
     const pathName = usePathname();
+    const { 0: isPending, 1: startTransition } = useTransition();
     const isCommentsPage = pathName.includes("comments");
     const listElement = useRef<HTMLDivElement | null>(null);
 
@@ -65,7 +73,28 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
       ).values(),
     );
 
-    function handleAddComment() {}
+    async function handleAddComment() {
+      if (commentContent) {
+        startTransition(async () => {
+          try {
+            const newComment = {
+              desc: commentContent,
+            };
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            const token = await getToken();
+            const response = await addComment(
+              slug as string,
+              newComment,
+              token as string,
+            );
+            setCommentContent("");
+            queryClient.invalidateQueries({ queryKey: [slug, "Comments"] });
+          } catch (error: any) {
+            showErrorToast(error.message);
+          }
+        });
+      }
+    }
 
     return (
       <div className={styles.container} ref={ref}>
@@ -83,14 +112,16 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
 
         {isCommentsPage ? null : (
           <SignedIn>
-            <div className={styles.write}>
+            <div
+              className={`${styles.write} ${isPending && "pointer-events-none opacity-60"}`}
+            >
               <textarea
                 placeholder="write a comment..."
                 className={styles.input}
                 value={commentContent}
                 onChange={(e) => setCommentContent(e.target.value)}
               />
-              <button className={styles.button} onClick={() => {}}>
+              <button className={styles.button} onClick={handleAddComment}>
                 Send
               </button>
             </div>
