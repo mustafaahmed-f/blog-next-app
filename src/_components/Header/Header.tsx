@@ -14,7 +14,7 @@ function Header() {
         <FaYoutube size={20} />
       </div>
       <Link href="/" className={styles.logo}>
-        lamablog
+        Mublog
       </Link>
       <div className={styles.links}>
         <ThemeToggle />

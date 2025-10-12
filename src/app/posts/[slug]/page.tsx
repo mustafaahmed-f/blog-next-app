@@ -14,6 +14,11 @@ import styles from "./postPage.module.css";
 import TagSection from "@/_features/Posts/subComponents/tagsSection/TagSection";
 import PostCategory from "@/_features/Posts/subComponents/Post Category/PostCategory";
 import PostViews from "@/_features/Posts/subComponents/PostViews/PostViews";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Post page",
+};
 
 interface PageProps {
   params: Promise<{

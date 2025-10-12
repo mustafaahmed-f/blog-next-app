@@ -1,6 +1,11 @@
 import CardList from "@/_features/Posts/subComponents/CardList/CardList";
 import Menu from "@/_components/Menu/Menu";
 import styles from "./blogPage.module.css";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Posts by category",
+};
 
 interface PageProps {
   searchParams: Promise<{
@@ -13,6 +18,13 @@ interface PageProps {
 async function Page({ searchParams }: PageProps) {
   const page = parseInt((await searchParams).page) || 1;
   const { cat, name } = await searchParams;
+
+  if (!cat)
+    return (
+      <div className={`${styles.container} text-red-500`}>
+        No Category Found
+      </div>
+    );
 
   return (
     <div className={styles.container}>

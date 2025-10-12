@@ -2,6 +2,12 @@ import ErrorToast from "@/_components/Toasts/ErrorToast";
 import { getSinglePost } from "@/_features/Posts/services/getSinglePost";
 import EditPageUI from "@/_features/Posts/subComponents/EditUI/EditPageUI";
 import styles from "../postPage.module.css";
+import { auth } from "@clerk/nextjs/server";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Edit Post",
+};
 
 interface PageProps {
   params: Promise<{
@@ -10,12 +16,14 @@ interface PageProps {
 }
 
 async function Page({ params }: PageProps) {
+  const { getToken } = await auth();
   const { slug } = await params;
   let catchedError: any = null;
   let response: any = null;
 
   try {
-    response = await getSinglePost(slug);
+    const token = await getToken();
+    response = await getSinglePost(slug, (token as string) ?? "");
   } catch (error: any) {
     catchedError = error.message;
   }
