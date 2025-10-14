@@ -1,4 +1,33 @@
+"use client";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/_components/ui/alert-dialog";
+import { Button } from "@/_components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/_components/ui/dropdown-menu";
+import { queryClient } from "@/_services/TanstackQuery_Client";
+import {
+  showErrorToast,
+  showSuccessToast,
+} from "@/_utils/helperMethods/showToasts";
+import { SignedIn, useAuth } from "@clerk/nextjs";
+import { useMutation } from "@tanstack/react-query";
+import { Check, EllipsisVertical, XIcon } from "lucide-react";
 import Image from "next/image";
+import { useParams } from "next/navigation";
+import { MouseEventHandler, useEffect, useRef, useState } from "react";
+import { deleteComment } from "../../services/deleteComment";
+import { updateComment } from "../../services/updateComment";
 import styles from "./comments.module.css";
 
 interface SingleCommentProps {
@@ -6,80 +35,223 @@ interface SingleCommentProps {
 }
 
 function SingleComment({ item }: SingleCommentProps) {
+  const { getToken, userId } = useAuth();
+  const inputSection = useRef<HTMLDivElement | null>(null);
+  const dropDownContent = useRef<HTMLDivElement | null>(null);
+  const { 0: commentContent, 1: setCommentContent } = useState<string>(
+    item.desc ?? "",
+  );
+  const { 0: isEditMode, 1: setIsEditMode } = useState<boolean>(false);
+  const { slug } = useParams();
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [dropListOpen, setDropListOpen] = useState(false);
+
+  const isCommentAuthor: boolean = item.user.clerkId === userId;
+
+  const { mutate: updateMutate, isPending: updatePending } = useMutation({
+    mutationFn: async () => {
+      const token = await getToken();
+      return updateComment(
+        item.id,
+        slug as string,
+        { desc: commentContent },
+        token ?? "",
+      );
+    },
+    onSuccess: (data) => {
+      showSuccessToast(
+        data?.message ?? "Comment has been updated successfully !!",
+      );
+      queryClient.invalidateQueries({ queryKey: [slug, "Comments"] });
+      setIsEditMode(false);
+    },
+    onError: (error) => {
+      showErrorToast(error.message);
+    },
+  });
+
+  const { mutate: deleteMutate, isPending: deletePending } = useMutation({
+    mutationFn: async () => {
+      const token = await getToken();
+      return deleteComment(item.id, slug as string, token ?? "");
+    },
+    onSuccess: (data) => {
+      showSuccessToast(
+        data?.message ?? "Comment has been deleted successfully !!",
+      );
+      queryClient.invalidateQueries({ queryKey: [slug, "Comments"] });
+      setIsEditMode(false);
+    },
+    onError: (error) => {
+      showErrorToast(error.message);
+      setCommentContent(item.desc);
+    },
+  });
+
+  function handleUpdateComment() {
+    if (item.desc === commentContent) return;
+    if (!isEditMode || (isEditMode && !commentContent)) return;
+
+    updateMutate();
+  }
+
+  function handleDeleteComment() {
+    deleteMutate();
+  }
+
+  const isPending = updatePending || deletePending;
+
+  useEffect(() => {
+    function closeEditBox(e: MouseEvent) {
+      const target = e.target;
+      if (
+        isEditMode &&
+        !inputSection.current?.contains(target as Node) &&
+        !dropDownContent.current?.contains(target as Node)
+      ) {
+        console.log("Clicked");
+        setIsEditMode(false);
+        setCommentContent(item.desc);
+      }
+    }
+
+    document.addEventListener("click", closeEditBox);
+    return () => {
+      document.removeEventListener("click", closeEditBox);
+    };
+  }, [isEditMode]);
+
   return (
-    <div className={styles.comment}>
-      <div className={styles.user}>
-        {item?.user?.img ? (
-          <Image
-            src={item.user.img}
-            alt=""
-            width={50}
-            height={50}
-            className={styles.image}
-          />
-        ) : (
-          <Image
-            src={"/icons8-avatar-50.png"}
-            alt="User avatar"
-            width={50}
-            height={50}
-            className={styles.image}
-          />
-        )}
-        <div className={styles.userInfo}>
-          <span className={styles.username}>{item.user.userName}</span>
-          <span className={styles.date}>{item.createdAt.slice(0, 10)}</span>
+    <div
+      className={`${styles.comment} ${isPending && "pointer-events-none opacity-60"}`}
+    >
+      <div className="flex flex-nowrap items-center justify-between">
+        <div className={styles.user}>
+          {item?.user?.img ? (
+            <Image
+              src={item.user.img}
+              alt=""
+              width={50}
+              height={50}
+              className={styles.image}
+            />
+          ) : (
+            <Image
+              src={"/icons8-avatar-50.png"}
+              alt="User avatar"
+              width={50}
+              height={50}
+              className={styles.image}
+            />
+          )}
+          <div className={styles.userInfo}>
+            <span className={styles.username}>{item.user.userName}</span>
+            <span className={styles.date}>{item.createdAt.slice(0, 10)}</span>
+          </div>
         </div>
+        <SignedIn>
+          {isCommentAuthor && (
+            <div>
+              <DropdownMenu open={dropListOpen} onOpenChange={setDropListOpen}>
+                <DropdownMenuTrigger asChild className="min-w-fit p-0">
+                  <Button
+                    variant="outline"
+                    className="min-w-fit cursor-pointer px-0 py-0"
+                  >
+                    <EllipsisVertical size={10} className="px-0 py-0" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-fit min-w-fit"
+                  ref={dropDownContent}
+                >
+                  <DropdownMenuItem
+                    className="mx-auto w-fit cursor-pointer px-3 py-1"
+                    onClick={() => setIsEditMode(true)}
+                  >
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="mx-auto w-fit cursor-pointer px-3 py-1 text-red-500 hover:text-red-700"
+                    onClick={(e: any) => e.preventDefault()}
+                  >
+                    <AlertDialog
+                      open={alertOpen}
+                      onOpenChange={setAlertOpen}
+                      // key={item.id}
+                    >
+                      <AlertDialogTrigger asChild>
+                        <span
+                          onClick={() => {
+                            setAlertOpen(true);
+                          }}
+                        >
+                          Delete
+                        </span>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent style={{ padding: "20px" }}>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to delete this comment ?
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <Button
+                            variant="outline"
+                            onClick={() => {
+                              setAlertOpen(false);
+                            }}
+                            className="cursor-pointer p-2"
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            onClick={handleDeleteComment}
+                            className="cursor-pointer p-2 text-white"
+                          >
+                            Confirm
+                          </Button>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
+        </SignedIn>
       </div>
-      <p className={styles.desc}>{item.desc}</p>
+      <div
+        className="flex flex-nowrap items-center gap-2 sm:gap-3"
+        ref={inputSection}
+      >
+        <input
+          className={`${styles.desc} w-full grow px-2 py-1 ${isEditMode ? "cursor-text ring-1" : "cursor-default"} outline-0`}
+          value={commentContent}
+          onChange={(e) => setCommentContent(e.target.value)}
+          readOnly={!isEditMode}
+        />
+        {isEditMode && (
+          <div className="flex flex-col items-center gap-1">
+            <span
+              className="cursor-pointer hover:text-blue-400"
+              onClick={handleUpdateComment}
+            >
+              <Check size={14} />
+            </span>
+            <span
+              className="cursor-pointer hover:text-red-400"
+              onClick={() => setIsEditMode(false)}
+            >
+              <XIcon size={14} />
+            </span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
 export default SingleComment;
-
-/*
-const deleteCommentMutation = useMutation({
-  mutationFn: (id: string) => deleteCommentApi(id), // your API call
-  onSuccess: (deletedId) => {
-    queryClient.setQueryData(["comments"], (oldData: any) => {
-      if (!oldData) return oldData;
-
-      return {
-        ...oldData,
-        pages: oldData.pages.map((page: any) => ({
-          ...page,
-          data: page.data.filter((comment: any) => comment.id !== deletedId),
-        })),
-      };
-    });
-  },
-});
-
-
-const queryClient = useQueryClient();
-
-const editCommentMutation = useMutation({
-  mutationFn: ({ id, desc }: { id: string; desc: string }) =>
-    editCommentApi(id, desc), // your API call
-  onSuccess: (updatedComment) => {
-    queryClient.setQueryData(["comments"], (oldData: any) => {
-      if (!oldData) return oldData;
-
-      return {
-        ...oldData,
-        pages: oldData.pages.map((page: any) => ({
-          ...page,
-          data: page.data.map((comment: any) =>
-            comment.id === updatedComment.id
-              ? { ...comment, ...updatedComment } // update the one comment
-              : comment
-          ),
-        })),
-      };
-    });
-  },
-});
-
-
-*/

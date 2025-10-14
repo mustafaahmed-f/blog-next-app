@@ -15,11 +15,21 @@ interface PostViewsProps {
 function PostViews({ postViews, postId, postSlug }: PostViewsProps) {
   useEffect(() => {
     async function incViewsFn() {
+      let viewedPosts = JSON.parse(
+        localStorage.getItem("blog_app_post_views") ?? "[]",
+      );
+      if (viewedPosts.includes(postId)) return;
       await incViews(postId, postSlug).catch((error: any) => {
         if (error.message !== "You already viewed this post") {
           showErrorToast(error.message);
           console.error(error);
         }
+
+        viewedPosts.push(postId);
+        localStorage.setItem(
+          "blog_app_post_views",
+          JSON.stringify(viewedPosts),
+        );
       });
     }
     incViewsFn();
