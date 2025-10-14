@@ -20,7 +20,7 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "@/_utils/helperMethods/showToasts";
-import { SignedIn, useAuth } from "@clerk/nextjs";
+import { ClerkLoaded, ClerkLoading, SignedIn, useAuth } from "@clerk/nextjs";
 import { useMutation } from "@tanstack/react-query";
 import { Check, EllipsisVertical, XIcon } from "lucide-react";
 import Image from "next/image";
@@ -29,6 +29,7 @@ import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { deleteComment } from "../../services/deleteComment";
 import { updateComment } from "../../services/updateComment";
 import styles from "./comments.module.css";
+import Spinner from "@/_components/Spinner/Spinner";
 
 interface SingleCommentProps {
   item: any;
@@ -38,6 +39,7 @@ function SingleComment({ item }: SingleCommentProps) {
   const { getToken, userId } = useAuth();
   const inputSection = useRef<HTMLDivElement | null>(null);
   const dropDownContent = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const { 0: commentContent, 1: setCommentContent } = useState<string>(
     item.desc ?? "",
   );
@@ -121,6 +123,13 @@ function SingleComment({ item }: SingleCommentProps) {
     };
   }, [isEditMode]);
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.style.height = "auto";
+      inputRef.current.style.height = `${inputRef.current.scrollHeight}px`;
+    }
+  }, [commentContent]);
+
   return (
     <div
       className={`${styles.comment} ${isPending && "pointer-events-none opacity-60"}`}
@@ -149,88 +158,101 @@ function SingleComment({ item }: SingleCommentProps) {
             <span className={styles.date}>{item.createdAt.slice(0, 10)}</span>
           </div>
         </div>
-        <SignedIn>
-          {isCommentAuthor && (
-            <div>
-              <DropdownMenu open={dropListOpen} onOpenChange={setDropListOpen}>
-                <DropdownMenuTrigger asChild className="min-w-fit p-0">
-                  <Button
-                    variant="outline"
-                    className="min-w-fit cursor-pointer px-0 py-0"
-                  >
-                    <EllipsisVertical size={10} className="px-0 py-0" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  className="w-fit min-w-fit"
-                  ref={dropDownContent}
+        <ClerkLoading>
+          <Spinner />
+        </ClerkLoading>
+        <ClerkLoaded>
+          <SignedIn>
+            {isCommentAuthor && (
+              <div>
+                <DropdownMenu
+                  open={dropListOpen}
+                  onOpenChange={setDropListOpen}
                 >
-                  <DropdownMenuItem
-                    className="mx-auto w-fit cursor-pointer px-3 py-1"
-                    onClick={() => setIsEditMode(true)}
-                  >
-                    Edit
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    className="mx-auto w-fit cursor-pointer px-3 py-1 text-red-500 hover:text-red-700"
-                    onClick={(e: any) => e.preventDefault()}
-                  >
-                    <AlertDialog
-                      open={alertOpen}
-                      onOpenChange={setAlertOpen}
-                      // key={item.id}
+                  <DropdownMenuTrigger asChild className="min-w-fit p-0">
+                    <Button
+                      variant="link"
+                      className="min-w-fit cursor-pointer bg-transparent px-0 py-0"
                     >
-                      <AlertDialogTrigger asChild>
-                        <span
-                          onClick={() => {
-                            setAlertOpen(true);
-                          }}
-                        >
-                          Delete
-                        </span>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent style={{ padding: "20px" }}>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Delete</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Are you sure you want to delete this comment ?
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <Button
-                            variant="outline"
+                      <EllipsisVertical size={10} className="px-0 py-0" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className="w-fit min-w-fit"
+                    ref={dropDownContent}
+                  >
+                    <DropdownMenuItem
+                      className="mx-auto w-fit cursor-pointer px-3 py-1"
+                      onClick={() => setIsEditMode(true)}
+                    >
+                      Edit
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="mx-auto w-fit cursor-pointer px-3 py-1 text-red-500 hover:text-red-700"
+                      onClick={(e: any) => e.preventDefault()}
+                    >
+                      <AlertDialog
+                        open={alertOpen}
+                        onOpenChange={setAlertOpen}
+                        // key={item.id}
+                      >
+                        <AlertDialogTrigger asChild>
+                          <span
                             onClick={() => {
-                              setAlertOpen(false);
+                              setAlertOpen(true);
                             }}
-                            className="cursor-pointer p-2"
                           >
-                            Cancel
-                          </Button>
-                          <Button
-                            variant="destructive"
-                            onClick={handleDeleteComment}
-                            className="cursor-pointer p-2 text-white"
-                          >
-                            Confirm
-                          </Button>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          )}
-        </SignedIn>
+                            Delete
+                          </span>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent style={{ padding: "20px" }}>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete this comment ?
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <Button
+                              variant="outline"
+                              onClick={() => {
+                                setAlertOpen(false);
+                              }}
+                              className="cursor-pointer p-2"
+                            >
+                              Cancel
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              onClick={handleDeleteComment}
+                              className="cursor-pointer p-2 text-white"
+                            >
+                              Confirm
+                            </Button>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )}
+          </SignedIn>
+        </ClerkLoaded>
       </div>
       <div
         className="flex flex-nowrap items-center gap-2 sm:gap-3"
         ref={inputSection}
       >
-        <input
-          className={`${styles.desc} w-full grow px-2 py-1 ${isEditMode ? "cursor-text ring-1" : "cursor-default"} outline-0`}
+        <textarea
+          className={`${styles.desc} w-full grow resize-none px-2 py-1 leading-relaxed break-words whitespace-pre-wrap ${isEditMode ? "cursor-text ring-1" : "cursor-default"} outline-0`}
           value={commentContent}
-          onChange={(e) => setCommentContent(e.target.value)}
+          ref={inputRef}
+          onChange={(e) => {
+            setCommentContent(e.target.value);
+            e.target.style.height = "auto";
+            e.target.style.height = e.target.scrollHeight + "px";
+          }}
           readOnly={!isEditMode}
         />
         {isEditMode && (
