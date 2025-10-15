@@ -1,8 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Blog App ( Frontend )
+
+A modern, full-featured blog application built with Next.js, TypeScript, TailwindCSS, shadcn/ui, and more. This project demonstrates best practices in authentication, form handling, validation, API data fetching, UI composition, and performance optimization.
+
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [Tech Stack & Libraries](#tech-stack--libraries)
+- [Getting Started](#getting-started)
+- [Useful Links](#useful-links)
+- [Deployment](#Deployment)
+
+---
+
+## Features
+
+- User authentication and management (Clerk)
+- Create, edit, and delete blog posts with rich text editing (Quill.js)
+- Form handling and validation (React Hook Form + Yup)
+- Responsive, accessible UI components (shadcn/ui, Radix UI, TailwindCSS)
+- Efficient client-side data fetching and caching (TanStack Query)
+- High-performance rendering of large comment lists (TanStack Virtualization)
+- Modern Next.js 14+ app directory structure with TypeScript
+
+---
+
+## Tech Stack & Libraries
+
+### Core
+
+- **Next.js**: React framework for server-side rendering, routing, and API routes.
+- **TypeScript**: Static typing for safer, more maintainable code.
+- **TailwindCSS**: Utility-first CSS framework for rapid UI development.
+
+### UI & Styling
+
+- **shadcn/ui**: Beautiful, accessible React components built on Radix UI primitives.
+- **Radix UI**: Unstyled, accessible UI primitives for building high-quality design systems.
+
+### Forms & Validation
+
+- **React Hook Form**: Performant, flexible form state management for React.
+- **Yup**: JavaScript schema builder for value parsing and validation, integrated with React Hook Form for robust form validation.
+
+### Data Fetching & Performance
+
+- **@tanstack/react-query**: Powerful asynchronous state management for fetching, caching, and updating server data in React.
+- **@tanstack/react-virtual**: Virtualization library for efficiently rendering large lists (e.g., comments) without performance loss.
+
+### Rich Text Editing
+
+- **Quill.js**: Powerful, extensible rich text editor for composing blog posts.
+
+### Authentication
+
+- **Clerk**: Complete user authentication and management solution for React and Next.js apps.
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+### 2. Set up environment variables
+
+Create a `.env.local` file in the root directory and add your required environment variables (e.g., Clerk API keys, database URLs, etc.).
+
+### 3. Run the development server
 
 ```bash
 npm run dev
@@ -10,27 +83,36 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Build for production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Useful Links
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [TailwindCSS Documentation](https://tailwindcss.com/docs)
+- [shadcn/ui Documentation](https://ui.shadcn.com/docs)
+- [Radix UI Primitives](https://www.radix-ui.com/primitives/docs/overview/introduction)
+- [React Hook Form](https://react-hook-form.com/)
+- [Yup](https://github.com/jquense/yup)
+- [TanStack Query](https://tanstack.com/query/latest)
+- [TanStack Virtual](https://tanstack.com/virtual/latest)
+- [Quill.js](https://quilljs.com/)
+- [Clerk](https://clerk.com/docs)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Live demo: [Luminae Store](https://ecommerce-nextjs-by-mustafa.vercel.app/)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> _Made with ❤️ using Next.js, TypeScript, TailwindCSS, and the best of the modern React ecosystem._
