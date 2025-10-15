@@ -10,7 +10,8 @@ A modern, full-featured blog application built with Next.js, TypeScript, Tailwin
 - [Tech Stack & Libraries](#tech-stack--libraries)
 - [Getting Started](#getting-started)
 - [Useful Links](#useful-links)
-- [Deployment](#Deployment)
+- [Backend Repository](#backend-repository)
+- [Deployment](#deployment)
 
 ---
 
@@ -108,6 +109,12 @@ npm start
 - [TanStack Virtual](https://tanstack.com/virtual/latest)
 - [Quill.js](https://quilljs.com/)
 - [Clerk](https://clerk.com/docs)
+
+---
+
+## Backend Repository
+
+You can find the backend source code here: [Blog App Backend (GitHub)](https://github.com/mustafaahmed-f?tab=repositories)
 
 ---
 
