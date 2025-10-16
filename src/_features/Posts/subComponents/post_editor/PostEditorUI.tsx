@@ -18,6 +18,7 @@ interface PostEditorUIProps {
   onReady: (q: Quill) => void;
   disabled?: boolean;
   editMode?: boolean;
+  isPublishingPost?: boolean;
 }
 
 function PostEditorUI({
@@ -26,6 +27,7 @@ function PostEditorUI({
   onReady,
   disabled,
   editMode,
+  isPublishingPost,
 }: PostEditorUIProps) {
   return (
     <div className={styles.container}>
@@ -101,7 +103,13 @@ function PostEditorUI({
         }}
       >
         <Button className={styles.publishBtn} disabled={disabled}>
-          {editMode ? "Update" : "Publish"}
+          {editMode
+            ? isPublishingPost
+              ? "Updating ..."
+              : "Update"
+            : isPublishingPost
+              ? "Publishing ..."
+              : "Publish"}
         </Button>
       </div>
     </div>

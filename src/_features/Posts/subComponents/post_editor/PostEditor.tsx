@@ -11,7 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useParams, useRouter } from "next/navigation";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { sendPost } from "../../services/sendPost";
 import { addPostDefaultValues } from "../../utils/addPostDefaultValues";
@@ -21,11 +21,13 @@ import { editPost } from "../../services/editPost";
 import { useAuth } from "@clerk/nextjs";
 
 interface PostEditorProps {
+  draftId?: string;
   editMode?: boolean;
   editModeDefaultValues?: InferFormValues<typeof addPostYupValidation>;
 }
 
 function PostEditor({
+  draftId,
   editMode = false,
   editModeDefaultValues,
 }: PostEditorProps) {
@@ -33,6 +35,8 @@ function PostEditor({
   const { slug } = useParams();
   const { getToken } = useAuth();
   const { fetchedCategories, catchedError } = useCategoires();
+  const { 0: isPublishingPost, 1: setIsPublishingPost } =
+    useState<boolean>(false);
 
   const [quillInstance, setQuillInstance] = useState<Quill | null>(null);
 
@@ -84,6 +88,7 @@ function PostEditor({
   async function publishPost(
     data: InferFormValues<typeof addPostYupValidation>,
   ) {
+    setIsPublishingPost(true);
     const formData = new FormData();
     formData.set("title", data.title);
     formData.set("categoryId", data.categoryId);
@@ -91,6 +96,7 @@ function PostEditor({
     formData.set("html", data.html);
     formData.set("delta", data.delta);
     if (data.img instanceof File) formData.set("img", data.img);
+    if (!editMode && draftId) formData.set("draftId", draftId);
     formData.set("tags", data.tags);
 
     try {
@@ -105,10 +111,12 @@ function PostEditor({
             ? "Post updated successfully"
             : "Post published successfully",
         );
+        setIsPublishingPost(false);
         router.push(`/posts/${response.data.slug}`);
       }
     } catch (error: any) {
       console.log("Error : ", error);
+      setIsPublishingPost(false);
       if (error.properties) {
         for (const property in error.properties) {
           showErrorToast((property as any).errors[0]);
@@ -123,10 +131,27 @@ function PostEditor({
     setQuillInstance(q);
   }
 
+  /*
+  
+      function cleanBrokenImagesFromHTML(html: string) {
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      doc.querySelectorAll("img").forEach((img) => {
+        fetch(img.src, { method: "HEAD" })
+          .then(res => { if (!res.ok) img.remove(); })
+          .catch(() => img.remove());
+      });
+      return doc.body.innerHTML;
+      }
+
+  */
+
   return (
     <>
       {catchedError && <ErrorToast error={catchedError} />}
-      <form onSubmit={methods.handleSubmit(publishPost)}>
+      <form
+        onSubmit={methods.handleSubmit(publishPost)}
+        className={`${isPublishingPost && "pointer-events-none opacity-65"}`}
+      >
         <PostEditorUI
           methods={methods}
           categories={fetchedCategories}
@@ -137,6 +162,7 @@ function PostEditor({
               : !methods.formState.isValid
           }
           editMode={editMode}
+          isPublishingPost={isPublishingPost}
         />
       </form>
     </>
