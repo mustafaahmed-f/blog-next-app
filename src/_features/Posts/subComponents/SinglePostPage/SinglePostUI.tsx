@@ -1,0 +1,132 @@
+"use client";
+
+import { HeartIcon } from "lucide-react";
+import LikeBtn from "../LikeBtn/LikeBtn";
+import PostCategory from "../Post Category/PostCategory";
+import TagSection from "../tagsSection/TagSection";
+import PostViews from "../PostViews/PostViews";
+import { SignedIn, useAuth } from "@clerk/nextjs";
+import Link from "next/link";
+import DeletePostBtn from "../DeletePostBtn/DeletePostBtn";
+import Image from "next/image";
+import Comments from "@/_features/Comments/subComponents/Comments/Comments";
+import Menu from "@/_components/Menu/Menu";
+import styles from "./singlePostUI.module.css";
+import { useParams } from "next/navigation";
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
+import { useEffect, useRef } from "react";
+
+interface SinglePostUIProps {
+  post: any;
+  postViews: number;
+  postResponse: any;
+}
+
+function SinglePostUI({ post, postViews, postResponse }: SinglePostUIProps) {
+  const { slug } = useParams();
+  const { userId } = useAuth();
+  const htmlRenderer = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (htmlRenderer.current) {
+      htmlRenderer.current.innerHTML = post.html;
+    }
+  }, []);
+  return (
+    <div>
+      <div className={styles.infoContainer}>
+        <div className={styles.textContainer}>
+          <PostCategory categoryId={post.categoryId} />
+          <div className={styles.titleContainer}>
+            <h1 className={styles.title}>{post?.title}</h1>
+            <TagSection tags={post?.tags} />
+
+            {/* Likes + Views section */}
+            <div className={styles.stats}>
+              <div className={styles.statItem}>
+                <HeartIcon className={styles.statIcon} />
+                <span>{post?._count.Likes ?? 0}</span>
+              </div>
+              <PostViews
+                postViews={postViews}
+                postId={post?.id}
+                postSlug={post?.slug}
+              />
+            </div>
+
+            <SignedIn>
+              {post.user.clerkId === userId && (
+                <div className={styles.crudSection}>
+                  <Link
+                    href={`/posts/${post?.slug}/edit`}
+                    className={styles.edit}
+                  >
+                    Edit
+                  </Link>
+                  <DeletePostBtn postSlug={post?.slug} />
+                </div>
+              )}
+            </SignedIn>
+          </div>
+
+          <div className={styles.user}>
+            {post?.user?.img ? (
+              <div className={styles.userImageContainer}>
+                <Image
+                  src={post.user.img}
+                  alt={post.user.userName}
+                  fill
+                  className={styles.avatar}
+                />
+              </div>
+            ) : (
+              <Image
+                src={"/icons8-avatar-50.png"}
+                alt="User avatar"
+                width={50}
+                height={50}
+                className={styles.image}
+              />
+            )}
+            <div className={styles.userTextContainer}>
+              <span className={styles.username}>{post?.user.userName}</span>
+              <span className={styles.date}>
+                {post?.createdAt.slice(0, 10)}
+              </span>
+            </div>
+          </div>
+        </div>
+        {post?.img && (
+          <div className={styles.imageContainer}>
+            <Image
+              src={post.img}
+              alt={post.title}
+              fill
+              className={styles.image}
+              style={{ border: "1px solid var(--border)" }}
+            />
+          </div>
+        )}
+      </div>
+      <div className={styles.content}>
+        <div className={styles.post}>
+          <div className={`${styles.description} ql-snow`}>
+            <div className="ql-editor" ref={htmlRenderer} />
+          </div>
+          <LikeBtn
+            slug={post?.slug}
+            isLiked={postResponse?.additionalInfo?.userLikedPost ?? false}
+          />
+          <hr style={{ marginTop: "3rem" }} />
+          <div className={styles.comment}>
+            <Comments postSlug={slug as string} sizeOfComments={20} />
+          </div>
+        </div>
+        <Menu />
+      </div>
+    </div>
+  );
+}
+
+export default SinglePostUI;

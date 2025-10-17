@@ -88,6 +88,9 @@ function PostEditor({
   async function publishPost(
     data: InferFormValues<typeof addPostYupValidation>,
   ) {
+    console.log("Data : ", data);
+    if (editMode && Object.keys(methods.formState.dirtyFields).length === 0)
+      return;
     setIsPublishingPost(true);
     const formData = new FormData();
     formData.set("title", data.title);
@@ -95,9 +98,20 @@ function PostEditor({
     formData.set("desc", data.desc);
     formData.set("html", data.html);
     formData.set("delta", data.delta);
+
     if (data.img instanceof File) formData.set("img", data.img);
+
     if (!editMode && draftId) formData.set("draftId", draftId);
+    if (editMode && editModeDefaultValues)
+      formData.set("draftId", (editModeDefaultValues as any).draftId);
+
     formData.set("tags", data.tags);
+
+    if (editMode)
+      formData.set(
+        "dirtyFields",
+        Object.keys(methods.formState.dirtyFields).join(","),
+      );
 
     try {
       const token = await getToken();

@@ -41,8 +41,8 @@ export const addPostYupValidation = yup.object().shape({
     .required("Tags are required")
     .max(100, "Tags must be at most 100 characters")
     .matches(
-      /^[a-zA-Z]+(?:,[a-zA-Z]+)*$/,
-      "Tags must be letters separated by commas",
+      /^[a-zA-Z][a-zA-Z\s-]*(?:,[a-zA-Z][a-zA-Z\s-]*)*$/,
+      "Tags must be words separated by commas",
     ),
 
   html: yup.string().required("HTML is required"),

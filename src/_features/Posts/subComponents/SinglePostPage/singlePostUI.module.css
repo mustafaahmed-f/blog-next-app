@@ -76,26 +76,6 @@
   object-fit: cover;
 }
 
-.content {
-  display: flex;
-  gap: 50px;
-  word-break: break-all;
-  overflow: none;
-  white-space: wrap;
-  text-wrap: wrap;
-}
-
-.post {
-  flex: 5;
-  margin-top: 60px;
-}
-
-.description p {
-  /* font-size: 20px; */
-  /* font-weight: 300; */
-  margin-bottom: 20px;
-}
-
 .crudSection {
   display: flex;
   align-items: center;
@@ -123,6 +103,82 @@
   color: black;
 }
 
+.content {
+  display: flex;
+  flex-wrap: wrap; /* ensures content wraps on small screens */
+  gap: 50px;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+.description {
+  white-space: normal; /* normal HTML wrapping */
+  overflow-wrap: break-word; /* wrap at word boundaries if needed */
+  word-break: normal; /* don't break within words */
+  line-height: 1.7;
+  font-size: 1rem;
+  color: var(--text-color, #333);
+}
+
+/* Normal spacing between paragraphs */
+.description p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+/* 🔥 Preserve spacing for empty <p> tags (Quill line breaks) */
+.description p:empty::before {
+  content: "\00a0"; /* non-breaking space */
+  display: block;
+  line-height: 1.7; /* same line height = same spacing */
+}
+
+/* Optional: tweak lists and headers */
+.description ul,
+.description ol {
+  margin-left: 1.2em;
+}
+
+.description h1,
+.description h2,
+.description h3 {
+  margin: 1em 0 0.5em;
+  font-weight: 600;
+}
+
+.post {
+  flex: 5;
+  margin-top: 60px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.ql-editor {
+  line-height: 1.7;
+  font-size: 1rem;
+  color: var(--text-color, #333);
+}
+
+.ql-editor p {
+  margin-bottom: 1em;
+}
+
+.ql-editor h1,
+.ql-editor h2,
+.ql-editor h3 {
+  margin-top: 1.4em;
+  margin-bottom: 0.6em;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.ql-editor ul,
+.ql-editor ol {
+  margin-left: 1.2em;
+  margin-bottom: 1em;
+}
+
 @media screen and (max-width: 1536px) {
   .title {
     font-size: 54px;
@@ -145,5 +201,12 @@
 
   .description p {
     font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .content {
+    flex-direction: column;
+    align-items: stretch;
   }
 }

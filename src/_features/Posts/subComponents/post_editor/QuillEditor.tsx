@@ -1,8 +1,8 @@
 import Quill from "quill";
-import React, { forwardRef, useEffect, useLayoutEffect, useRef } from "react";
-import { quillOptions } from "../../utils/quillOptions";
-import { QuillImageHandler } from "../../utils/QuillImageHandler";
+import { useEffect, useRef } from "react";
 import { FieldValues, Path, UseFormWatch } from "react-hook-form";
+import { QuillImageHandler } from "../../utils/QuillImageHandler";
+import { quillOptions } from "../../utils/quillOptions";
 
 interface QuillEditorProps<T extends FieldValues> {
   defaultValue?: any;
