@@ -1,21 +1,20 @@
 "use client";
 
-import { HeartIcon } from "lucide-react";
-import LikeBtn from "../LikeBtn/LikeBtn";
-import PostCategory from "../Post Category/PostCategory";
-import TagSection from "../tagsSection/TagSection";
-import PostViews from "../PostViews/PostViews";
-import { SignedIn, useAuth } from "@clerk/nextjs";
-import Link from "next/link";
-import DeletePostBtn from "../DeletePostBtn/DeletePostBtn";
-import Image from "next/image";
 import Comments from "@/_features/Comments/subComponents/Comments/Comments";
-import Menu from "@/_components/Menu/Menu";
-import styles from "./singlePostUI.module.css";
+import { SignedIn, useAuth } from "@clerk/nextjs";
+import { HeartIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import { useEffect, useRef } from "react";
+import DeletePostBtn from "../DeletePostBtn/DeletePostBtn";
+import LikeBtn from "../LikeBtn/LikeBtn";
+import PostCategory from "../Post Category/PostCategory";
+import PostViews from "../PostViews/PostViews";
+import TagSection from "../tagsSection/TagSection";
+import styles from "./singlePostUI.module.css";
 
 interface SinglePostUIProps {
   post: any;
@@ -34,7 +33,7 @@ function SinglePostUI({ post, postViews, postResponse }: SinglePostUIProps) {
     }
   }, []);
   return (
-    <div>
+    <>
       <div className={styles.infoContainer}>
         <div className={styles.textContainer}>
           <PostCategory categoryId={post.categoryId} />
@@ -123,9 +122,8 @@ function SinglePostUI({ post, postViews, postResponse }: SinglePostUIProps) {
             <Comments postSlug={slug as string} sizeOfComments={20} />
           </div>
         </div>
-        <Menu />
       </div>
-    </div>
+    </>
   );
 }
 

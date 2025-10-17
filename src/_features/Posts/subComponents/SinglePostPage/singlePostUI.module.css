@@ -105,11 +105,14 @@
 
 .content {
   display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
   flex-wrap: wrap; /* ensures content wraps on small screens */
   gap: 50px;
   overflow-x: hidden;
   width: 100%;
   max-width: 100%;
+  /* flex-wrap: nowrap; */
 }
 
 .description {
@@ -148,7 +151,7 @@
 }
 
 .post {
-  flex: 5;
+  flex: 0 0 70%;
   margin-top: 60px;
   width: 100%;
   max-width: 100%;
@@ -201,12 +204,5 @@
 
   .description p {
     font-size: 18px;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .content {
-    flex-direction: column;
-    align-items: stretch;
   }
 }
