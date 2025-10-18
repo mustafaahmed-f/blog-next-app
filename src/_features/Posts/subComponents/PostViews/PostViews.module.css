@@ -2,10 +2,11 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  color: var(--textColor);
 }
 
 .statIcon {
   width: 18px;
   height: 18px;
-  color: black;
+  /* color: black; */
 }

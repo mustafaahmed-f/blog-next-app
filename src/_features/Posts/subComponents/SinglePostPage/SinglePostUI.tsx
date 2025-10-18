@@ -8,13 +8,14 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import DeletePostBtn from "../DeletePostBtn/DeletePostBtn";
 import LikeBtn from "../LikeBtn/LikeBtn";
 import PostCategory from "../Post Category/PostCategory";
 import PostViews from "../PostViews/PostViews";
 import TagSection from "../tagsSection/TagSection";
 import styles from "./singlePostUI.module.css";
+import { ThemeContext } from "@/_context/ThemeContext";
 
 interface SinglePostUIProps {
   post: any;
@@ -26,6 +27,8 @@ function SinglePostUI({ post, postViews, postResponse }: SinglePostUIProps) {
   const { slug } = useParams();
   const { userId } = useAuth();
   const htmlRenderer = useRef<HTMLDivElement | null>(null);
+
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     if (htmlRenderer.current) {
@@ -45,7 +48,9 @@ function SinglePostUI({ post, postViews, postResponse }: SinglePostUIProps) {
             <div className={styles.stats}>
               <div className={styles.statItem}>
                 <HeartIcon className={styles.statIcon} />
-                <span>{post?._count.Likes ?? 0}</span>
+                <span className={styles.likeNumbers}>
+                  {post?._count.Likes ?? 0}
+                </span>
               </div>
               <PostViews
                 postViews={postViews}
@@ -108,9 +113,9 @@ function SinglePostUI({ post, postViews, postResponse }: SinglePostUIProps) {
           </div>
         )}
       </div>
-      <div className={styles.content}>
+      <div className={`${styles.content} `}>
         <div className={styles.post}>
-          <div className={`${styles.description} ql-snow`}>
+          <div className={`${theme} ${styles.description} ql-snow`}>
             <div className="ql-editor" ref={htmlRenderer} />
           </div>
           <LikeBtn

@@ -245,6 +245,7 @@ function SingleComment({ item }: SingleCommentProps) {
         ref={inputSection}
       >
         <textarea
+          name="comment_content"
           className={`${styles.desc} w-full grow resize-none px-2 py-1 leading-relaxed break-words whitespace-pre-wrap ${isEditMode ? "cursor-text ring-1" : "cursor-default"} outline-0`}
           value={commentContent}
           ref={inputRef}

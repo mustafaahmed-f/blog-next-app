@@ -9,6 +9,7 @@ interface QuillEditorProps<T extends FieldValues> {
   onReady: (q: Quill) => void;
   watch: UseFormWatch<T>;
   editMode?: boolean;
+  draftId?: string;
 }
 
 function QuillEditor<T extends FieldValues>({
@@ -16,6 +17,7 @@ function QuillEditor<T extends FieldValues>({
   onReady,
   watch,
   editMode,
+  draftId,
 }: QuillEditorProps<T>) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const defaultValueRef = useRef<any>(defaultValue);
@@ -27,7 +29,7 @@ function QuillEditor<T extends FieldValues>({
     );
     const quill = new Quill(editorContainer, quillOptions);
     const toolbar: any = quill.getModule("toolbar");
-    toolbar.addHandler("image", () => QuillImageHandler(quill));
+    toolbar.addHandler("image", () => QuillImageHandler(quill, draftId));
 
     if (editMode) {
       const deltaValue = watch("delta" as Path<T>);

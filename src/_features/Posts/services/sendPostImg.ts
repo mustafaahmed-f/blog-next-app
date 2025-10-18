@@ -1,8 +1,8 @@
 import { jsonResponseType } from "@/_types/JsonResponse.type";
 
-export async function sendPostImg(data: FormData) {
+export async function sendPostImg(data: FormData, draftId?: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/posts/uploadPostImg`,
+    `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/posts/uploadPostImg?draftId=${draftId}`,
     {
       credentials: "include",
       method: "POST",

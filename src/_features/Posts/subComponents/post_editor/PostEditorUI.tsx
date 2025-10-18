@@ -19,6 +19,7 @@ interface PostEditorUIProps {
   disabled?: boolean;
   editMode?: boolean;
   isPublishingPost?: boolean;
+  draftId?: string;
 }
 
 function PostEditorUI({
@@ -27,6 +28,7 @@ function PostEditorUI({
   onReady,
   disabled,
   editMode,
+  draftId,
   isPublishingPost,
 }: PostEditorUIProps) {
   return (
@@ -91,6 +93,7 @@ function PostEditorUI({
         onReady={onReady}
         watch={methods.watch}
         editMode={editMode}
+        draftId={draftId}
       />
 
       <div

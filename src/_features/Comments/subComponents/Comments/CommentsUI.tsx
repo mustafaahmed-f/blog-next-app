@@ -116,6 +116,7 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
               className={`${styles.write} ${isPending && "pointer-events-none opacity-60"}`}
             >
               <textarea
+                name="new_comment"
                 placeholder="write a comment..."
                 className={styles.input}
                 value={commentContent}

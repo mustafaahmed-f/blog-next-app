@@ -177,6 +177,7 @@ function PostEditor({
           }
           editMode={editMode}
           isPublishingPost={isPublishingPost}
+          draftId={draftId}
         />
       </form>
     </>

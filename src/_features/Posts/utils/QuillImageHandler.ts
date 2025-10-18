@@ -2,7 +2,7 @@ import { showErrorToast } from "@/_utils/helperMethods/showToasts";
 import Quill from "quill";
 import { sendPostImg } from "../services/sendPostImg";
 
-export function QuillImageHandler(quill: Quill) {
+export function QuillImageHandler(quill: Quill, draftId?: string) {
   const input = document.createElement("input");
   input.setAttribute("type", "file");
   input.setAttribute("accept", "image/*");
@@ -14,10 +14,10 @@ export function QuillImageHandler(quill: Quill) {
     if (!image) return;
 
     const formData: FormData = new FormData();
-    formData.set("image", image);
+    formData.set("img", image);
 
     try {
-      const response = await sendPostImg(formData);
+      const response = await sendPostImg(formData, draftId);
       if (response.error) {
         showErrorToast(response.error);
         console.log("Error : ", response.error);

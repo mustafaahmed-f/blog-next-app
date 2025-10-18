@@ -39,6 +39,7 @@ function LikeBtn({ slug, isLiked }: LikeBtnProps) {
         fill="currentColor"
         onClick={handleLike}
       />
+      <p className="">Like</p>
     </div>
   );
 }

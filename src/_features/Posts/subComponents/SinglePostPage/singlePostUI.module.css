@@ -100,7 +100,11 @@
 .statIcon {
   width: 18px;
   height: 18px;
-  color: black;
+  color: var(--textColor);
+}
+
+.likeNumbers {
+  color: var(--textColor);
 }
 
 .content {
