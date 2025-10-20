@@ -177,7 +177,7 @@ function PostEditor({
           }
           editMode={editMode}
           isPublishingPost={isPublishingPost}
-          draftId={draftId}
+          draftId={editMode ? (editModeDefaultValues as any).draftId : draftId}
         />
       </form>
     </>

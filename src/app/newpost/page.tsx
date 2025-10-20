@@ -7,6 +7,7 @@ export const metadata = {
 
 function Page() {
   const draftId = randomUUID();
+  console.log("Draft id : ", draftId);
   return <PostEditor draftId={draftId.toString()} editMode={false} />;
 }
 

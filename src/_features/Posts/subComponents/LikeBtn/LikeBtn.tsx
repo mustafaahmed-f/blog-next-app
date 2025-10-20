@@ -32,14 +32,16 @@ function LikeBtn({ slug, isLiked }: LikeBtnProps) {
     }
   }
   return (
-    <div className={styles.likeSection}>
+    <div
+      className={`${styles.likeSection} w-fit cursor-pointer`}
+      onClick={handleLike}
+    >
       <HeartIcon
         color="black"
         className={`${styles.likeIcon} ${liked ? styles.active : ""}`}
         fill="currentColor"
-        onClick={handleLike}
       />
-      <p className="">Like</p>
+      <p className="">{liked ? "Unlike" : "Like"}</p>
     </div>
   );
 }

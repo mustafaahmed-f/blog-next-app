@@ -11,13 +11,17 @@
   color: white;
 }
 
-.likeIcon:hover {
+.likeSection:hover .likeIcon {
   color: #9eccf7;
+}
+
+.likeSection:hover p {
+  color: #0d87f9;
 }
 
 .likeIcon.active {
   color: #0d87f9;
 }
-.likeIcon.active:hover {
+.likeSection:hover .likeIcon.active {
   color: #0d87f9;
 }

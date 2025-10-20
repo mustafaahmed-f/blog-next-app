@@ -29,6 +29,7 @@ function QuillEditor<T extends FieldValues>({
     );
     const quill = new Quill(editorContainer, quillOptions);
     const toolbar: any = quill.getModule("toolbar");
+
     toolbar.addHandler("image", () => QuillImageHandler(quill, draftId));
 
     if (editMode) {
@@ -55,7 +56,7 @@ function QuillEditor<T extends FieldValues>({
     };
   }, []);
 
-  return <div ref={containerRef}></div>;
+  return <div className="bg-white" ref={containerRef}></div>;
 }
 
 export default QuillEditor;

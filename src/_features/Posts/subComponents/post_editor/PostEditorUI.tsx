@@ -31,9 +31,18 @@ function PostEditorUI({
   draftId,
   isPublishingPost,
 }: PostEditorUIProps) {
+  console.log("Draft id : ", draftId);
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Add new post</h1>
+      <div className="rounded-lg bg-amber-100 p-3">
+        <p className="text-base text-amber-500">
+          <span className="text-lg text-black uppercase">**Hint : </span>
+          If post is not published within 2 hours, any images uploaded inside
+          post body will be deleted automatically from cloud and so they won't
+          appear in the post after publishing.
+        </p>
+      </div>
 
       {/*  //// Add Title section */}
 
