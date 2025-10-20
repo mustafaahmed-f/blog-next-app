@@ -9,7 +9,7 @@ import {
 } from "@/_utils/helperMethods/showToasts";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useParams, useRouter } from "next/navigation";
-import Quill from "quill";
+import Quill, { Delta, EmitterSource } from "quill";
 import "quill/dist/quill.snow.css";
 import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -55,7 +55,7 @@ function PostEditor({
   }, [editMode, editModeDefaultValues, methods]);
 
   useEffect(() => {
-    function handler() {
+    function handler(delta: Delta, oldDelta: Delta, source: EmitterSource) {
       if (quillInstance) {
         localStorage.setItem(
           "blog_app_post_content",
@@ -88,7 +88,6 @@ function PostEditor({
   async function publishPost(
     data: InferFormValues<typeof addPostYupValidation>,
   ) {
-    console.log("Data : ", data);
     if (editMode && Object.keys(methods.formState.dirtyFields).length === 0)
       return;
     setIsPublishingPost(true);

@@ -31,7 +31,6 @@ function PostEditorUI({
   draftId,
   isPublishingPost,
 }: PostEditorUIProps) {
-  console.log("Draft id : ", draftId);
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Add new post</h1>

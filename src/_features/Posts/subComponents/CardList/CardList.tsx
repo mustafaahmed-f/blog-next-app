@@ -33,8 +33,6 @@ const CardList = ({ page, category }: { page: number; category?: string }) => {
 
   const posts = !isFetching && data ? data.data : null;
 
-  console.log("Additional data : ", data?.additionalInfo);
-
   const hasPrev = page - 1 > 0;
   const hasNext = data?.additionalInfo.hasNext;
 

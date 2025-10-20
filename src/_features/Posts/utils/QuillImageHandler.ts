@@ -24,7 +24,9 @@ export function QuillImageHandler(quill: Quill, draftId?: string) {
         return;
       }
 
-      const imageURL = response.data;
+      const imgObj = response.data;
+      const imageURL = imgObj.secure_url;
+      const public_id = imgObj.public_id;
 
       const range = quill.getSelection();
       quill.insertEmbed(range?.index ?? 1, "image", imageURL);
