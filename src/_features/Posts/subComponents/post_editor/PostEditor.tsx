@@ -20,6 +20,8 @@ import PostEditorUI from "./PostEditorUI";
 import { editPost } from "../../services/editPost";
 import { useAuth } from "@clerk/nextjs";
 
+import "../../utils/CustomImageBlot";
+
 interface PostEditorProps {
   draftId?: string;
   editMode?: boolean;
@@ -48,6 +50,7 @@ function PostEditor({
     criteriaMode: "firstError",
   });
 
+  console.log("Values : ", methods.getValues());
   useEffect(() => {
     if (editMode && editModeDefaultValues) {
       methods.reset(editModeDefaultValues);
