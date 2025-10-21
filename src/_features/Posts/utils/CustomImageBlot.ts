@@ -6,11 +6,18 @@ const ImageBlot = Quill.import("formats/image") as any;
 //// Step 2️⃣: Extend it to create our own version
 class CustomImageBlot extends ImageBlot {
   //// Called when a new image blot is inserted
-  static create(value: { secure_url: string; public_id: string }) {
+  static create(value: {
+    src?: string;
+    secure_url?: string;
+    public_id: string;
+  }) {
+    //// we used here the src or secure_url as while editing post, quill gets the delta format and gets the src attr from it
+    //// and then pass it to create();
+    const src = value.secure_url || value.src || "";
     //// Call parent create() — it returns an <img> DOM node
     const node = super.create(value.secure_url) as HTMLImageElement;
 
-    node.setAttribute("src", value.secure_url);
+    node.setAttribute("src", src);
 
     node.setAttribute("data-public-id", value.public_id);
     node.setAttribute("alt", value.public_id);

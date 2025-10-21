@@ -19,7 +19,7 @@ import { addPostYupValidation } from "../../utils/addPostYupValidation";
 import PostEditorUI from "./PostEditorUI";
 import { editPost } from "../../services/editPost";
 import { useAuth } from "@clerk/nextjs";
-
+import { extractImgIDs } from "../../utils/extractImgIDs";
 import "../../utils/CustomImageBlot";
 
 interface PostEditorProps {
@@ -42,6 +42,9 @@ function PostEditor({
 
   const [quillInstance, setQuillInstance] = useState<Quill | null>(null);
 
+  //// State for removed images' public ids
+  const { 0: deletedIds, 1: setDeletedIds } = useState<string[]>([]);
+
   const methods = useForm<InferFormValues<typeof addPostYupValidation>>({
     defaultValues: editMode ? editModeDefaultValues : addPostDefaultValues,
     resolver: yupResolver(addPostYupValidation),
@@ -50,7 +53,6 @@ function PostEditor({
     criteriaMode: "firstError",
   });
 
-  console.log("Values : ", methods.getValues());
   useEffect(() => {
     if (editMode && editModeDefaultValues) {
       methods.reset(editModeDefaultValues);
@@ -60,10 +62,16 @@ function PostEditor({
   useEffect(() => {
     function handler(delta: Delta, oldDelta: Delta, source: EmitterSource) {
       if (quillInstance) {
-        localStorage.setItem(
-          "blog_app_post_content",
-          JSON.stringify(quillInstance.getContents()),
-        );
+        //// Handler for removing images from editor
+        const previousIds = extractImgIDs(oldDelta);
+        const currentIds = extractImgIDs(quillInstance.getContents());
+
+        const removedIds = previousIds.filter((id) => !currentIds.includes(id));
+        if (removedIds.length > 0) {
+          setDeletedIds((prev) => [...new Set([...prev, ...removedIds])]);
+        }
+
+        //// Updating values of react form hook
         methods.setValue("desc", quillInstance.getText(), {
           shouldDirty: true,
         });
@@ -86,7 +94,7 @@ function PostEditor({
         quillInstance.off(Quill.events.TEXT_CHANGE, handler);
       }
     };
-  }, [quillInstance]);
+  }, [quillInstance, setDeletedIds]);
 
   async function publishPost(
     data: InferFormValues<typeof addPostYupValidation>,
@@ -100,6 +108,7 @@ function PostEditor({
     formData.set("desc", data.desc);
     formData.set("html", data.html);
     formData.set("delta", data.delta);
+    formData.set("deletedIds", JSON.stringify(deletedIds));
 
     if (data.img instanceof File) formData.set("img", data.img);
 
@@ -146,20 +155,6 @@ function PostEditor({
   function onReady(q: Quill) {
     setQuillInstance(q);
   }
-
-  /*
-  
-      function cleanBrokenImagesFromHTML(html: string) {
-      const doc = new DOMParser().parseFromString(html, "text/html");
-      doc.querySelectorAll("img").forEach((img) => {
-        fetch(img.src, { method: "HEAD" })
-          .then(res => { if (!res.ok) img.remove(); })
-          .catch(() => img.remove());
-      });
-      return doc.body.innerHTML;
-      }
-
-  */
 
   return (
     <>
