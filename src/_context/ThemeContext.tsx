@@ -32,7 +32,6 @@ export const ThemeContextProvider = ({
   const [mounted, setMounted] = useState(false);
 
   const toggle = () => {
-    console.log("toggle");
     setTheme(theme === "light" ? "dark" : "light");
   };
 

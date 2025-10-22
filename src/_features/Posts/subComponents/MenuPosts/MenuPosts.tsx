@@ -5,9 +5,9 @@ const MenuPosts = ({ featuredPosts }: { featuredPosts: any }) => {
   return (
     <div className={styles.items}>
       {featuredPosts &&
-        featuredPosts.slice(3, 7).map((item: any) => (
+        featuredPosts.slice(1, 5).map((item: any) => (
           <Link
-            key={item.slug}
+            key={item?.slug}
             href={`/posts/${item.slug}`}
             className={styles.item}
           >

@@ -81,6 +81,7 @@ function SinglePostUI({ post, postViews, postResponse }: SinglePostUIProps) {
                   src={post.user.img}
                   alt={post.user.userName}
                   fill
+                  sizes="33vw"
                   className={styles.avatar}
                 />
               </div>
@@ -108,6 +109,7 @@ function SinglePostUI({ post, postViews, postResponse }: SinglePostUIProps) {
               alt={post.title}
               fill
               className={styles.image}
+              sizes="33vw"
               style={{ border: "1px solid var(--border)" }}
             />
           </div>

@@ -140,8 +140,8 @@ function SingleComment({ item }: SingleCommentProps) {
             <Image
               src={item.user.img}
               alt=""
-              width={50}
-              height={50}
+              width={70}
+              height={80}
               className={styles.image}
             />
           ) : (
