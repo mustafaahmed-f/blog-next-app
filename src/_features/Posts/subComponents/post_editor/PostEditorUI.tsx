@@ -9,6 +9,7 @@ import styles from "./PostEditor.module.css";
 import QuillEditor from "./QuillEditor";
 import TagsInputField from "./TagsInputField";
 import InputField from "@/_components/form/InputField";
+import { useState } from "react";
 
 type PostFormValues = InferFormValues<typeof addPostYupValidation>;
 
@@ -19,7 +20,7 @@ interface PostEditorUIProps {
   disabled?: boolean;
   editMode?: boolean;
   isPublishingPost?: boolean;
-  draftId?: string;
+  draftId: string;
 }
 
 function PostEditorUI({
@@ -31,6 +32,7 @@ function PostEditorUI({
   draftId,
   isPublishingPost,
 }: PostEditorUIProps) {
+  const [isUploading, setIsUploading] = useState(false);
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Add new post</h1>
@@ -102,6 +104,8 @@ function PostEditorUI({
         watch={methods.watch}
         editMode={editMode}
         draftId={draftId}
+        isUploading={isUploading}
+        setIsUploading={setIsUploading}
       />
 
       <div
@@ -113,7 +117,10 @@ function PostEditorUI({
           alignItems: "center",
         }}
       >
-        <Button className={styles.publishBtn} disabled={disabled}>
+        <Button
+          className={styles.publishBtn}
+          disabled={isUploading || disabled}
+        >
           {editMode
             ? isPublishingPost
               ? "Updating ..."

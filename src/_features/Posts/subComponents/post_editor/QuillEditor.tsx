@@ -1,15 +1,18 @@
 import Quill from "quill";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FieldValues, Path, UseFormWatch } from "react-hook-form";
 import { QuillImageHandler } from "../../utils/QuillImageHandler";
 import { quillOptions } from "../../utils/quillOptions";
+import Spinner from "@/_components/Spinner/Spinner";
 
 interface QuillEditorProps<T extends FieldValues> {
   defaultValue?: any;
   onReady: (q: Quill) => void;
   watch: UseFormWatch<T>;
   editMode?: boolean;
-  draftId?: string;
+  draftId: string;
+  isUploading: boolean;
+  setIsUploading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function QuillEditor<T extends FieldValues>({
@@ -18,6 +21,8 @@ function QuillEditor<T extends FieldValues>({
   watch,
   editMode,
   draftId,
+  isUploading,
+  setIsUploading,
 }: QuillEditorProps<T>) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const defaultValueRef = useRef<any>(defaultValue);
@@ -30,7 +35,9 @@ function QuillEditor<T extends FieldValues>({
     const quill = new Quill(editorContainer, quillOptions);
     const toolbar: any = quill.getModule("toolbar");
 
-    toolbar.addHandler("image", () => QuillImageHandler(quill, draftId));
+    toolbar.addHandler("image", () =>
+      QuillImageHandler(quill, draftId, setIsUploading),
+    );
 
     if (editMode) {
       const deltaValue = watch("delta" as Path<T>);
@@ -56,7 +63,15 @@ function QuillEditor<T extends FieldValues>({
     };
   }, []);
 
-  return <div className="bg-white" ref={containerRef}></div>;
+  return (
+    <div className="relative bg-white" ref={containerRef}>
+      {isUploading && (
+        <div className="absolute inset-0 z-50 flex cursor-not-allowed items-center justify-center bg-white/60 backdrop-blur-sm">
+          <Spinner />
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default QuillEditor;

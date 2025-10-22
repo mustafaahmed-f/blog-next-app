@@ -2,7 +2,11 @@ import { showErrorToast } from "@/_utils/helperMethods/showToasts";
 import Quill from "quill";
 import { sendPostImg } from "../services/sendPostImg";
 
-export function QuillImageHandler(quill: Quill, draftId?: string) {
+export function QuillImageHandler(
+  quill: Quill,
+  draftId: string,
+  setIsUploading: React.Dispatch<React.SetStateAction<boolean>>,
+) {
   const input = document.createElement("input");
   input.setAttribute("type", "file");
   input.setAttribute("accept", "image/*");
@@ -17,6 +21,7 @@ export function QuillImageHandler(quill: Quill, draftId?: string) {
     formData.set("img", image);
 
     try {
+      setIsUploading(true);
       const response = await sendPostImg(formData, draftId);
       if (response.error) {
         showErrorToast(response.error);
@@ -31,6 +36,8 @@ export function QuillImageHandler(quill: Quill, draftId?: string) {
     } catch (error: any) {
       showErrorToast(error.message);
       console.log(error);
+    } finally {
+      setIsUploading(false);
     }
   };
 }
