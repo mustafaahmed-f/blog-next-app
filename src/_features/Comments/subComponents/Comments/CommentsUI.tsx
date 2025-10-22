@@ -1,18 +1,18 @@
 import Spinner from "@/_components/Spinner/Spinner";
 import { Button } from "@/_components/ui/button";
+import { queryClient } from "@/_services/TanstackQuery_Client";
+import { showErrorToast } from "@/_utils/helperMethods/showToasts";
 import { SignedIn, useAuth } from "@clerk/nextjs";
 import { InfiniteData } from "@tanstack/react-query";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { forwardRef, useRef, useState, useTransition } from "react";
+import { addComment } from "../../services/addComment";
 import styles from "./comments.module.css";
 import SingleComment from "./SingleComment";
-import {
-  showErrorToast,
-  showSuccessToast,
-} from "@/_utils/helperMethods/showToasts";
-import { addComment } from "../../services/addComment";
-import { queryClient } from "@/_services/TanstackQuery_Client";
+
+import { RevalidateTagMethod } from "@/_services/RevalidateTagMethod";
+import { mainModules } from "@/_utils/constants/mainModules";
 
 interface CommentsUIProps {
   data:
@@ -86,6 +86,15 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
               slug as string,
               newComment,
               token as string,
+            );
+            if (response.error) {
+              showErrorToast(response.error);
+              return;
+            }
+            RevalidateTagMethod(
+              mainModules.comment,
+              "allRecords",
+              slug as string,
             );
             setCommentContent("");
             queryClient.invalidateQueries({ queryKey: [slug, "Comments"] });

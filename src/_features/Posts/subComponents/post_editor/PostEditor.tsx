@@ -7,20 +7,23 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "@/_utils/helperMethods/showToasts";
+import { useAuth } from "@clerk/nextjs";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useParams, useRouter } from "next/navigation";
 import Quill, { Delta, EmitterSource } from "quill";
 import "quill/dist/quill.snow.css";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { editPost } from "../../services/editPost";
 import { sendPost } from "../../services/sendPost";
 import { addPostDefaultValues } from "../../utils/addPostDefaultValues";
 import { addPostYupValidation } from "../../utils/addPostYupValidation";
-import PostEditorUI from "./PostEditorUI";
-import { editPost } from "../../services/editPost";
-import { useAuth } from "@clerk/nextjs";
-import { extractImgIDs } from "../../utils/extractImgIDs";
 import "../../utils/CustomImageBlot";
+import { extractImgIDs } from "../../utils/extractImgIDs";
+import PostEditorUI from "./PostEditorUI";
+
+import { RevalidateTagMethod } from "@/_services/RevalidateTagMethod";
+import { mainModules } from "@/_utils/constants/mainModules";
 
 interface PostEditorProps {
   draftId?: string;
@@ -136,6 +139,10 @@ function PostEditor({
             ? "Post updated successfully"
             : "Post published successfully",
         );
+        RevalidateTagMethod(mainModules.post, "allRecords");
+        if (editMode) {
+          RevalidateTagMethod(mainModules.post, "singleRecord", slug as string);
+        }
         setIsPublishingPost(false);
         router.push(`/posts/${response.data.slug}`);
       }

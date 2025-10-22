@@ -1,8 +1,5 @@
 "use client";
 
-import { Button } from "@/_components/ui/button";
-import styles from "./DeletePostBtn.module.css";
-import { useState } from "react";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -12,13 +9,19 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/_components/ui/alert-dialog";
+import { Button } from "@/_components/ui/button";
 import {
   showErrorToast,
   showSuccessToast,
 } from "@/_utils/helperMethods/showToasts";
-import { deletePost } from "../../services/deletePost";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { deletePost } from "../../services/deletePost";
+import styles from "./DeletePostBtn.module.css";
+
+import { RevalidateTagMethod } from "@/_services/RevalidateTagMethod";
+import { mainModules } from "@/_utils/constants/mainModules";
 
 interface DeletePostBtnProps {
   postSlug: string;
@@ -34,6 +37,7 @@ function DeletePostBtn({ postSlug }: DeletePostBtnProps) {
       const response = await deletePost(postSlug, token ?? "");
       if (response.data) {
         showSuccessToast("Post has been deleted successfully");
+        RevalidateTagMethod(mainModules.post, "allRecords", postSlug);
         setOpen(false);
         router.push("/");
       }

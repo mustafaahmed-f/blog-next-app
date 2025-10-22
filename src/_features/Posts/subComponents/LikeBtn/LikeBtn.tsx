@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import styles from "./LikeBtn.module.css";
-import { HeartIcon } from "lucide-react";
+import { showErrorToast } from "@/_utils/helperMethods/showToasts";
 import { useAuth } from "@clerk/nextjs";
-import { likePost } from "../../services/likePost";
-import {
-  showErrorToast,
-  showSuccessToast,
-} from "@/_utils/helperMethods/showToasts";
+import { HeartIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { likePost } from "../../services/likePost";
+import styles from "./LikeBtn.module.css";
+
+import { RevalidateTagMethod } from "@/_services/RevalidateTagMethod";
+import { mainModules } from "@/_utils/constants/mainModules";
 
 interface LikeBtnProps {
   slug: string;
@@ -27,7 +27,7 @@ function LikeBtn({ slug, isLiked }: LikeBtnProps) {
       showErrorToast(response.error);
     } else {
       setLiked(!liked);
-      // showSuccessToast(response.message);
+      RevalidateTagMethod(mainModules.post, "singleRecord", slug);
       router.refresh();
     }
   }

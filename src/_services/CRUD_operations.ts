@@ -6,11 +6,13 @@ export async function getSingleRecord({
   _APIEndpointName = "",
   enableCache = true,
   token,
+  module,
 }: {
   recordIdentified: string;
   _APIEndpointName: string;
   enableCache: boolean;
   token: string | null;
+  module: string;
 }) {
   let headers: any = {};
   if (token) {
@@ -24,7 +26,7 @@ export async function getSingleRecord({
       //// Cache for three hours
       next: {
         revalidate: enableCache ? 60 * 60 * 3 : 0,
-        tags: generateTags(_APIEndpointName, "singleRecord", recordIdentified),
+        tags: generateTags(module, "singleRecord", recordIdentified),
       },
       headers,
     },
@@ -54,6 +56,7 @@ export async function getSingleRecord({
 export async function _getEveryRecord(
   _APIEndpointName: string,
   enableCache = true,
+  module: string,
 ) {
   //// This method is used to get all records from table and apply api feature on the client side
   const res = await fetch(
@@ -63,7 +66,7 @@ export async function _getEveryRecord(
       //// Cache for three hours
       next: {
         revalidate: enableCache ? 60 * 60 * 3 : 0,
-        tags: generateTags(_APIEndpointName, "everyRecord"),
+        tags: generateTags(module, "everyRecord"),
       },
     },
   );
@@ -96,6 +99,8 @@ export async function _getAllRecords({
   sort = "",
   searchTerm = "",
   enableCache = true,
+  module,
+  recordIdentified,
 }: {
   _APIEndpointName: string;
   page?: number;
@@ -103,6 +108,8 @@ export async function _getAllRecords({
   sort?: string;
   searchTerm?: string;
   enableCache?: boolean;
+  module: string;
+  recordIdentified?: string;
 }) {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}page=${page}&size=${size}&searchTerm=${searchTerm}&sort=${sort}`,
@@ -111,7 +118,7 @@ export async function _getAllRecords({
       //// Cache for three hours
       next: {
         revalidate: enableCache ? 60 * 60 * 3 : 0,
-        tags: generateTags(_APIEndpointName, "allRecords"),
+        tags: generateTags(module, "allRecords", recordIdentified),
       },
     },
   );

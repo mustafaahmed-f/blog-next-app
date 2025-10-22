@@ -1,4 +1,5 @@
 import { _getAllRecords } from "@/_services/CRUD_operations";
+import { mainModules } from "@/_utils/constants/mainModules";
 import { mainURLs } from "@/_utils/constants/mainURLs";
 
 export async function getComments(
@@ -8,6 +9,8 @@ export async function getComments(
 ) {
   return _getAllRecords({
     _APIEndpointName: `${mainURLs.Comments}/getComments?postSlug=${postSlug}&cursor=${cursor}&limit=${size}&`,
-    enableCache: false,
+    enableCache: true,
+    module: mainModules.comment,
+    recordIdentified: postSlug,
   });
 }

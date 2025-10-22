@@ -1,4 +1,5 @@
 "use client";
+import Spinner from "@/_components/Spinner/Spinner";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -25,11 +26,13 @@ import { useMutation } from "@tanstack/react-query";
 import { Check, EllipsisVertical, XIcon } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { MouseEventHandler, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { deleteComment } from "../../services/deleteComment";
 import { updateComment } from "../../services/updateComment";
 import styles from "./comments.module.css";
-import Spinner from "@/_components/Spinner/Spinner";
+
+import { RevalidateTagMethod } from "@/_services/RevalidateTagMethod";
+import { mainModules } from "@/_utils/constants/mainModules";
 
 interface SingleCommentProps {
   item: any;
@@ -64,6 +67,7 @@ function SingleComment({ item }: SingleCommentProps) {
       showSuccessToast(
         data?.message ?? "Comment has been updated successfully !!",
       );
+      RevalidateTagMethod(mainModules.comment, "allRecords", slug as string);
       queryClient.invalidateQueries({ queryKey: [slug, "Comments"] });
       setIsEditMode(false);
     },
@@ -81,6 +85,7 @@ function SingleComment({ item }: SingleCommentProps) {
       showSuccessToast(
         data?.message ?? "Comment has been deleted successfully !!",
       );
+      RevalidateTagMethod(mainModules.comment, "allRecords", slug as string);
       queryClient.invalidateQueries({ queryKey: [slug, "Comments"] });
       setIsEditMode(false);
     },

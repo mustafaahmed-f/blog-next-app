@@ -1,10 +1,13 @@
 "use client";
 
-import styles from "./PostViews.module.css";
+import { showErrorToast } from "@/_utils/helperMethods/showToasts";
 import { EyeIcon } from "lucide-react";
 import { useEffect } from "react";
 import { incViews } from "../../services/incViews";
-import { showErrorToast } from "@/_utils/helperMethods/showToasts";
+import styles from "./PostViews.module.css";
+
+import { RevalidateTagMethod } from "@/_services/RevalidateTagMethod";
+import { mainModules } from "@/_utils/constants/mainModules";
 
 interface PostViewsProps {
   postViews: number;
@@ -24,7 +27,7 @@ function PostViews({ postViews, postId, postSlug }: PostViewsProps) {
           showErrorToast(error.message);
           console.error(error);
         }
-
+        RevalidateTagMethod(mainModules.post, "singleRecord", postSlug);
         viewedPosts.push(postId);
         localStorage.setItem(
           "blog_app_post_views",

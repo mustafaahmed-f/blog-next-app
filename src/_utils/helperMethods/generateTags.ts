@@ -1,17 +1,19 @@
 export function generateTags(
   module: string,
   method: "allRecords" | "everyRecord" | "singleRecord",
-  recordId?: string,
+  recordIdentifier?: string,
 ): string[] {
   switch (method) {
     case "allRecords":
-      return [`all-records-${module}`];
+      return recordIdentifier
+        ? [`all-records-${module}-${recordIdentifier}`]
+        : [`all-records-${module}`];
 
     case "everyRecord":
       return [`every-record-${module}`];
 
     case "singleRecord":
-      return [`single-record-${module}-${recordId}`];
+      return [`single-record-${module}-${recordIdentifier}`];
 
     default:
       return [];
