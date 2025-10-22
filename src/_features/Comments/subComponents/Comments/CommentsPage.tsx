@@ -6,6 +6,7 @@ import styles from "@/app/posts/[slug]/postPage.module.css";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Comments from "./Comments";
+import Image from "next/image";
 
 interface CommentsPageProps {
   postSlug: string;
@@ -43,7 +44,10 @@ function CommentsPage({ postSlug, post }: CommentsPageProps) {
           <h1 className={styles.title}>{post?.title}</h1>
           <div className={styles.user}>
             <div className={styles.userImageContainer}>
-              <img
+              <Image
+                width={50}
+                height={50}
+                sizes="30vw"
                 src={getProfileImg(post?.user?.img)}
                 alt={post?.user?.userName}
                 className={styles.avatar}

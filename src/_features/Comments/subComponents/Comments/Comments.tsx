@@ -104,6 +104,7 @@ function Comments({
     isFetching,
     isFetchingNextPage,
     isFetchNextPageError,
+    canFetchMore,
   ]);
 
   if (isPending)

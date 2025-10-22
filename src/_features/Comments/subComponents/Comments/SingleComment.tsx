@@ -126,7 +126,7 @@ function SingleComment({ item }: SingleCommentProps) {
     return () => {
       document.removeEventListener("click", closeEditBox);
     };
-  }, [isEditMode]);
+  }, [isEditMode, item.desc, setCommentContent, setIsEditMode]);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -145,8 +145,8 @@ function SingleComment({ item }: SingleCommentProps) {
             <Image
               src={item.user.img}
               alt=""
-              width={70}
-              height={80}
+              width={50}
+              height={50}
               className={styles.image}
             />
           ) : (

@@ -1,15 +1,15 @@
 import DropList from "@/_components/form/DropList";
 import ImageUploader from "@/_components/form/ImageUploader";
+import InputField from "@/_components/form/InputField";
 import { Button } from "@/_components/ui/button";
 import { InferFormValues } from "@/_utils/helperMethods/InferFormValues";
 import Quill from "quill";
+import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { addPostYupValidation } from "../../utils/addPostYupValidation";
 import styles from "./PostEditor.module.css";
 import QuillEditor from "./QuillEditor";
 import TagsInputField from "./TagsInputField";
-import InputField from "@/_components/form/InputField";
-import { useState } from "react";
 
 type PostFormValues = InferFormValues<typeof addPostYupValidation>;
 

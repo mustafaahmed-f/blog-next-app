@@ -36,7 +36,7 @@ function PostViews({ postViews, postId, postSlug }: PostViewsProps) {
       });
     }
     incViewsFn();
-  }, []);
+  }, [postSlug, postId]);
 
   return (
     <div className={styles.statItem}>

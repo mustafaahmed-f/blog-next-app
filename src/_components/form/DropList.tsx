@@ -1,3 +1,4 @@
+import { getErrObject } from "@/_utils/helperMethods/getErrObject";
 import {
   FieldValues,
   Path,
@@ -14,8 +15,6 @@ import {
   SelectValue,
 } from "../ui/select";
 import styles from "./DropList.module.css";
-import { getErrObject } from "@/_utils/helperMethods/getErrObject";
-import { useEffect } from "react";
 
 interface DropListProps<T extends FieldValues> {
   options: any[];

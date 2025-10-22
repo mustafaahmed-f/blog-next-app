@@ -1,18 +1,13 @@
 "use client";
 
 import Spinner from "@/_components/Spinner/Spinner";
-import {
-  InfiniteData,
-  keepPreviousData,
-  useQuery,
-} from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useTransition } from "react";
 import { getPosts } from "../../services/getPosts";
+import { getPostsWithCategory } from "../../services/getPostsWithCategory";
 import Card from "../Card/Card";
 import Pagination from "../Pagination/Pagination";
 import styles from "./cardList.module.css";
-import { getPostsWithCategory } from "../../services/getPostsWithCategory";
-import { useTransition } from "react";
-import { queryClient } from "@/_services/TanstackQuery_Client";
 
 const CardList = ({ page, category }: { page: number; category?: string }) => {
   const { 0: isPending, 1: startTransition } = useTransition();

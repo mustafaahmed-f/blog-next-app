@@ -1,5 +1,6 @@
 "use client";
 
+import { ThemeContext } from "@/_context/ThemeContext";
 import Comments from "@/_features/Comments/subComponents/Comments/Comments";
 import { SignedIn, useAuth } from "@clerk/nextjs";
 import { HeartIcon } from "lucide-react";
@@ -15,7 +16,6 @@ import PostCategory from "../Post Category/PostCategory";
 import PostViews from "../PostViews/PostViews";
 import TagSection from "../tagsSection/TagSection";
 import styles from "./singlePostUI.module.css";
-import { ThemeContext } from "@/_context/ThemeContext";
 
 interface SinglePostUIProps {
   post: any;

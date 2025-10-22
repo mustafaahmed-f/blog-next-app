@@ -1,3 +1,4 @@
+import { getErrObject } from "@/_utils/helperMethods/getErrObject";
 import {
   FieldValues,
   Path,
@@ -7,7 +8,6 @@ import {
   UseFormWatch,
 } from "react-hook-form";
 import { Input } from "../ui/input";
-import { getErrObject } from "@/_utils/helperMethods/getErrObject";
 
 interface InputFieldProps<T extends FieldValues> {
   name: Path<T>;
@@ -27,9 +27,6 @@ function InputField<T extends FieldValues>({
   required,
   placeholder,
   errors,
-  watch,
-  setValue,
-  trigger,
   register,
 }: InputFieldProps<T>) {
   const errorObj = getErrObject<T>(errors, name);

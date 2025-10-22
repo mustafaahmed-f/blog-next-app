@@ -1,7 +1,4 @@
 "use client";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import styles from "./authLinks.module.css";
 import {
   SignedIn,
   SignedOut,
@@ -9,8 +6,10 @@ import {
   SignUpButton,
   UserButton,
 } from "@clerk/nextjs";
-import { Button } from "../ui/button";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import styles from "./authLinks.module.css";
 
 interface AuthLinksProps {}
 

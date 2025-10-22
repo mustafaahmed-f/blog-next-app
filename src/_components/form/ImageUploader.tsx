@@ -1,3 +1,4 @@
+import { getErrObject } from "@/_utils/helperMethods/getErrObject";
 import { useEffect, useState } from "react";
 import {
   FieldValues,
@@ -8,7 +9,6 @@ import {
   UseFormWatch,
 } from "react-hook-form";
 import styles from "./ImageUploader.module.css";
-import { getErrObject } from "@/_utils/helperMethods/getErrObject";
 
 interface ImageUploaderProps<T extends FieldValues> {
   name: Path<T>;

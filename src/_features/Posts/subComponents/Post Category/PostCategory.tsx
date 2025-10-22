@@ -1,8 +1,7 @@
 "use client";
 
-import styles from "./PostCategory.module.css";
 import { useCategoires } from "@/_context/CategoriesContext";
-import Link from "next/link";
+import styles from "./PostCategory.module.css";
 
 interface PostCategoryProps {
   categoryId: string;
