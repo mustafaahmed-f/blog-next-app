@@ -60,6 +60,8 @@ const CommentsUI = forwardRef<HTMLDivElement, CommentsUIProps>(
     const listElement = useRef<HTMLDivElement | null>(null);
 
     const rowVirtualizer = useWindowVirtualizer({
+      //* we use allcomments.length + 1 when we have next page to count for the loading indicator so it can be rendered
+      //* below comments.
       count: hasNextPage ? allComments.length + 1 : allComments.length,
       scrollMargin: listElement.current?.offsetTop ?? 0,
       estimateSize: () => 130,
