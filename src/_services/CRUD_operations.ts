@@ -58,6 +58,10 @@ export async function _getEveryRecord(
   enableCache = true,
   module: string,
 ) {
+  console.log(
+    "URL : ",
+    `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}`,
+  );
   //// This method is used to get all records from table and apply api feature on the client side
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}`,
