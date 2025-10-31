@@ -1,3 +1,4 @@
+import { getCategories } from "@/_features/Categories/services/getCategories";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type contextType = {
@@ -24,9 +25,11 @@ export function CategoriesProvider({
   const { 0: finalCategories, 1: setFinalCategories } = useState([]);
 
   useEffect(() => {
-    if (fetchedCategories) {
-      setFinalCategories(fetchedCategories);
+    async function getCategoriesMethod() {
+      const categories = await getCategories();
+      setFinalCategories(categories?.data);
     }
+    getCategoriesMethod();
   }, [fetchedCategories]);
   return (
     <categoriesContext.Provider
