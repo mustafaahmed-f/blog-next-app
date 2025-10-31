@@ -11,17 +11,12 @@ import { useEffect } from "react";
 
 interface ProvidersProps {
   children: React.ReactNode;
-  fetchedCategories: any;
+
   featuredPosts: any;
   catchedError: { catgoriesError: string; postsError: string };
 }
 
-function Providers({
-  children,
-  featuredPosts,
-  catchedError,
-  fetchedCategories,
-}: ProvidersProps) {
+function Providers({ children, featuredPosts, catchedError }: ProvidersProps) {
   const pathname = usePathname();
 
   useEffect(() => {
@@ -36,12 +31,7 @@ function Providers({
           featuredPosts={featuredPosts}
           catchedError={catchedError.postsError}
         >
-          <CategoriesProvider
-            fetchedCategories={fetchedCategories ?? []}
-            catchedError={catchedError.catgoriesError}
-          >
-            {children}
-          </CategoriesProvider>
+          <CategoriesProvider>{children}</CategoriesProvider>
         </FeaturedPostsProvider>
       </QueryClientProvider>
     </ThemeContextProvider>

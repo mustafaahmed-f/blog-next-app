@@ -28,25 +28,20 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let fetchedCategories: any = null;
   let featuredPosts: any = null;
   let catchedError: { catgoriesError: string; postsError: string } = {
     catgoriesError: "",
     postsError: "",
   };
   try {
-    const [featuredPostsResponse, categoriesResponse] = await Promise.all([
+    //* I was fetching categories here with featured posts
+    const [featuredPostsResponse] = await Promise.all([
       getFeaturedPosts().catch((err: any) => {
         catchedError!.postsError = err?.message;
         console.log("Posts error : ", err);
       }),
-      getCategories().catch((err: any) => {
-        catchedError!.catgoriesError = err?.message;
-        console.log("Categories error : ", err);
-      }),
     ]);
 
-    fetchedCategories = categoriesResponse?.data;
     featuredPosts = featuredPostsResponse?.data;
   } catch (error: any) {
     console.log("Unexpected error : ", error);
@@ -56,9 +51,6 @@ export default async function RootLayout({
     };
   }
 
-  console.log("Featured posts : ", featuredPosts);
-  console.log("Categories : ", fetchedCategories);
-
   return (
     <ClerkProvider
       appearance={{ baseTheme: dark }}
@@ -67,11 +59,7 @@ export default async function RootLayout({
       <html lang="en">
         <body className={`${inter.className} antialiased`}>
           {" "}
-          <Providers
-            featuredPosts={featuredPosts}
-            catchedError={catchedError}
-            fetchedCategories={fetchedCategories ?? []}
-          >
+          <Providers featuredPosts={featuredPosts} catchedError={catchedError}>
             <div className="container">
               <div className="wrapper">
                 <Toaster richColors position="bottom-right" expand={true} />

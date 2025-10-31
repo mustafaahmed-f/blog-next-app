@@ -15,12 +15,8 @@ const categoriesContext = createContext<contextType>(initialState);
 
 export function CategoriesProvider({
   children,
-  fetchedCategories,
-  catchedError,
 }: {
   children: React.ReactNode;
-  fetchedCategories: any;
-  catchedError: any;
 }) {
   const { 0: finalCategories, 1: setFinalCategories } = useState([]);
 
@@ -30,10 +26,11 @@ export function CategoriesProvider({
       setFinalCategories(categories?.data);
     }
     getCategoriesMethod();
-  }, [fetchedCategories]);
+  }, [setFinalCategories]);
+
   return (
     <categoriesContext.Provider
-      value={{ fetchedCategories: finalCategories, catchedError }}
+      value={{ fetchedCategories: finalCategories, catchedError: "" }}
     >
       {children}
     </categoriesContext.Provider>

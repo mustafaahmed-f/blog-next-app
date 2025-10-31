@@ -15,24 +15,28 @@ const CategoryList = () => {
       <div className={styles.container}>
         <h1 className={styles.title}>Popular Categories</h1>
         <div className={styles.categories}>
-          {fetchedCategories?.map((item: any) => (
-            <Link
-              href={`/blog?cat=${item.id}&name=${item.title}`}
-              className={`${styles.category} ${styles[item.title]}`}
-              key={item.id}
-            >
-              {item.img && (
-                <Image
-                  src={item.img}
-                  alt=""
-                  width={32}
-                  height={32}
-                  className={styles.image}
-                />
-              )}
-              {item.title}
-            </Link>
-          ))}
+          {fetchedCategories?.length ? (
+            fetchedCategories?.map((item: any) => (
+              <Link
+                href={`/blog?cat=${item.id}&name=${item.title}`}
+                className={`${styles.category} ${styles[item.title]}`}
+                key={item.id}
+              >
+                {item.img && (
+                  <Image
+                    src={item.img}
+                    alt=""
+                    width={32}
+                    height={32}
+                    className={styles.image}
+                  />
+                )}
+                {item.title}
+              </Link>
+            ))
+          ) : (
+            <p>No categories yet.</p>
+          )}
         </div>
       </div>
     </>
