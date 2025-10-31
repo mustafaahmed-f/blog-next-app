@@ -56,6 +56,7 @@ export default async function RootLayout({
     };
   }
 
+  console.log("Featured posts : ", featuredPosts);
   console.log("Categories : ", fetchedCategories);
 
   return (
