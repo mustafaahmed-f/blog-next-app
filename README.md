@@ -153,7 +153,7 @@ You can find the backend source code here: [Blog App Backend (GitHub)](https://g
 
 ## Deployment
 
-Live demo: [Luminae Store](https://ecommerce-nextjs-by-mustafa.vercel.app/)
+Live demo: [MuBlog](https://blog-next-app-by-mustafa.vercel.app/)
 
 > _Made with ❤️ using Next.js, TypeScript, TailwindCSS, and the best of the modern React ecosystem._
 
