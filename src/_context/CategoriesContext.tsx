@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 type contextType = {
   fetchedCategories: any;
@@ -21,9 +21,16 @@ export function CategoriesProvider({
   fetchedCategories: any;
   catchedError: any;
 }) {
+  const { 0: finalCategories, 1: setFinalCategories } = useState([]);
+
+  useEffect(() => {
+    if (fetchedCategories) {
+      setFinalCategories(fetchedCategories);
+    }
+  }, [fetchedCategories]);
   return (
     <categoriesContext.Provider
-      value={{ fetchedCategories: fetchedCategories || [], catchedError }}
+      value={{ fetchedCategories: finalCategories, catchedError }}
     >
       {children}
     </categoriesContext.Provider>

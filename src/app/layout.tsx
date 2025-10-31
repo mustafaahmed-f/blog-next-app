@@ -70,7 +70,7 @@ export default async function RootLayout({
           <Providers
             featuredPosts={featuredPosts}
             catchedError={catchedError}
-            fetchedCategories={fetchedCategories}
+            fetchedCategories={fetchedCategories ?? []}
           >
             <div className="container">
               <div className="wrapper">

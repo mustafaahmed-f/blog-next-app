@@ -37,7 +37,7 @@ function Providers({
           catchedError={catchedError.postsError}
         >
           <CategoriesProvider
-            fetchedCategories={fetchedCategories}
+            fetchedCategories={fetchedCategories ?? []}
             catchedError={catchedError.catgoriesError}
           >
             {children}
