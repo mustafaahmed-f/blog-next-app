@@ -35,6 +35,8 @@ function SinglePostUI({ post, postViews, postResponse }: SinglePostUIProps) {
       htmlRenderer.current.innerHTML = post.html;
     }
   }, []);
+
+  console.log("Post : ", post);
   return (
     <>
       <div className={styles.infoContainer}>
