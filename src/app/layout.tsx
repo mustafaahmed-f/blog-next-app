@@ -56,6 +56,8 @@ export default async function RootLayout({
     };
   }
 
+  console.log("Categories : ", fetchedCategories);
+
   return (
     <ClerkProvider
       appearance={{ baseTheme: dark }}
