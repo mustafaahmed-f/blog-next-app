@@ -88,6 +88,7 @@ export async function _getEveryRecord(
     );
   }
 
+  console.log("Data returned : ", jsonResponse.data ?? "No data returned !!");
   return {
     message: jsonResponse.message ?? "",
     data: jsonResponse.data ?? null,
