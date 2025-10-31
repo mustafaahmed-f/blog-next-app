@@ -35,6 +35,8 @@ async function Page({ params }: PageProps) {
   const post: any = getSinglePostResponse ? getSinglePostResponse.data : null;
   const postViews = post ? post.views : 0;
 
+  console.log("Single post : ", post);
+
   return (
     <>
       {catchedError && <ErrorToast error={catchedError} />}
