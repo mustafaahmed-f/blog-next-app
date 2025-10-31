@@ -23,7 +23,7 @@
   font-size: 1rem;
 }
 
-:global(.ql-toolbar) {
+.editor :global(.ql-toolbar) {
   position: sticky;
   top: 0; /* adjust if you have a fixed header (e.g. top: 64px) */
   z-index: 50;
@@ -32,11 +32,11 @@
 }
 
 /* editor area */
-:global(.ql-container) {
+.editor :global(.ql-container) {
   border-top: none; /* avoid double border with toolbar */
 }
 
-:global(.ql-editor) {
+.editor :global(.ql-editor) {
   min-height: 300px; /* ensure big typing area */
   padding: 1rem;
   line-height: 1.6;

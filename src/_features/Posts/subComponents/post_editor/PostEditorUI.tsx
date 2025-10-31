@@ -34,7 +34,7 @@ function PostEditorUI({
 }: PostEditorUIProps) {
   const [isUploading, setIsUploading] = useState(false);
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${styles.editor}`}>
       <h1 className={styles.title}>Add new post</h1>
       <div className="rounded-lg bg-amber-100 p-3">
         <p className="text-base text-amber-500">
