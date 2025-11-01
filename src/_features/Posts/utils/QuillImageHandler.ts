@@ -6,6 +6,7 @@ export function QuillImageHandler(
   quill: Quill,
   draftId: string,
   setIsUploading: React.Dispatch<React.SetStateAction<boolean>>,
+  token?: string,
 ) {
   const input = document.createElement("input");
   input.setAttribute("type", "file");
@@ -22,7 +23,7 @@ export function QuillImageHandler(
 
     try {
       setIsUploading(true);
-      const response = await sendPostImg(formData, draftId);
+      const response = await sendPostImg(formData, draftId, token);
       if (response.error) {
         showErrorToast(response.error);
         console.log("Error : ", response.error);

@@ -4,6 +4,7 @@ import { FieldValues, Path, UseFormWatch } from "react-hook-form";
 import { QuillImageHandler } from "../../utils/QuillImageHandler";
 import { quillOptions } from "../../utils/quillOptions";
 import Spinner from "@/_components/Spinner/Spinner";
+import { useAuth } from "@clerk/nextjs";
 
 interface QuillEditorProps<T extends FieldValues> {
   defaultValue?: any;
@@ -24,6 +25,7 @@ function QuillEditor<T extends FieldValues>({
   isUploading,
   setIsUploading,
 }: QuillEditorProps<T>) {
+  const { getToken } = useAuth();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const defaultValueRef = useRef<any>(defaultValue);
 
@@ -35,9 +37,10 @@ function QuillEditor<T extends FieldValues>({
     const quill = new Quill(editorContainer, quillOptions);
     const toolbar: any = quill.getModule("toolbar");
 
-    toolbar.addHandler("image", () =>
-      QuillImageHandler(quill, draftId, setIsUploading),
-    );
+    toolbar.addHandler("image", async () => {
+      const token = await getToken();
+      QuillImageHandler(quill, draftId, setIsUploading, token as string);
+    });
 
     if (editMode) {
       const deltaValue = watch("delta" as Path<T>);
