@@ -5,7 +5,11 @@ export const addPostYupValidation = yup.object().shape({
     .string()
     .required("Title is required")
     .min(5, "Title must be at least 5 characters")
-    .max(100, "Title must be at most 100 characters"),
+    .max(100, "Title must be at most 100 characters")
+    .matches(
+      /^[A-Za-z0-9]+(?: [A-Za-z0-9]+)*$/,
+      "Title can only contain letters, numbers, and single spaces between words ( no leading spaces ) !!",
+    ),
 
   desc: yup
     .string()

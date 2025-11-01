@@ -5,9 +5,7 @@ export async function sendPostImg(
   draftId?: string,
   token?: string,
 ) {
-  let headers: any = {
-    "Content-Type": "application/json",
-  };
+  let headers: any = {};
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
