@@ -4,6 +4,7 @@ import { CategoriesProvider } from "@/_context/CategoriesContext";
 import { FeaturedPostsProvider } from "@/_context/FeaturedPostsContext";
 import { ThemeContextProvider } from "@/_context/ThemeContext";
 import { queryClient } from "@/_services/TanstackQuery_Client";
+import { ensureClientId } from "@/_utils/helperMethods/ensureClientId";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { usePathname } from "next/navigation";
@@ -18,7 +19,7 @@ interface ProvidersProps {
 
 function Providers({ children, featuredPosts, catchedError }: ProvidersProps) {
   const pathname = usePathname();
-
+  ensureClientId();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
