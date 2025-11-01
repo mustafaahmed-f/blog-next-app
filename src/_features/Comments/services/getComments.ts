@@ -9,7 +9,7 @@ export async function getComments(
 ) {
   return _getAllRecords({
     _APIEndpointName: `${mainURLs.Comments}/getComments?postSlug=${postSlug}&cursor=${cursor}&limit=${size}&`,
-    enableCache: true,
+    enableCache: false,
     module: mainModules.comment,
     recordIdentified: postSlug,
   });

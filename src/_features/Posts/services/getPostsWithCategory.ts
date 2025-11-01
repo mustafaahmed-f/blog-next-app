@@ -9,7 +9,7 @@ export async function getPostsWithCategory(
 ) {
   return _getAllRecords({
     _APIEndpointName: `${mainURLs.Posts}/getPostsWithFilter?category=${category}&`,
-    enableCache: true,
+    enableCache: false,
     module: mainModules.post,
     page: page || 1,
     size: size || 10,

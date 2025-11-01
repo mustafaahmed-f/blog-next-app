@@ -6,7 +6,7 @@ export async function getSinglePost(slug: string, token: string) {
   return getSingleRecord({
     recordIdentified: slug,
     _APIEndpointName: `${mainURLs.Posts}/getPost`,
-    enableCache: true,
+    enableCache: false,
     token,
     module: mainModules.post,
   });
