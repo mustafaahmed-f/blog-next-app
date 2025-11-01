@@ -8,7 +8,7 @@ import { useCategoires } from "@/_context/CategoriesContext";
 
 const CategoryList = () => {
   const { catchedError, fetchedCategories } = useCategoires();
-  console.log("Categories inside category list : ", fetchedCategories);
+
   return (
     <>
       {catchedError && <ErrorToast error={catchedError} />}

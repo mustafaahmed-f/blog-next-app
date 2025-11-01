@@ -12,10 +12,12 @@ function PostCategory({ categoryId }: PostCategoryProps) {
   const postCategory = fetchedCategories.find(
     (item: any) => item.id === categoryId,
   );
-  return (
+  return fetchedCategories && fetchedCategories.length ? (
     <div className={`${styles.category} ${styles[postCategory.title]}`}>
       {postCategory?.title ?? ""}
     </div>
+  ) : (
+    <p>Loading category ..</p>
   );
 }
 
