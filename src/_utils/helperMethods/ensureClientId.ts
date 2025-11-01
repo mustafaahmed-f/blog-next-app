@@ -9,6 +9,6 @@ export function ensureClientId() {
     crypto.randomUUID?.() ??
     Date.now().toString(36) + Math.random().toString(36).slice(2);
   // Set cookie for long time
-  document.cookie = `${cookieName}=${cid}; Path=/; Max-Age=${60 * 60 * 24 * 15}; SameSite=Lax`;
+  document.cookie = `${cookieName}=${cid}; Path=/; Max-Age=${60 * 60 * 24 * 15}; SameSite=None; Secure`;
   return cid;
 }
