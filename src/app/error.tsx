@@ -15,7 +15,10 @@ export default function Error({
       <h1 className="text-3xl font-semibold text-red-600">
         Something went wrong!
       </h1>
+      <p>{error.name}</p>
       <p className="text-lg">{error.message}</p>
+
+      <p>{error.stack}</p>
 
       <button
         className="bg-accent-500 text-primary-800 inline-block cursor-pointer px-6 py-3 text-lg hover:underline"
