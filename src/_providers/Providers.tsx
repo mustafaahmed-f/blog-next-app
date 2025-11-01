@@ -19,7 +19,6 @@ interface ProvidersProps {
 
 function Providers({ children, featuredPosts, catchedError }: ProvidersProps) {
   const pathname = usePathname();
-  ensureClientId();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
