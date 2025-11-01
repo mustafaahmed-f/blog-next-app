@@ -27,7 +27,9 @@ function PostViews({ postViews, postId, postSlug }: PostViewsProps) {
       );
       if (viewedPosts.includes(postId)) return;
 
-      await incViews(postId, postSlug).catch((error: any) => {
+      const clientId = ensureClientId();
+      console.log("client Id : ", clientId);
+      await incViews(postId, postSlug, clientId).catch((error: any) => {
         if (error.message !== "You already viewed this post") {
           showErrorToast(error.message);
           console.error(error);
@@ -39,8 +41,6 @@ function PostViews({ postViews, postId, postSlug }: PostViewsProps) {
           JSON.stringify(viewedPosts),
         );
       });
-
-      ensureClientId();
     }
     incViewsFn();
   }, [postSlug, postId]);
