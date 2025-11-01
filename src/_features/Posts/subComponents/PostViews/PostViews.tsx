@@ -18,6 +18,10 @@ interface PostViewsProps {
 function PostViews({ postViews, postId, postSlug }: PostViewsProps) {
   useEffect(() => {
     async function incViewsFn() {
+      const hasViewedPost = localStorage.getItem("blog_app_post_views");
+      if (!hasViewedPost) {
+        localStorage.setItem("blog_app_post_views", "[]");
+      }
       let viewedPosts = JSON.parse(
         localStorage.getItem("blog_app_post_views") ?? "[]",
       );
