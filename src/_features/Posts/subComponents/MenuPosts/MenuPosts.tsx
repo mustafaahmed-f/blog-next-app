@@ -4,7 +4,7 @@ import styles from "./menuPosts.module.css";
 const MenuPosts = ({ featuredPosts }: { featuredPosts: any }) => {
   return (
     <div className={styles.items}>
-      {featuredPosts &&
+      {featuredPosts && featuredPosts.length ? (
         featuredPosts.slice(1, 5).map((item: any) => (
           <Link
             key={item?.slug}
@@ -22,7 +22,10 @@ const MenuPosts = ({ featuredPosts }: { featuredPosts: any }) => {
               </div>
             </div>
           </Link>
-        ))}
+        ))
+      ) : (
+        <p>No posts yet.</p>
+      )}
     </div>
   );
 };

@@ -64,11 +64,15 @@ const CardList = ({ page, category }: { page: number; category?: string }) => {
             className={styles.posts}
             style={isPending ? { opacity: 0.5, pointerEvents: "none" } : {}}
           >
-            {posts?.map((item: any) => (
-              <div key={item.slug}>
-                <Card item={item} />
-              </div>
-            ))}
+            {posts.length ? (
+              posts?.map((item: any) => (
+                <div key={item.slug}>
+                  <Card item={item} />
+                </div>
+              ))
+            ) : (
+              <p>No posts yet.</p>
+            )}
           </div>
           <Pagination
             page={page}

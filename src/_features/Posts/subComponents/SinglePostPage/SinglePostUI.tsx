@@ -43,7 +43,9 @@ function SinglePostUI({ post, postViews, postResponse }: SinglePostUIProps) {
         <div className={styles.textContainer}>
           <PostCategory categoryId={post.categoryId} />
           <div className={styles.titleContainer}>
-            <h1 className={styles.title}>{post?.title}</h1>
+            <h1 className={styles.title}>
+              {post?.title ?? "Failed to fetch title"}
+            </h1>
             <TagSection tags={post?.tags} />
 
             {/* Likes + Views section */}
@@ -108,7 +110,7 @@ function SinglePostUI({ post, postViews, postResponse }: SinglePostUIProps) {
           <div className={styles.imageContainer}>
             <Image
               src={post.img}
-              alt={post.title}
+              alt={post?.title ?? "Post image"}
               fill
               className={styles.image}
               sizes="33vw"

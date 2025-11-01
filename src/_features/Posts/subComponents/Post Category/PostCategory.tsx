@@ -14,7 +14,7 @@ function PostCategory({ categoryId }: PostCategoryProps) {
   );
   return (
     <div className={`${styles.category} ${styles[postCategory.title]}`}>
-      {postCategory.title ?? ""}
+      {postCategory?.title ?? ""}
     </div>
   );
 }

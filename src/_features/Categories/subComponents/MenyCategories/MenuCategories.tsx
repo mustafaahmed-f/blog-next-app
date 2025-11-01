@@ -12,15 +12,19 @@ const MenuCategories = () => {
     <>
       {catchedError && <ErrorToast error={catchedError} />}
       <div className={styles.categoryList}>
-        {fetchedCategories?.map((item: any) => (
-          <Link
-            href={`/blog?cat=${item.id}`}
-            className={`${styles.categoryItem} ${styles[item.slug]}`}
-            key={item.id}
-          >
-            {item.title}
-          </Link>
-        ))}
+        {fetchedCategories && fetchedCategories.length ? (
+          fetchedCategories?.map((item: any) => (
+            <Link
+              href={`/blog?cat=${item.id}`}
+              className={`${styles.categoryItem} ${styles[item.slug]}`}
+              key={item.id}
+            >
+              {item?.title}
+            </Link>
+          ))
+        ) : (
+          <p>No categories yet.</p>
+        )}
       </div>
     </>
   );
