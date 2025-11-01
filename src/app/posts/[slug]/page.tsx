@@ -40,12 +40,14 @@ async function Page({ params }: PageProps) {
   return (
     <>
       {catchedError && <ErrorToast error={catchedError} />}
-      {!post && catchedError ? (
+
+      {/* changed: always guard against missing post to avoid reading properties of undefined */}
+      {!post ? (
         <div className={styles.container}>
           <div className={styles.infoContainer}>
             <div className={styles.textContainer}>
               <h1 className={styles.title}>Unable to fetch post</h1>
-              <p>{catchedError}</p>
+              <p>{catchedError ?? "No post data received from the server."}</p>
             </div>
           </div>
         </div>
