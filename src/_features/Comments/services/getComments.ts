@@ -6,11 +6,13 @@ export async function getComments(
   postSlug: string,
   cursor: string,
   size: number,
+  clientId: string,
 ) {
   return _getAllRecords({
     _APIEndpointName: `${mainURLs.Comments}/getComments?postSlug=${postSlug}&cursor=${cursor}&limit=${size}&`,
     enableCache: false,
     module: mainModules.comment,
     recordIdentified: postSlug,
+    clientId,
   });
 }

@@ -1,11 +1,15 @@
 import { jsonResponseType } from "@/_types/JsonResponse.type";
+import { ensureClientId } from "@/_utils/helperMethods/ensureClientId";
 
 export async function sendPostImg(
   data: FormData,
   draftId?: string,
   token?: string,
 ) {
-  let headers: any = {};
+  const clientId = ensureClientId();
+  let headers: any = {
+    "x-client-id": clientId,
+  };
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }

@@ -22,6 +22,7 @@ import styles from "./DeletePostBtn.module.css";
 
 import { RevalidateTagMethod } from "@/_services/RevalidateTagMethod";
 import { mainModules } from "@/_utils/constants/mainModules";
+import { ensureClientId } from "@/_utils/helperMethods/ensureClientId";
 
 interface DeletePostBtnProps {
   postSlug: string;
@@ -34,7 +35,8 @@ function DeletePostBtn({ postSlug }: DeletePostBtnProps) {
   async function handleDelete() {
     try {
       const token = await getToken();
-      const response = await deletePost(postSlug, token ?? "");
+      const clientId = ensureClientId();
+      const response = await deletePost(postSlug, token ?? "", clientId);
       if (response.data) {
         showSuccessToast("Post has been deleted successfully");
         RevalidateTagMethod(mainModules.post, "allRecords", postSlug);

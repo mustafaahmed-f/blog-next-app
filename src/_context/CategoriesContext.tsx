@@ -1,4 +1,5 @@
 import { getCategories } from "@/_features/Categories/services/getCategories";
+import { ensureClientId } from "@/_utils/helperMethods/ensureClientId";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type contextType = {
@@ -22,7 +23,8 @@ export function CategoriesProvider({
 
   useEffect(() => {
     async function getCategoriesMethod() {
-      const categories = await getCategories();
+      const clientId = ensureClientId();
+      const categories = await getCategories(clientId);
       setFinalCategories(categories?.data);
     }
     getCategoriesMethod();

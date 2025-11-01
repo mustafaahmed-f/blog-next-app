@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import styles from "./postPage.module.css";
+import { ensureClientIdServer } from "@/_utils/helperMethods/ensureClientIdServer";
 
 export const metadata: Metadata = {
   title: "Post page",
@@ -20,12 +21,13 @@ interface PageProps {
 async function Page({ params }: PageProps) {
   const { getToken } = await auth();
   const token = await getToken();
+  const clientId = await ensureClientIdServer();
   const { slug } = await params;
   let catchedError: any = null;
   let getSinglePostResponse: any = null;
 
   try {
-    const singlePost = await getSinglePost(slug, token ?? "");
+    const singlePost = await getSinglePost(slug, token ?? "", clientId);
 
     getSinglePostResponse = singlePost;
   } catch (error: any) {

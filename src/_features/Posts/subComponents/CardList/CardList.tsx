@@ -8,8 +8,10 @@ import { getPostsWithCategory } from "../../services/getPostsWithCategory";
 import Card from "../Card/Card";
 import Pagination from "../Pagination/Pagination";
 import styles from "./cardList.module.css";
+import { ensureClientId } from "@/_utils/helperMethods/ensureClientId";
 
 const CardList = ({ page, category }: { page: number; category?: string }) => {
+  const clientId = ensureClientId();
   const { 0: isPending, 1: startTransition } = useTransition();
   const POST_PER_PAGE = 3;
 
@@ -19,8 +21,8 @@ const CardList = ({ page, category }: { page: number; category?: string }) => {
       : [page, "main_page_recent_posts"],
     queryFn: () => {
       return category
-        ? getPostsWithCategory(category, page, POST_PER_PAGE)
-        : getPosts(page, POST_PER_PAGE);
+        ? getPostsWithCategory(category, page, POST_PER_PAGE, clientId)
+        : getPosts(page, POST_PER_PAGE, clientId);
     },
     placeholderData: keepPreviousData,
     gcTime: 1000 * 60 * 5,

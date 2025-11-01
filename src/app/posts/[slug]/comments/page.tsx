@@ -1,9 +1,10 @@
 import ErrorToast from "@/_components/Toasts/ErrorToast";
-import { getSinglePost } from "@/_features/Posts/services/getSinglePost";
-import styles from "../postPage.module.css";
 import CommentsPage from "@/_features/Comments/subComponents/Comments/CommentsPage";
+import { getSinglePost } from "@/_features/Posts/services/getSinglePost";
+import { ensureClientIdServer } from "@/_utils/helperMethods/ensureClientIdServer";
 import { auth } from "@clerk/nextjs/server";
 import { Metadata } from "next";
+import styles from "../postPage.module.css";
 
 export const metadata: Metadata = {
   title: "Comments",
@@ -23,7 +24,8 @@ async function Page({ params }: PageProps) {
 
   try {
     const token = await getToken();
-    response = await getSinglePost(slug, (token as string) ?? "");
+    const clientId = await ensureClientIdServer();
+    response = await getSinglePost(slug, (token as string) ?? "", clientId);
   } catch (error: any) {
     catchedError = error.message;
   }

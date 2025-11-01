@@ -5,11 +5,13 @@ export async function editPost(
   data: FormData,
   slug: string,
   token: string | null,
+  clientId: string,
 ) {
   return _updateSingleRecord({
     recordIdentified: slug,
     _APIEndpointName: `${mainURLs.Posts}/updatePost`,
     data,
     token,
+    clientId,
   });
 }

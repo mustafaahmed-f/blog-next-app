@@ -24,6 +24,7 @@ import PostEditorUI from "./PostEditorUI";
 
 import { RevalidateTagMethod } from "@/_services/RevalidateTagMethod";
 import { mainModules } from "@/_utils/constants/mainModules";
+import { ensureClientId } from "@/_utils/helperMethods/ensureClientId";
 
 interface PostEditorProps {
   draftId?: string;
@@ -129,10 +130,10 @@ function PostEditor({
 
     try {
       const token = await getToken();
-
+      const clientId = ensureClientId();
       const response = editMode
-        ? await editPost(formData, slug as string, token)
-        : await sendPost(formData, token);
+        ? await editPost(formData, slug as string, token, clientId)
+        : await sendPost(formData, token, clientId);
       if (response.data) {
         showSuccessToast(
           editMode

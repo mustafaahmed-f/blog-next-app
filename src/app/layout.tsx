@@ -1,14 +1,13 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "@/app/globals.css";
 import Footer from "@/_components/Footer/Footer";
 import Header from "@/_components/Header/Header";
-import Providers from "@/_providers/Providers";
-import { Toaster } from "sonner";
 import { getFeaturedPosts } from "@/_features/Posts/services/getFeaturedPosts";
-import { getCategories } from "@/_features/Categories/services/getCategories";
+import Providers from "@/_providers/Providers";
+import "@/app/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 

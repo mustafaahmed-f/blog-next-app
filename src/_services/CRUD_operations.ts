@@ -7,14 +7,18 @@ export async function getSingleRecord({
   enableCache = true,
   token,
   module,
+  clientId = "",
 }: {
   recordIdentified: string;
   _APIEndpointName: string;
   enableCache: boolean;
   token: string | null;
   module: string;
+  clientId: string;
 }) {
-  let headers: any = {};
+  let headers: any = {
+    "x-client-id": clientId,
+  };
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
@@ -57,7 +61,11 @@ export async function _getEveryRecord(
   _APIEndpointName: string,
   enableCache = true,
   module: string,
+  clientId: string,
 ) {
+  let headers: any = {
+    "x-client-id": clientId,
+  };
   //// This method is used to get all records from table and apply api feature on the client side
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}`,
@@ -68,6 +76,7 @@ export async function _getEveryRecord(
         revalidate: enableCache ? 60 * 60 * 3 : 0,
         tags: generateTags(module, "everyRecord"),
       },
+      headers,
     },
   );
 
@@ -101,6 +110,7 @@ export async function _getAllRecords({
   enableCache = true,
   module,
   recordIdentified,
+  clientId = "",
 }: {
   _APIEndpointName: string;
   page?: number;
@@ -110,7 +120,11 @@ export async function _getAllRecords({
   enableCache?: boolean;
   module: string;
   recordIdentified?: string;
+  clientId: string;
 }) {
+  let headers: any = {
+    "x-client-id": clientId,
+  };
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_MAIN_BACKEND_URL}/${_APIEndpointName}page=${page}&size=${size}&searchTerm=${searchTerm}&sort=${sort}`,
     {
@@ -120,6 +134,7 @@ export async function _getAllRecords({
         revalidate: enableCache ? 60 * 60 * 3 : 0,
         tags: generateTags(module, "allRecords", recordIdentified),
       },
+      headers,
     },
   );
 
@@ -148,12 +163,16 @@ export async function _deleteSingleRecord({
   _APIEndpointName,
   recordIdentified,
   token,
+  clientId = "",
 }: {
   _APIEndpointName: string;
   recordIdentified: string;
   token: string | null;
+  clientId: string;
 }) {
-  let headers: any = {};
+  let headers: any = {
+    "x-client-id": clientId,
+  };
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
@@ -193,13 +212,17 @@ export async function _updateSingleRecord({
   recordIdentified,
   data,
   token,
+  clientId = "",
 }: {
   _APIEndpointName: string;
   recordIdentified: string;
   data: any;
   token: string | null;
+  clientId: string;
 }) {
-  let headers: any = {};
+  let headers: any = {
+    "x-client-id": clientId,
+  };
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
@@ -239,12 +262,16 @@ export async function _createSingleRecord({
   _APIEndpointName,
   data,
   token,
+  clientId = "",
 }: {
   _APIEndpointName: string;
   data: any;
   token: string | null;
+  clientId: string;
 }) {
-  let headers: any = {};
+  let headers: any = {
+    "x-client-id": clientId,
+  };
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }

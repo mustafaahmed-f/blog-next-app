@@ -4,6 +4,7 @@ import EditPageUI from "@/_features/Posts/subComponents/EditUI/EditPageUI";
 import styles from "../postPage.module.css";
 import { auth } from "@clerk/nextjs/server";
 import { Metadata } from "next";
+import { ensureClientIdServer } from "@/_utils/helperMethods/ensureClientIdServer";
 
 export const metadata: Metadata = {
   title: "Edit Post",
@@ -23,7 +24,8 @@ async function Page({ params }: PageProps) {
 
   try {
     const token = await getToken();
-    response = await getSinglePost(slug, (token as string) ?? "");
+    const clientId = await ensureClientIdServer();
+    response = await getSinglePost(slug, (token as string) ?? "", clientId);
   } catch (error: any) {
     catchedError = error.message;
   }

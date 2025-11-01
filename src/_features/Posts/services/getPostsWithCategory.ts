@@ -6,6 +6,7 @@ export async function getPostsWithCategory(
   category: string,
   page?: number,
   size?: number,
+  clientId?: string,
 ) {
   return _getAllRecords({
     _APIEndpointName: `${mainURLs.Posts}/getPostsWithFilter?category=${category}&`,
@@ -13,5 +14,6 @@ export async function getPostsWithCategory(
     module: mainModules.post,
     page: page || 1,
     size: size || 10,
+    clientId: clientId ?? "",
   });
 }

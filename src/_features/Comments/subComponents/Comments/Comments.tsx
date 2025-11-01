@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import { getComments } from "../../services/getComments";
 import styles from "./comments.module.css";
 import CommentsUI from "./CommentsUI";
+import { ensureClientId } from "@/_utils/helperMethods/ensureClientId";
 
 interface CommentsProps {
   postSlug: string;
@@ -23,6 +24,8 @@ function Comments({
   const commentsSection = useRef<HTMLDivElement | null>(null);
   const loadMoreSection = useRef<HTMLDivElement | null>(null);
 
+  const clientId = ensureClientId();
+
   const {
     data,
     isFetching,
@@ -36,7 +39,12 @@ function Comments({
   } = useInfiniteQuery({
     queryKey: [postSlug, "Comments"],
     queryFn: ({ pageParam }) => {
-      return getComments(postSlug, pageParam as string, sizeOfComments);
+      return getComments(
+        postSlug,
+        pageParam as string,
+        sizeOfComments,
+        clientId,
+      );
     },
     initialPageParam: "",
     getNextPageParam: (lastPage) =>

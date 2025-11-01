@@ -1,5 +1,6 @@
 import { jsonResponseType } from "@/_types/JsonResponse.type";
 import { mainURLs } from "@/_utils/constants/mainURLs";
+import { ensureClientId } from "@/_utils/helperMethods/ensureClientId";
 
 export async function updateComment(
   id: string,
@@ -7,8 +8,10 @@ export async function updateComment(
   updatedComment: { desc: string },
   token: string,
 ) {
+  const clientId = ensureClientId();
   let headers: any = {
     "Content-Type": "application/json",
+    "x-client-id": clientId,
   };
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;

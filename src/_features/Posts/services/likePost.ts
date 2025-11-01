@@ -1,8 +1,12 @@
 import { jsonResponseType } from "@/_types/JsonResponse.type";
 import { mainURLs } from "@/_utils/constants/mainURLs";
+import { ensureClientId } from "@/_utils/helperMethods/ensureClientId";
 
 export async function likePost(slug: string, token?: string) {
-  let headers: any = {};
+  const clientId = ensureClientId();
+  let headers: any = {
+    "x-client-id": clientId,
+  };
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
