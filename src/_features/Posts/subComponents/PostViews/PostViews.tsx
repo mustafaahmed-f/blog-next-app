@@ -5,9 +5,9 @@ import { EyeIcon } from "lucide-react";
 import { useEffect } from "react";
 import { incViews } from "../../services/incViews";
 import styles from "./PostViews.module.css";
-
 import { RevalidateTagMethod } from "@/_services/RevalidateTagMethod";
 import { mainModules } from "@/_utils/constants/mainModules";
+import { ensureClientId } from "@/_utils/helperMethods/ensureClientId";
 
 interface PostViewsProps {
   postViews: number;
@@ -22,6 +22,7 @@ function PostViews({ postViews, postId, postSlug }: PostViewsProps) {
         localStorage.getItem("blog_app_post_views") ?? "[]",
       );
       if (viewedPosts.includes(postId)) return;
+
       await incViews(postId, postSlug).catch((error: any) => {
         if (error.message !== "You already viewed this post") {
           showErrorToast(error.message);
@@ -34,6 +35,8 @@ function PostViews({ postViews, postId, postSlug }: PostViewsProps) {
           JSON.stringify(viewedPosts),
         );
       });
+
+      ensureClientId();
     }
     incViewsFn();
   }, [postSlug, postId]);
