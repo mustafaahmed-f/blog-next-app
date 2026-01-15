@@ -59,13 +59,13 @@ function Comments({
         "Comments",
       ]);
 
-      if (!cached) return undefined; // 👉 if no cache, let React Query fetch normally
+      if (!cached) return undefined; //* if no cache, let React Query fetch normally
 
       if (fullComments) {
-        return cached; // 👉 use all cached data (All Comments Page)
+        return cached; //* use all cached data (All Comments Page)
       }
 
-      // 👉 otherwise, only first 2 pages (Single Post Page)
+      //* otherwise, only first 2 pages (Single Post Page)
       return {
         pageParams: cached.pageParams.slice(0, 2),
         pages: cached.pages.slice(0, 2),
